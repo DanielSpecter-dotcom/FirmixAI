@@ -15,6 +15,9 @@
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet">
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="img/LogoFirmix.ico">
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -260,6 +263,12 @@
     ];
 
     // --- INLINE SVG ICONS ---
+    const IconDashboard = () => (
+      <svg className="w-6 h-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+      </svg>
+    );
+
     const IconShield = () => (
       <svg className="w-6 h-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -286,6 +295,7 @@
 
     // --- MAIN APP COMPONENT ---
     function App() {
+      const [isPremium, setIsPremium] = useState(false);
       const [simTab, setSimTab] = useState('scam-shield');
       const [menuOpen, setMenuOpen] = useState(false);
       const [pricingPlan, setPricingPlan] = useState(null);
@@ -377,10 +387,31 @@
         const messageText = textToSend || chatInput;
         if (!messageText.trim()) return;
 
-        // Add user message
         const now = new Date();
         const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
+        const userMsgCount = messages.filter(m => m.sender === 'user').length;
+        if (!isPremium && userMsgCount >= 1) {
+          // Add user message
+          setMessages(prev => [...prev, { sender: 'user', text: messageText, timestamp: timeStr }]);
+          setChatInput('');
+          setIsTyping(true);
+          setTimeout(() => {
+            setMessages(prev => [
+              ...prev,
+              {
+                sender: 'bot',
+                text: '🔒 Has alcanzado el límite gratuito para el Abogado IA.\n\nActualiza al Plan Premium para consultas ilimitadas y desbloquear las herramientas de Firma Digital y Bóveda Segura.',
+                timestamp: timeStr,
+                isLockedCTA: true
+              }
+            ]);
+            setIsTyping(false);
+          }, 1500);
+          return;
+        }
+
+        // Add user message
         setMessages(prev => [...prev, { sender: 'user', text: messageText, timestamp: timeStr }]);
         setChatInput('');
         setIsTyping(true);
@@ -496,7 +527,7 @@
       };
 
       return (
-        <div className="min-h-screen bg-navy-950 flex flex-col font-sans selection:bg-amber-500 selection:text-navy-950">
+        <div className="min-h-screen bg-navy-950 flex flex-col font-sans selection:bg-amber-500 selection:text-navy-950 overflow-hidden w-full relative">
 
           {/* --- NAVBAR --- */}
           <header className="sticky top-0 z-50 bg-navy-900/80 backdrop-blur-md border-b border-navy-800 transition-all duration-300">
@@ -504,10 +535,8 @@
 
               {/* Brand Logo */}
               <a href="#" className="flex items-center space-x-2 group">
-                <div className="w-10 h-10 bg-gradient-to-tr from-amber-500 to-amber-600 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:rotate-6 transition-transform">
-                  <svg className="w-6 h-6 text-navy-950" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0z" />
-                  </svg>
+                <div className="w-10 h-10 bg-gradient-to-tr from-amber-500 to-amber-600 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:rotate-6 transition-transform p-1.5">
+                  <img src="img/LogoFirmix2.png" className="w-full h-full object-contain" alt="Firmix Logo" />
                 </div>
                 <div className="flex flex-col">
                   <span className="font-display font-bold text-xl text-white tracking-wide group-hover:text-amber-400 transition-colors">FIRMIX <span className="text-amber-500 font-extrabold text-sm align-super">IA</span></span>
@@ -576,12 +605,17 @@
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center max-w-3xl mx-auto mb-10 md:mb-16">
-                <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-tight">
-                  La tranquilidad de alquilar seguro, <span className="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-amber-600">en un solo toque</span>
-                </h1>
-                <p className="mt-6 text-base sm:text-lg md:text-xl text-slate-400 font-light leading-relaxed">
-                  Audita contratos de alquiler con Inteligencia Artificial, chatea con tu abogado de bolsillo 24/7 y firma con validez jurídica absoluta. Protege tu garantía y evita estafas desde tu celular.
-                </p>
+                <div className="flex flex-col sm:flex-row justify-center items-center">
+                  <div>
+                    <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-tight">
+                      La tranquilidad de alquilar seguro, <span className="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-amber-600">en un solo toque</span>
+                    </h1>
+                    <p className="mt-6 text-base sm:text-lg md:text-xl text-slate-400 font-light leading-relaxed">
+                      Audita contratos de alquiler con Inteligencia Artificial, chatea con tu abogado de bolsillo 24/7 y firma con validez jurídica absoluta. Protege tu garantía y evita estafas desde tu celular.
+                    </p>
+                  </div>
+                  <img src="img/LogoFirmix2.png" className="mx-auto my-6 w-40 h-40 object-contain" alt="Firmix IA" />
+                </div>
                 <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
                   <a href="#demo" className="w-full sm:w-auto px-8 py-4 bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold rounded-2xl shadow-lg shadow-amber-500/15 hover:shadow-glow-amber hover:-translate-y-0.5 transition-all text-center">
                     Analizar Contrato Gratis (PDF)
@@ -592,22 +626,22 @@
                 </div>
 
                 {/* Trust Seals */}
-                <div className="mt-12 pt-8 border-t border-navy-900/50 grid grid-cols-2 sm:grid-cols-4 gap-4 items-center justify-items-center">
-                  <div className="flex items-center space-x-2 text-slate-500">
-                    <svg className="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M6.267 3.455a.75.75 0 00-.708-.523H4.5a2 2 0 00-2 2v1.078a.75.75 0 00.379.65l6 3.464a.75.75 0 00.742 0l6-3.464a.75.75 0 00.379-.65V4.932a2 2 0 00-2-2h-1.059a.75.75 0 00-.708.523L10.25 7.036a.75.75 0 01-.5 0L6.267 3.455zM2.5 9.043v5.457a2 2 0 002 2h11a2 2 0 002-2V9.043l-6.75 3.9a1.75 1.75 0 01-1.5 0L2.5 9.043z" clipRule="evenodd" /></svg>
-                    <span className="text-xs font-semibold tracking-wider uppercase">Validez Ley 27269</span>
+                <div className="mt-12 pt-8 border-t border-navy-900/50 grid grid-cols-2 sm:grid-cols-4 gap-y-6 gap-x-4 items-center justify-items-center">
+                  <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left space-y-1 sm:space-y-0 sm:space-x-2 text-slate-500 max-w-[140px] sm:max-w-none">
+                    <svg className="w-5 h-5 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M6.267 3.455a.75.75 0 00-.708-.523H4.5a2 2 0 00-2 2v1.078a.75.75 0 00.379.65l6 3.464a.75.75 0 00.742 0l6-3.464a.75.75 0 00.379-.65V4.932a2 2 0 00-2-2h-1.059a.75.75 0 00-.708.523L10.25 7.036a.75.75 0 01-.5 0L6.267 3.455zM2.5 9.043v5.457a2 2 0 002 2h11a2 2 0 002-2V9.043l-6.75 3.9a1.75 1.75 0 01-1.5 0L2.5 9.043z" clipRule="evenodd" /></svg>
+                    <span className="text-[10px] sm:text-xs font-semibold tracking-wider uppercase leading-tight">Validez Ley 27269</span>
                   </div>
-                  <div className="flex items-center space-x-2 text-slate-500">
-                    <svg className="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a5 5 0 00-5 5v2a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2V7a5 5 0 00-5-5zM7 7a3 3 0 016 0v2H7V7z" /></svg>
-                    <span className="text-xs font-semibold tracking-wider uppercase">Seguridad Bancaria</span>
+                  <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left space-y-1 sm:space-y-0 sm:space-x-2 text-slate-500 max-w-[140px] sm:max-w-none">
+                    <svg className="w-5 h-5 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a5 5 0 00-5 5v2a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2V7a5 5 0 00-5-5zM7 7a3 3 0 016 0v2H7V7z" /></svg>
+                    <span className="text-[10px] sm:text-xs font-semibold tracking-wider uppercase leading-tight">Seguridad Bancaria</span>
                   </div>
-                  <div className="flex items-center space-x-2 text-slate-500">
-                    <svg className="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
-                    <span className="text-xs font-semibold tracking-wider uppercase">Cotejo RENIEC</span>
+                  <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left space-y-1 sm:space-y-0 sm:space-x-2 text-slate-500 max-w-[140px] sm:max-w-none">
+                    <svg className="w-5 h-5 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
+                    <span className="text-[10px] sm:text-xs font-semibold tracking-wider uppercase leading-tight">Cotejo RENIEC</span>
                   </div>
-                  <div className="flex items-center space-x-2 text-slate-500">
-                    <svg className="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M2.166 4.9L10 1.154 17.834 4.9A2 2 0 0119 6.74v4.918a9.023 9.023 0 01-4.84 8.013L10 21l-4.16-2.329A9.023 9.023 0 011 11.658V6.74a2 2 0 011.166-1.84zM10 3.16L3 6.52v4.808c0 3.23 1.76 6.2 4.62 7.74l2.38 1.332 2.38-1.332C15.24 17.528 17 14.558 17 11.328V6.52L10 3.16z" clipRule="evenodd" /></svg>
-                    <span className="text-xs font-semibold tracking-wider uppercase">Firma Encriptada</span>
+                  <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left space-y-1 sm:space-y-0 sm:space-x-2 text-slate-500 max-w-[140px] sm:max-w-none">
+                    <svg className="w-5 h-5 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M2.166 4.9L10 1.154 17.834 4.9A2 2 0 0119 6.74v4.918a9.023 9.023 0 01-4.84 8.013L10 21l-4.16-2.329A9.023 9.023 0 011 11.658V6.74a2 2 0 011.166-1.84zM10 3.16L3 6.52v4.808c0 3.23 1.76 6.2 4.62 7.74l2.38 1.332 2.38-1.332C15.24 17.528 17 14.558 17 11.328V6.52L10 3.16z" clipRule="evenodd" /></svg>
+                    <span className="text-[10px] sm:text-xs font-semibold tracking-wider uppercase leading-tight">Firma Encriptada</span>
                   </div>
                 </div>
               </div>
@@ -626,6 +660,23 @@
                   </div>
 
                   <div className="space-y-3 mt-6">
+                    {/* Dashboard Tab */}
+                    <button
+                      onClick={() => setSimTab('dashboard')}
+                      className={`w-full text-left p-4 rounded-2xl border transition-all duration-300 flex items-start space-x-4 ${simTab === 'dashboard' ? 'border-amber-500 bg-navy-800/60 shadow-glow-navy' : 'border-navy-800 hover:border-navy-700 bg-transparent'}`}
+                    >
+                      <div className={`p-3 rounded-xl ${simTab === 'dashboard' ? 'bg-amber-500/10 text-amber-400' : 'bg-navy-800 text-slate-400'}`}>
+                        <IconDashboard />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex justify-between items-center">
+                          <h4 className="font-bold text-white text-base">Panel de Control (Dashboard)</h4>
+                          {!isPremium && <span className="text-[9px] bg-amber-500/15 text-amber-400 font-extrabold px-2 py-0.5 rounded border border-amber-500/30 tracking-wide">PREMIUM</span>}
+                        </div>
+                        <p className="text-xs text-slate-400 mt-1">Tu Scoring de inquilino confiable y resumen de todos tus contratos y firmas.</p>
+                      </div>
+                    </button>
+
                     {/* Tab 1 Card */}
                     <button
                       onClick={() => setSimTab('scam-shield')}
@@ -662,8 +713,11 @@
                       <div className={`p-3 rounded-xl ${simTab === 'vault' ? 'bg-amber-500/10 text-amber-400' : 'bg-navy-800 text-slate-400'}`}>
                         <IconVault />
                       </div>
-                      <div>
-                        <h4 className="font-bold text-white text-base">3. Smart Vault (Bóveda Segura)</h4>
+                      <div className="flex-1">
+                        <div className="flex justify-between items-center">
+                          <h4 className="font-bold text-white text-base">3. Smart Vault (Bóveda Segura)</h4>
+                          {!isPremium && <span className="text-[9px] bg-amber-500/15 text-amber-400 font-extrabold px-2 py-0.5 rounded border border-amber-500/30 tracking-wide">PREMIUM</span>}
+                        </div>
                         <p className="text-xs text-slate-400 mt-1">Almacena contratos, registra recibos y crea tu perfil financiero de inquilino confiable.</p>
                       </div>
                     </button>
@@ -676,12 +730,40 @@
                       <div className={`p-3 rounded-xl ${simTab === 'signature' ? 'bg-amber-500/10 text-amber-400' : 'bg-navy-800 text-slate-400'}`}>
                         <IconPen />
                       </div>
-                      <div>
-                        <h4 className="font-bold text-white text-base">4. Firma Digital Biométrica</h4>
+                      <div className="flex-1">
+                        <div className="flex justify-between items-center">
+                          <h4 className="font-bold text-white text-base">4. Firma Digital Biométrica</h4>
+                          {!isPremium && <span className="text-[9px] bg-amber-500/15 text-amber-400 font-extrabold px-2 py-0.5 rounded border border-amber-500/30 tracking-wide">PREMIUM</span>}
+                        </div>
                         <p className="text-xs text-slate-400 mt-1">Valida identidad con cotejo de rostro ante RENIEC y firma legalmente desde casa.</p>
                       </div>
                     </button>
                   </div>
+
+                  {isPremium && (
+                    <div className="mt-4 p-3.5 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-between animate-pulse">
+                      <div>
+                        <span className="text-[10px] font-extrabold text-emerald-400 uppercase tracking-wide">Modo Premium Activo ✨</span>
+                        <p className="text-[11px] text-slate-400 mt-0.5 font-light">Todas las herramientas desbloqueadas.</p>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setIsPremium(false);
+                          setSimTab('scam-shield');
+                          setMessages([
+                            {
+                              sender: 'bot',
+                              text: '¡Hola! 🛡️ Soy tu Abogado Digital 24/7. Puedo analizar cualquier duda que tengas sobre tu alquiler o contrato en Lima. Escribe tu duda o toca una de las preguntas frecuentes abajo.',
+                              timestamp: '10:00 AM'
+                            }
+                          ]);
+                        }}
+                        className="px-3 py-1.5 bg-navy-800 hover:bg-navy-700 text-red-400 hover:text-red-300 font-bold text-xs rounded-xl border border-navy-750 transition-colors uppercase tracking-wider text-[10px]"
+                      >
+                        Reset Demo
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* Right Panel: Simulated Phone Mockup */}
@@ -703,14 +785,173 @@
                     {/* App Internal Nav */}
                     <div className="bg-navy-800/90 border-b border-navy-700/60 px-4 py-3 flex items-center justify-between shrink-0 z-10">
                       <div className="flex items-center space-x-1.5">
-                        <div className="w-2.5 h-2.5 bg-amber-500 rounded-full"></div>
+                        <img src="img/LogoFirmix2.png" className="w-4 h-4 object-contain" alt="Firmix Logo" />
                         <span className="font-display font-extrabold text-white text-sm tracking-wide">FIRMIX IA</span>
                       </div>
-                      <span className="text-[10px] bg-amber-500/10 text-amber-400 font-bold px-2 py-0.5 rounded-full border border-amber-500/20">ABOGADO MÓVIL</span>
+                      {isPremium ? (
+                        <span className="text-[10px] bg-emerald-500/15 text-emerald-400 font-bold px-2.5 py-0.5 rounded-full border border-emerald-500/30 flex items-center gap-1 animate-pulse select-none">
+                          PREMIUM ✨
+                        </span>
+                      ) : (
+                        <span className="text-[10px] bg-amber-500/10 text-amber-400 font-bold px-2 py-0.5 rounded-full border border-amber-500/20 select-none">
+                          DEMO GRATIS
+                        </span>
+                      )}
                     </div>
 
                     {/* App Content Area (Changes based on active tab) */}
                     <div className="flex-1 bg-navy-950 overflow-y-auto relative flex flex-col">
+
+                      {/* --- VIEW: DASHBOARD --- */}
+                      {simTab === 'dashboard' && (
+                        !isPremium ? (
+                          <div className="p-5 flex-1 flex flex-col justify-center items-center text-center bg-navy-950 text-slate-300 relative overflow-hidden">
+                            {/* Blurred Dashboard Background Preview */}
+                            <div className="absolute inset-0 opacity-15 filter blur-xs pointer-events-none select-none flex flex-col p-4 space-y-3">
+                              <div className="h-16 bg-navy-800 rounded-xl w-full"></div>
+                              <div className="grid grid-cols-2 gap-2"><div className="h-12 bg-navy-800 rounded-xl"></div><div className="h-12 bg-navy-800 rounded-xl"></div></div>
+                              <div className="h-24 bg-navy-800 rounded-xl w-full"></div>
+                              <div className="h-20 bg-navy-800 rounded-xl w-full"></div>
+                            </div>
+
+                            {/* Registration / Lock UI */}
+                            <div className="z-10 bg-navy-900/90 border border-navy-800 p-5 rounded-3xl shadow-xl w-full max-w-[310px]">
+                              <div className="w-12 h-12 bg-amber-500/10 text-amber-500 rounded-full flex items-center justify-center mb-4 mx-auto border border-amber-500/20">
+                                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                              </div>
+                              <h4 className="font-display font-bold text-sm text-white">Ingresa a tu Dashboard</h4>
+                              <p className="text-[10px] text-slate-400 mt-1.5 leading-relaxed">
+                                Crea tu cuenta gratuita para guardar tus contratos y adquiere el plan Premium para desbloquear tu historial completo y analíticas avanzadas.
+                              </p>
+
+                              {/* Simulated One-click OAuth */}
+                              <div className="space-y-2 mt-4">
+                                <button
+                                  type="button"
+                                  onClick={() => setPricingPlan('premium')}
+                                  className="w-full py-2 px-3 bg-white hover:bg-slate-100 text-slate-900 font-bold text-[10px] rounded-xl flex items-center justify-center space-x-2 transition-all shadow"
+                                >
+                                  <span>Continue with Google</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => setPricingPlan('premium')}
+                                  className="w-full py-2 px-3 bg-slate-950 hover:bg-slate-900 text-white font-bold text-[10px] rounded-xl flex items-center justify-center space-x-2 transition-all border border-slate-800"
+                                >
+                                  <span>Continue with Apple</span>
+                                </button>
+                              </div>
+
+                              <div className="mt-4 pt-3 border-t border-navy-800 flex flex-col items-center">
+                                <span className="text-[9px] text-slate-500 font-semibold">¿Ya tienes cuenta Premium?</span>
+                                <button
+                                  type="button"
+                                  onClick={() => setPricingPlan('premium')}
+                                  className="mt-1.5 w-full py-2 bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold text-[10px] rounded-xl shadow transition-all uppercase tracking-wider"
+                                >
+                                  Desbloquear Dashboard Premium
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="p-4 flex-1 flex flex-col bg-navy-950 text-slate-300">
+
+                            {/* Profile header */}
+                            <div className="flex items-center space-x-3 bg-navy-900/50 p-3 rounded-2xl border border-navy-800 mb-4">
+                              <div className="w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 font-bold border border-amber-500/30 flex items-center justify-center text-sm">DA</div>
+                              <div>
+                                <h5 className="text-xs font-bold text-white">Daniel Alarcón C.</h5>
+                                <p className="text-[9px] text-slate-400 font-semibold">Inquilino Premium ✨</p>
+                              </div>
+                            </div>
+
+                            {/* Scoring Circle Gauge */}
+                            <div className="bg-navy-900 border border-navy-800 rounded-2xl p-4 flex flex-col items-center mb-4 relative overflow-hidden">
+                              <div className="absolute top-2 right-2 text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Blockchain OK</div>
+                              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Firmix Scoring</span>
+
+                              {/* Simple CSS Circular indicator */}
+                              <div className="relative w-24 h-24 my-3 flex items-center justify-center">
+                                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                  <path className="text-navy-950" strokeWidth="2.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                  <path className="text-emerald-400" strokeDasharray="98, 100" strokeWidth="2.5" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                </svg>
+                                <div className="absolute text-center">
+                                  <div className="text-base font-display font-extrabold text-white">980</div>
+                                  <div className="text-[8px] text-slate-400 uppercase font-bold tracking-tight">Excelente</div>
+                                </div>
+                              </div>
+
+                              <p className="text-[9.5px] text-slate-400 text-center leading-relaxed font-light mt-1">
+                                Tu reputación de pago y firmas te sitúa en el <span className="text-emerald-400 font-bold">top 2%</span> de inquilinos confiables.
+                              </p>
+                            </div>
+
+                            {/* Stats Cards */}
+                            <div className="grid grid-cols-3 gap-2.5 mb-4 shrink-0">
+                              <div className="p-2.5 bg-navy-900 border border-navy-800 rounded-xl text-center flex flex-col justify-center">
+                                <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wider">Contratos</span>
+                                <span className="text-xs font-bold text-white mt-1">1 Activo</span>
+                              </div>
+                              <div className="p-2.5 bg-navy-900 border border-navy-800 rounded-xl text-center flex flex-col justify-center">
+                                <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wider">Bóveda</span>
+                                <span className="text-xs font-bold text-white mt-1">4 PDF</span>
+                              </div>
+                              <div className="p-2.5 bg-navy-900 border border-navy-800 rounded-xl text-center flex flex-col justify-center">
+                                <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wider">Firmas</span>
+                                <span className="text-xs font-bold text-emerald-400 mt-1">2 OK</span>
+                              </div>
+                            </div>
+
+                            {/* Recent Activity List */}
+                            <div className="flex-1 min-h-[140px] flex flex-col">
+                              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-2 block">Historial Reciente</span>
+                              <div className="flex-1 overflow-y-auto space-y-2 max-h-[150px] pr-1">
+                                <div className="p-2.5 bg-navy-900/70 border border-navy-800 rounded-xl flex items-center justify-between text-[10px]">
+                                  <div className="flex items-center space-x-2">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                    <span className="text-white font-medium">Firma adenda dpto 402</span>
+                                  </div>
+                                  <span className="text-slate-500 text-[8px]">Hoy, 08:30 AM</span>
+                                </div>
+                                <div className="p-2.5 bg-navy-900/70 border border-navy-800 rounded-xl flex items-center justify-between text-[10px]">
+                                  <div className="flex items-center space-x-2">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                    <span className="text-white font-medium">Recibo de pago Marzo.pdf</span>
+                                  </div>
+                                  <span className="text-slate-500 text-[8px]">02/03/2026</span>
+                                </div>
+                                <div className="p-2.5 bg-navy-900/70 border border-navy-800 rounded-xl flex items-center justify-between text-[10px]">
+                                  <div className="flex items-center space-x-2">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                    <span className="text-white font-medium">Escaneo Scam Shield: Contrato</span>
+                                  </div>
+                                  <span className="text-slate-500 text-[8px]">24/02/2026</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Quick navigation actions */}
+                            <div className="mt-3 grid grid-cols-2 gap-2 pt-2 border-t border-navy-800 shrink-0">
+                              <button
+                                onClick={() => setSimTab('scam-shield')}
+                                className="py-2 px-2.5 bg-navy-900 border border-navy-800 hover:border-amber-500/50 rounded-xl text-[10px] text-white font-medium transition-colors text-center"
+                              >
+                                Escanear Nuevo
+                              </button>
+                              <button
+                                onClick={() => setSimTab('signature')}
+                                className="py-2 px-2.5 bg-amber-500 hover:bg-amber-600 text-navy-950 rounded-xl text-[10px] font-bold transition-colors text-center shadow-sm uppercase tracking-wider"
+                              >
+                                Firmar Contrato
+                              </button>
+                            </div>
+                          </div>
+                        )
+                      )}
 
                       {/* --- VIEW: SCAM SHIELD --- */}
                       {simTab === 'scam-shield' && (
@@ -814,8 +1055,8 @@
                                 <div className="flex items-center space-x-3">
                                   {/* Color indicator based on score */}
                                   <div className={`w-12 h-12 rounded-xl flex flex-col items-center justify-center font-display font-extrabold text-sm ${CONTRACT_PRESETS[selectedPreset].riskScore >= 80 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                                      CONTRACT_PRESETS[selectedPreset].riskScore >= 50 ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                                        'bg-red-500/10 text-red-400 border border-red-500/20'
+                                    CONTRACT_PRESETS[selectedPreset].riskScore >= 50 ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+                                      'bg-red-500/10 text-red-400 border border-red-500/20'
                                     }`}>
                                     {CONTRACT_PRESETS[selectedPreset].riskScore}
                                     <span className="text-[7px] text-slate-400 -mt-1 font-semibold">SCORE</span>
@@ -841,14 +1082,14 @@
                                   <div
                                     key={index}
                                     className={`p-3 rounded-xl border ${risk.type === 'danger' ? 'bg-red-950/20 border-red-500/20' :
-                                        risk.type === 'warning' ? 'bg-amber-950/20 border-amber-500/20' :
-                                          'bg-emerald-950/20 border-emerald-500/20'
+                                      risk.type === 'warning' ? 'bg-amber-950/20 border-amber-500/20' :
+                                        'bg-emerald-950/20 border-emerald-500/20'
                                       }`}
                                   >
                                     <div className="flex items-center space-x-2">
                                       <span className={`w-2.5 h-2.5 rounded-full ${risk.type === 'danger' ? 'bg-red-500' :
-                                          risk.type === 'warning' ? 'bg-amber-500' :
-                                            'bg-emerald-500'
+                                        risk.type === 'warning' ? 'bg-amber-500' :
+                                          'bg-emerald-500'
                                         }`}></span>
                                       <span className="text-xs font-bold text-white">{risk.title}</span>
                                     </div>
@@ -865,16 +1106,57 @@
                                 ))}
                               </div>
 
-                              {/* Conversion Trigger */}
-                              <div className="mt-4 p-3 bg-gradient-to-r from-navy-900 to-navy-850 border border-amber-500/20 rounded-xl text-center shadow-lg">
-                                <p className="text-[10px] text-slate-300 font-semibold">¿Quieres descargar el reporte completo de 12 páginas y exportar una adenda legal?</p>
-                                <button
-                                  onClick={() => setPricingPlan('premium')}
-                                  className="mt-2 w-full py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-navy-950 font-bold text-xs rounded-lg shadow-md transition-all"
-                                >
-                                  Desbloquear Dashboard Premium
-                                </button>
-                              </div>
+                              {/* Conversion Trigger depending on premium */}
+                              {isPremium ? (
+                                <div className="mt-4 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-center shadow-lg">
+                                  <p className="text-[10px] text-emerald-400 font-bold flex items-center justify-center gap-1">
+                                    <span>✨ Funciones Premium Desbloqueadas</span>
+                                  </p>
+                                  <div className="grid grid-cols-2 gap-2 mt-2">
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        alert("Descargando Reporte de Auditoría PDF completo (Simulado)...");
+                                        // Save to vault automatically
+                                        const docName = `Auditoría - ${uploadedFileName || CONTRACT_PRESETS[selectedPreset].title}.pdf`;
+                                        if (!vaultDocs.some(d => d.name === docName)) {
+                                          const today = new Date();
+                                          const dateStr = today.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                                          const newDoc = {
+                                            name: docName,
+                                            type: "Contrato",
+                                            date: dateStr,
+                                            size: "1.4 MB",
+                                            verified: true
+                                          };
+                                          setVaultDocs(prev => [newDoc, ...prev]);
+                                        }
+                                      }}
+                                      className="py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[9px] rounded-lg shadow-sm transition-all uppercase tracking-wider"
+                                    >
+                                      Descargar PDF
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => setSimTab('vault')}
+                                      className="py-2 bg-navy-800 hover:bg-navy-750 text-emerald-400 font-bold text-[9px] rounded-lg border border-navy-700 transition-all uppercase tracking-wider"
+                                    >
+                                      Ver en Bóveda
+                                    </button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="mt-4 p-3 bg-gradient-to-r from-navy-900 to-navy-850 border border-amber-500/20 rounded-xl text-center shadow-lg">
+                                  <p className="text-[10px] text-slate-300 font-semibold">¿Quieres descargar el reporte completo de 12 páginas y exportar una adenda legal?</p>
+                                  <button
+                                    type="button"
+                                    onClick={() => setPricingPlan('premium')}
+                                    className="mt-2 w-full py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-navy-950 font-bold text-xs rounded-lg shadow-md transition-all uppercase tracking-wider"
+                                  >
+                                    Desbloquear Dashboard Premium
+                                  </button>
+                                </div>
+                              )}
                             </div>
                           )}
                         </div>
@@ -891,12 +1173,21 @@
                                 className={`flex flex-col max-w-[85%] ${msg.sender === 'user' ? 'self-end items-end' : 'self-start items-start'}`}
                               >
                                 <div className={`p-3 rounded-2xl text-xs leading-relaxed ${msg.sender === 'user'
-                                    ? 'bg-amber-500 text-navy-950 font-medium rounded-tr-none'
-                                    : 'bg-navy-900 text-slate-200 border border-navy-800 rounded-tl-none'
+                                  ? 'bg-amber-500 text-navy-950 font-medium rounded-tr-none'
+                                  : 'bg-navy-900 text-slate-200 border border-navy-800 rounded-tl-none'
                                   }`}>
                                   {msg.text.split('\n').map((para, i) => (
                                     <p key={i} className={i > 0 ? 'mt-2' : ''}>{para}</p>
                                   ))}
+                                  {msg.isLockedCTA && (
+                                    <button
+                                      type="button"
+                                      onClick={() => setPricingPlan('premium')}
+                                      className="mt-3 w-full py-2 bg-amber-500 hover:bg-amber-600 text-navy-950 font-extrabold text-[10px] rounded-lg shadow-sm transition-all uppercase tracking-wider flex items-center justify-center space-x-1"
+                                    >
+                                      <span>🔑 Desbloquear Premium (S/.29)</span>
+                                    </button>
+                                  )}
                                 </div>
                                 <span className="text-[9px] text-slate-500 mt-1 px-1 font-semibold">{msg.timestamp}</span>
                               </div>
@@ -950,358 +1241,453 @@
 
                       {/* --- VIEW: SMART VAULT --- */}
                       {simTab === 'vault' && (
-                        <div className="p-4 flex-1 flex flex-col bg-navy-950">
-
-                          {/* Top Vault Metrics */}
-                          <div className="grid grid-cols-2 gap-3 mb-4 shrink-0">
-                            <div className="p-3 bg-navy-900 border border-navy-800 rounded-xl text-center">
-                              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Inquilino Scoring</span>
-                              <div className="text-xl font-display font-extrabold text-emerald-400 mt-1">980/1000</div>
-                              <span className="text-[9px] bg-emerald-500/10 text-emerald-400 font-semibold px-2 py-0.5 rounded-full mt-1.5 inline-block">Excelente</span>
+                        !isPremium ? (
+                          <div className="p-5 flex-1 flex flex-col justify-center items-center text-center bg-navy-950 text-slate-300">
+                            <div className="w-14 h-14 bg-amber-500/10 text-amber-500 rounded-full flex items-center justify-center mb-4 border border-amber-500/20 animate-pulse">
+                              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                              </svg>
                             </div>
-                            <div className="p-3 bg-navy-900 border border-navy-800 rounded-xl text-center">
-                              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Espacio Seguro</span>
-                              <div className="text-xl font-display font-extrabold text-white mt-1">2.4 MB</div>
-                              <span className="text-[9px] text-slate-400 mt-1.5 inline-block font-semibold">100% Cifrado SSL</span>
-                            </div>
-                          </div>
+                            <h4 className="font-display font-bold text-sm text-white">Smart Vault (Bóveda Segura)</h4>
+                            <p className="text-[10px] text-slate-400 mt-2 px-2 leading-relaxed">
+                              La Bóveda Inteligente con encriptación militar y registro en Blockchain requiere una suscripción Premium activa.
+                            </p>
 
-                          <div className="flex justify-between items-center mb-2 shrink-0">
-                            <h5 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Mis Documentos Activos</h5>
+                            <ul className="text-left text-[10px] text-slate-400 my-4 space-y-2 bg-navy-900/50 p-4 rounded-2xl border border-navy-800 w-full max-w-[280px]">
+                              <li className="flex items-center space-x-2">
+                                <span className="text-emerald-500 font-bold">✓</span>
+                                <span>Almacenamiento de contratos ilimitado</span>
+                              </li>
+                              <li className="flex items-center space-x-2">
+                                <span className="text-emerald-500 font-bold">✓</span>
+                                <span>Historial de recibos y adendas</span>
+                              </li>
+                              <li className="flex items-center space-x-2">
+                                <span className="text-emerald-500 font-bold">✓</span>
+                                <span>Generación de Scoring Financiero</span>
+                              </li>
+                              <li className="flex items-center space-x-2">
+                                <span className="text-emerald-500 font-bold">✓</span>
+                                <span>Certificación legal criptográfica</span>
+                              </li>
+                            </ul>
+
                             <button
-                              onClick={() => setShowVaultUpload(true)}
-                              className="text-[10px] font-bold text-amber-500 hover:text-amber-400 flex items-center space-x-1"
+                              type="button"
+                              onClick={() => setPricingPlan('premium')}
+                              className="w-full max-w-[280px] py-2.5 bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold text-[10px] rounded-xl shadow-lg transition-all uppercase tracking-wider flex items-center justify-center space-x-2"
                             >
-                              <span>+ Subir Pago</span>
+                              <span>Activar Plan Premium - S/.29</span>
                             </button>
                           </div>
+                        ) : (
+                          <div className="p-4 flex-1 flex flex-col bg-navy-950">
 
-                          {/* Documents List */}
-                          <div className="flex-1 overflow-y-auto space-y-2.5 max-h-[300px] pr-1">
-                            {vaultDocs.map((doc, idx) => (
-                              <div key={idx} className="p-3 bg-navy-900 border border-navy-800/80 rounded-xl flex items-center justify-between shadow-xs">
-                                <div className="flex items-center space-x-2.5 min-w-0">
-                                  {/* Icon based on doc type */}
-                                  <div className={`p-2 rounded-lg shrink-0 ${doc.type === 'Contrato' ? 'bg-blue-500/10 text-blue-400' :
-                                      doc.type === 'Garantía' ? 'bg-amber-500/10 text-amber-400' :
-                                        'bg-emerald-500/10 text-emerald-400'
-                                    }`}>
-                                    {doc.type === 'Contrato' ? (
-                                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                                    ) : (
-                                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                                    )}
-                                  </div>
-                                  <div className="truncate min-w-0">
-                                    <h6 className="text-[11px] font-bold text-white truncate">{doc.name}</h6>
-                                    <p className="text-[9px] text-slate-500 mt-0.5">{doc.date} • {doc.size}</p>
-                                  </div>
-                                </div>
-                                <div className="flex items-center space-x-2 shrink-0">
-                                  {doc.verified && (
-                                    <span className="text-[9px] font-bold bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-500/10">Respaldado</span>
-                                  )}
-                                </div>
+                            {/* Top Vault Metrics */}
+                            <div className="grid grid-cols-2 gap-3 mb-4 shrink-0">
+                              <div className="p-3 bg-navy-900 border border-navy-800 rounded-xl text-center">
+                                <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Inquilino Scoring</span>
+                                <div className="text-xl font-display font-extrabold text-emerald-400 mt-1">980/1000</div>
+                                <span className="text-[9px] bg-emerald-500/10 text-emerald-400 font-semibold px-2 py-0.5 rounded-full mt-1.5 inline-block">Excelente</span>
                               </div>
-                            ))}
-                          </div>
+                              <div className="p-3 bg-navy-900 border border-navy-800 rounded-xl text-center">
+                                <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Espacio Seguro</span>
+                                <div className="text-xl font-display font-extrabold text-white mt-1">2.4 MB</div>
+                                <span className="text-[9px] text-slate-400 mt-1.5 inline-block font-semibold">100% Cifrado SSL</span>
+                              </div>
+                            </div>
 
-                          {/* Action Report Card */}
-                          <div className="mt-3 p-3 bg-gradient-to-tr from-amber-500/10 to-amber-600/5 border border-amber-500/25 rounded-xl shrink-0">
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <h6 className="text-xs font-bold text-white">Reporte de Buen Inquilino</h6>
-                                <p className="text-[9px] text-slate-400 mt-0.5">Demuestra tu puntualidad respaldado en Blockchain.</p>
-                              </div>
+                            <div className="flex justify-between items-center mb-2 shrink-0">
+                              <h5 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Mis Documentos Activos</h5>
                               <button
-                                onClick={() => alert("Reporte de Buen Pagador generado en PDF (Simulado). ¡Ideal para presentar a tu próximo arrendador!")}
-                                className="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold text-[9px] rounded-lg shadow-sm transition-all"
+                                onClick={() => setShowVaultUpload(true)}
+                                className="text-[10px] font-bold text-amber-500 hover:text-amber-400 flex items-center space-x-1"
                               >
-                                Descargar
+                                <span>+ Subir Pago</span>
                               </button>
                             </div>
-                          </div>
 
-                          {/* Simple Upload Modal overlay */}
-                          {showVaultUpload && (
-                            <div className="absolute inset-0 bg-navy-950/95 z-20 p-4 flex flex-col justify-center">
-                              <form onSubmit={handleAddDocument} className="bg-navy-900 border border-navy-800 p-4 rounded-2xl space-y-3">
-                                <h4 className="font-bold text-white text-sm">Registrar Pago de Alquiler</h4>
-
-                                <div className="space-y-1">
-                                  <label className="text-[9px] font-bold text-slate-400 uppercase">Mes correspondiente</label>
-                                  <input
-                                    type="text"
-                                    required
-                                    placeholder="Ej. Mayo 2026"
-                                    value={newDocName}
-                                    onChange={(e) => setNewDocName(e.target.value)}
-                                    className="w-full bg-navy-950 border border-navy-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-amber-500"
-                                  />
+                            {/* Documents List */}
+                            <div className="flex-1 overflow-y-auto space-y-2.5 max-h-[300px] pr-1">
+                              {vaultDocs.map((doc, idx) => (
+                                <div key={idx} className="p-3 bg-navy-900 border border-navy-800/80 rounded-xl flex items-center justify-between shadow-xs">
+                                  <div className="flex items-center space-x-2.5 min-w-0">
+                                    {/* Icon based on doc type */}
+                                    <div className={`p-2 rounded-lg shrink-0 ${doc.type === 'Contrato' ? 'bg-blue-500/10 text-blue-400' :
+                                      doc.type === 'Garantía' ? 'bg-amber-500/10 text-amber-400' :
+                                        'bg-emerald-500/10 text-emerald-400'
+                                      }`}>
+                                      {doc.type === 'Contrato' ? (
+                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                      ) : (
+                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                                      )}
+                                    </div>
+                                    <div className="truncate min-w-0">
+                                      <h6 className="text-[11px] font-bold text-white truncate">{doc.name}</h6>
+                                      <p className="text-[9px] text-slate-500 mt-0.5">{doc.date} • {doc.size}</p>
+                                    </div>
+                                  </div>
+                                  <div className="flex items-center space-x-2 shrink-0">
+                                    {doc.verified && (
+                                      <span className="text-[9px] font-bold bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-500/10">Respaldado</span>
+                                    )}
+                                  </div>
                                 </div>
-
-                                <div className="space-y-1">
-                                  <label className="text-[9px] font-bold text-slate-400 uppercase">Tipo de Documento</label>
-                                  <select
-                                    value={newDocType}
-                                    onChange={(e) => setNewDocType(e.target.value)}
-                                    className="w-full bg-navy-950 border border-navy-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-amber-500"
-                                  >
-                                    <option value="Pago">Recibo de Alquiler / Transferencia</option>
-                                    <option value="Servicio">Recibo de Luz/Agua/Internet</option>
-                                    <option value="Garantía">Firma de Adenda / Acuerdo</option>
-                                  </select>
-                                </div>
-
-                                <div className="pt-2 flex space-x-2">
-                                  <button
-                                    type="button"
-                                    onClick={() => setShowVaultUpload(false)}
-                                    className="flex-1 py-2 bg-navy-800 hover:bg-navy-750 text-slate-300 font-bold text-xs rounded-lg border border-navy-700"
-                                  >
-                                    Cancelar
-                                  </button>
-                                  <button
-                                    type="submit"
-                                    disabled={uploadingDoc}
-                                    className="flex-1 py-2 bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold text-xs rounded-lg shadow-md transition-all flex items-center justify-center"
-                                  >
-                                    {uploadingDoc ? 'Cargando...' : 'Subir y Cifrar'}
-                                  </button>
-                                </div>
-                              </form>
+                              ))}
                             </div>
-                          )}
-                        </div>
+
+                            {/* Action Report Card */}
+                            <div className="mt-3 p-3 bg-gradient-to-tr from-amber-500/10 to-amber-600/5 border border-amber-500/25 rounded-xl shrink-0">
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <h6 className="text-xs font-bold text-white">Reporte de Buen Inquilino</h6>
+                                  <p className="text-[9px] text-slate-400 mt-0.5">Demuestra tu puntualidad respaldado en Blockchain.</p>
+                                </div>
+                                <button
+                                  onClick={() => alert("Reporte de Buen Pagador generado en PDF (Simulado). ¡Ideal para presentar a tu próximo arrendador!")}
+                                  className="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold text-[9px] rounded-lg shadow-sm transition-all"
+                                >
+                                  Descargar
+                                </button>
+                              </div>
+                            </div>
+
+                            {/* Simple Upload Modal overlay */}
+                            {showVaultUpload && (
+                              <div className="absolute inset-0 bg-navy-950/95 z-20 p-4 flex flex-col justify-center">
+                                <form onSubmit={handleAddDocument} className="bg-navy-900 border border-navy-800 p-4 rounded-2xl space-y-3 max-h-[90%] overflow-y-auto">
+                                  <h4 className="font-bold text-white text-sm">Registrar Pago de Alquiler</h4>
+
+                                  <div className="space-y-1">
+                                    <label className="text-[9px] font-bold text-slate-400 uppercase">Mes correspondiente</label>
+                                    <input
+                                      type="text"
+                                      required
+                                      placeholder="Ej. Mayo 2026"
+                                      value={newDocName}
+                                      onChange={(e) => setNewDocName(e.target.value)}
+                                      className="w-full bg-navy-950 border border-navy-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                                    />
+                                  </div>
+
+                                  <div className="space-y-1">
+                                    <label className="text-[9px] font-bold text-slate-400 uppercase">Tipo de Documento</label>
+                                    <select
+                                      value={newDocType}
+                                      onChange={(e) => setNewDocType(e.target.value)}
+                                      className="w-full bg-navy-950 border border-navy-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                                    >
+                                      <option value="Pago">Recibo de Alquiler / Transferencia</option>
+                                      <option value="Servicio">Recibo de Luz/Agua/Internet</option>
+                                      <option value="Garantía">Firma de Adenda / Acuerdo</option>
+                                    </select>
+                                  </div>
+
+                                  <div className="pt-2 flex space-x-2">
+                                    <button
+                                      type="button"
+                                      onClick={() => setShowVaultUpload(false)}
+                                      className="flex-1 py-2 bg-navy-800 hover:bg-navy-750 text-slate-300 font-bold text-xs rounded-lg border border-navy-700"
+                                    >
+                                      Cancelar
+                                    </button>
+                                    <button
+                                      type="submit"
+                                      disabled={uploadingDoc}
+                                      className="flex-1 py-2 bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold text-xs rounded-lg shadow-md transition-all flex items-center justify-center"
+                                    >
+                                      {uploadingDoc ? 'Cargando...' : 'Subir y Cifrar'}
+                                    </button>
+                                  </div>
+                                </form>
+                              </div>
+                            )}
+                          </div>
+                        )
                       )}
 
                       {/* --- VIEW: DIGITAL SIGNATURE --- */}
                       {simTab === 'signature' && (
-                        <div className="p-4 flex-1 flex flex-col bg-navy-950 text-slate-300">
+                        !isPremium ? (
+                          <div className="p-5 flex-1 flex flex-col justify-center items-center text-center bg-navy-950 text-slate-300">
+                            <div className="w-14 h-14 bg-amber-500/10 text-amber-500 rounded-full flex items-center justify-center mb-4 border border-amber-500/20 animate-pulse">
+                              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                              </svg>
+                            </div>
+                            <h4 className="font-display font-bold text-sm text-white">Firma Digital Biométrica</h4>
+                            <p className="text-[10px] text-slate-400 mt-2 px-2 leading-relaxed">
+                              La firma electrónica con validez legal del Decreto Legislativo N° 681 y cotejo de rostro ante RENIEC requiere una cuenta Premium.
+                            </p>
 
-                          {/* Step Progress Dots */}
-                          <div className="flex items-center justify-between px-6 mb-4 shrink-0">
-                            {[1, 2, 3, 4].map(step => (
-                              <div key={step} className="flex items-center flex-1 last:flex-initial">
-                                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${sigStep === step ? 'bg-amber-500 text-navy-950 ring-4 ring-amber-500/20' :
-                                    sigStep > step ? 'bg-emerald-500 text-white' : 'bg-navy-800 text-slate-500'
-                                  }`}>
-                                  {sigStep > step ? '✓' : step}
-                                </div>
-                                {step < 4 && (
-                                  <div className={`h-0.5 flex-1 mx-2 ${sigStep > step ? 'bg-emerald-500' : 'bg-navy-800'}`}></div>
-                                )}
-                              </div>
-                            ))}
+                            <ul className="text-left text-[10px] text-slate-400 my-4 space-y-2 bg-navy-900/50 p-4 rounded-2xl border border-navy-800 w-full max-w-[280px]">
+                              <li className="flex items-center space-x-2">
+                                <span className="text-emerald-500 font-bold">✓</span>
+                                <span>Verificación biométrica facial (RENIEC API)</span>
+                              </li>
+                              <li className="flex items-center space-x-2">
+                                <span className="text-emerald-500 font-bold">✓</span>
+                                <span>Dibujo de firma manuscrita digitalizada</span>
+                              </li>
+                              <li className="flex items-center space-x-2">
+                                <span className="text-emerald-500 font-bold">✓</span>
+                                <span>Sellado de tiempo oficial Indecopi</span>
+                              </li>
+                              <li className="flex items-center space-x-2">
+                                <span className="text-emerald-500 font-bold">✓</span>
+                                <span>Envío automático a correos y WhatsApp</span>
+                              </li>
+                            </ul>
+
+                            <button
+                              type="button"
+                              onClick={() => setPricingPlan('premium')}
+                              className="w-full max-w-[280px] py-2.5 bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold text-[10px] rounded-xl shadow-lg transition-all uppercase tracking-wider flex items-center justify-center space-x-2"
+                            >
+                              <span>Activar Plan Premium - S/.29</span>
+                            </button>
                           </div>
+                        ) : (
+                          <div className="p-4 flex-1 flex flex-col bg-navy-950 text-slate-300">
 
-                          {/* STEP 1: PARTICIPANTS */}
-                          {sigStep === 1 && (
-                            <div className="flex-1 flex flex-col justify-between">
-                              <div>
-                                <h4 className="font-bold text-white text-sm">Paso 1: Identificación</h4>
-                                <p className="text-[10px] text-slate-400 mt-1">Valida los firmantes del contrato con DNI vigentes.</p>
-
-                                <div className="space-y-3 mt-4">
-                                  <div className="p-3 bg-navy-900 border border-navy-800 rounded-xl">
-                                    <span className="text-[8px] font-extrabold text-amber-500 uppercase">Arrendador (Dueño)</span>
-                                    <input
-                                      type="text"
-                                      value={landlordName}
-                                      onChange={(e) => setLandlordName(e.target.value)}
-                                      className="w-full bg-transparent border-b border-navy-800 focus:border-amber-500 focus:outline-none text-xs text-white py-1 font-medium"
-                                    />
-                                    <span className="text-[9px] text-slate-500 block mt-1 font-semibold">Validación DNI: Activa • RENIEC Perú</span>
+                            {/* Step Progress Dots */}
+                            <div className="flex items-center justify-between px-6 mb-4 shrink-0">
+                              {[1, 2, 3, 4].map(step => (
+                                <div key={step} className="flex items-center flex-1 last:flex-initial">
+                                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${sigStep === step ? 'bg-amber-500 text-navy-950 ring-4 ring-amber-500/20' :
+                                    sigStep > step ? 'bg-emerald-500 text-white' : 'bg-navy-800 text-slate-500'
+                                    }`}>
+                                    {sigStep > step ? '✓' : step}
                                   </div>
-
-                                  <div className="p-3 bg-navy-900 border border-navy-800 rounded-xl">
-                                    <span className="text-[8px] font-extrabold text-amber-500 uppercase">Arrendatario (Inquilino)</span>
-                                    <input
-                                      type="text"
-                                      value={tenantName}
-                                      onChange={(e) => setTenantName(e.target.value)}
-                                      className="w-full bg-transparent border-b border-navy-800 focus:border-amber-500 focus:outline-none text-xs text-white py-1 font-medium"
-                                    />
-                                    <span className="text-[9px] text-slate-500 block mt-1 font-semibold">Validación DNI: Activa • RENIEC Perú</span>
-                                  </div>
+                                  {step < 4 && (
+                                    <div className={`h-0.5 flex-1 mx-2 ${sigStep > step ? 'bg-emerald-500' : 'bg-navy-800'}`}></div>
+                                  )}
                                 </div>
-                              </div>
-
-                              <button
-                                onClick={() => setSigStep(2)}
-                                className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold text-xs rounded-xl shadow-md transition-all uppercase tracking-wider"
-                              >
-                                Ir a Validación Facial
-                              </button>
+                              ))}
                             </div>
-                          )}
 
-                          {/* STEP 2: FACE BIOMETRICS */}
-                          {sigStep === 2 && (
-                            <div className="flex-1 flex flex-col justify-between">
-                              <div>
-                                <h4 className="font-bold text-white text-sm">Paso 2: Validación Facial</h4>
-                                <p className="text-[10px] text-slate-400 mt-1">Para asegurar la validez legal, escanea tu rostro. Compararemos tu biometría contra la foto oficial del DNI.</p>
+                            {/* STEP 1: PARTICIPANTS */}
+                            {sigStep === 1 && (
+                              <div className="flex-1 flex flex-col justify-between">
+                                <div>
+                                  <h4 className="font-bold text-white text-sm">Paso 1: Identificación</h4>
+                                  <p className="text-[10px] text-slate-400 mt-1">Valida los firmantes del contrato con DNI vigentes.</p>
 
-                                <div className="my-6 flex justify-center">
-                                  <div className="relative w-44 h-44 rounded-full border-4 border-dashed border-navy-800 overflow-hidden flex items-center justify-center bg-navy-900 shadow-inner">
-
-                                    {faceScanActive ? (
-                                      <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                        <div className="w-full h-full bg-amber-500/10 animate-pulse flex items-center justify-center">
-                                          {/* Scanning Green Ring */}
-                                          <div className="absolute inset-2 border-2 border-emerald-500 rounded-full animate-ping"></div>
-                                          <span className="text-xl font-bold text-white">{faceScanProgress}%</span>
-                                        </div>
-                                      </div>
-                                    ) : faceScanDone ? (
-                                      <div className="absolute inset-0 bg-emerald-500/10 flex flex-col items-center justify-center">
-                                        <svg className="w-12 h-12 text-emerald-400 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                                        <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider mt-2">Cotejo RENIEC Exitoso</span>
-                                      </div>
-                                    ) : (
-                                      <div className="flex flex-col items-center text-center p-3">
-                                        <svg className="w-10 h-10 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                        <button
-                                          type="button"
-                                          onClick={startFaceScan}
-                                          className="mt-2.5 px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/20 text-[9px] font-bold rounded-lg uppercase tracking-wider"
-                                        >
-                                          Iniciar Cámara
-                                        </button>
-                                      </div>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div className="flex space-x-2">
-                                <button
-                                  onClick={() => setSigStep(1)}
-                                  className="flex-1 py-3 bg-navy-800 text-slate-300 font-bold text-xs rounded-xl border border-navy-700 uppercase"
-                                >
-                                  Atrás
-                                </button>
-                                <button
-                                  onClick={() => faceScanDone && setSigStep(3)}
-                                  disabled={!faceScanDone}
-                                  className={`flex-1 py-3 font-bold text-xs rounded-xl shadow-md transition-all uppercase tracking-wider ${faceScanDone ? 'bg-amber-500 text-navy-950 hover:bg-amber-600' : 'bg-navy-850 text-slate-600 cursor-not-allowed border border-navy-800'
-                                    }`}
-                                >
-                                  Siguiente
-                                </button>
-                              </div>
-                            </div>
-                          )}
-
-                          {/* STEP 3: DRAW SIGNATURE */}
-                          {sigStep === 3 && (
-                            <div className="flex-1 flex flex-col justify-between">
-                              <div>
-                                <h4 className="font-bold text-white text-sm">Paso 3: Firma Manuscrita</h4>
-                                <p className="text-[10px] text-slate-400 mt-1">Dibuja tu firma en el recuadro gris usando tu dedo o mouse.</p>
-
-                                <div className="mt-4">
-                                  <div
-                                    className="w-full h-44 bg-navy-900 border border-navy-800 rounded-xl relative overflow-hidden select-none cursor-crosshair"
-                                    onMouseDown={() => setIsDrawing(true)}
-                                    onMouseUp={() => setIsDrawing(false)}
-                                    onMouseLeave={() => setIsDrawing(false)}
-                                    onMouseMove={handleDrawSignature}
-                                    onTouchStart={() => setIsDrawing(true)}
-                                    onTouchEnd={() => setIsDrawing(false)}
-                                    onTouchMove={handleDrawSignature}
-                                    ref={signatureCanvasRef}
-                                  >
-                                    {sigLines.length === 0 && (
-                                      <div className="absolute inset-0 flex items-center justify-center text-slate-600 pointer-events-none text-[10px] uppercase font-bold tracking-wider">
-                                        Firma aquí
-                                      </div>
-                                    )}
-
-                                    {/* Draw SVG representation of user lines */}
-                                    <svg className="absolute inset-0 w-full h-full pointer-events-none">
-                                      <polyline
-                                        fill="none"
-                                        stroke="#f59e0b"
-                                        strokeWidth="3"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        points={sigLines.map(p => `${p.x},${p.y}`).join(' ')}
+                                  <div className="space-y-3 mt-4">
+                                    <div className="p-3 bg-navy-900 border border-navy-800 rounded-xl">
+                                      <span className="text-[8px] font-extrabold text-amber-500 uppercase">Arrendador (Dueño)</span>
+                                      <input
+                                        type="text"
+                                        value={landlordName}
+                                        onChange={(e) => setLandlordName(e.target.value)}
+                                        className="w-full bg-transparent border-b border-navy-800 focus:border-amber-500 focus:outline-none text-xs text-white py-1 font-medium"
                                       />
-                                    </svg>
-                                  </div>
+                                      <span className="text-[9px] text-slate-500 block mt-1 font-semibold">Validación DNI: Activa • RENIEC Perú</span>
+                                    </div>
 
-                                  <div className="flex justify-end mt-2">
-                                    <button
-                                      type="button"
-                                      onClick={clearSignature}
-                                      className="text-[9px] font-bold text-red-400 hover:text-red-300 uppercase tracking-wider"
-                                    >
-                                      Borrar Firma
-                                    </button>
+                                    <div className="p-3 bg-navy-900 border border-navy-800 rounded-xl">
+                                      <span className="text-[8px] font-extrabold text-amber-500 uppercase">Arrendatario (Inquilino)</span>
+                                      <input
+                                        type="text"
+                                        value={tenantName}
+                                        onChange={(e) => setTenantName(e.target.value)}
+                                        className="w-full bg-transparent border-b border-navy-800 focus:border-amber-500 focus:outline-none text-xs text-white py-1 font-medium"
+                                      />
+                                      <span className="text-[9px] text-slate-500 block mt-1 font-semibold">Validación DNI: Activa • RENIEC Perú</span>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
 
-                              <div className="flex space-x-2">
                                 <button
                                   onClick={() => setSigStep(2)}
-                                  className="flex-1 py-3 bg-navy-800 text-slate-300 font-bold text-xs rounded-xl border border-navy-700 uppercase"
+                                  className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold text-xs rounded-xl shadow-md transition-all uppercase tracking-wider"
                                 >
-                                  Atrás
-                                </button>
-                                <button
-                                  onClick={handleSaveSignature}
-                                  disabled={sigLines.length === 0}
-                                  className={`flex-1 py-3 font-bold text-xs rounded-xl shadow-md transition-all uppercase tracking-wider ${sigLines.length > 0 ? 'bg-amber-500 text-navy-950 hover:bg-amber-600' : 'bg-navy-850 text-slate-600 cursor-not-allowed border border-navy-800'
-                                    }`}
-                                >
-                                  Estampar Firma
+                                  Ir a Validación Facial
                                 </button>
                               </div>
-                            </div>
-                          )}
+                            )}
 
-                          {/* STEP 4: SIGNED SUCCESS */}
-                          {sigStep === 4 && (
-                            <div className="flex-1 flex flex-col justify-between text-center items-center py-6">
-                              <div className="w-16 h-16 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center border border-emerald-500/20 animate-bounce">
-                                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                              </div>
+                            {/* STEP 2: FACE BIOMETRICS */}
+                            {sigStep === 2 && (
+                              <div className="flex-1 flex flex-col justify-between">
+                                <div>
+                                  <h4 className="font-bold text-white text-sm">Paso 2: Validación Facial</h4>
+                                  <p className="text-[10px] text-slate-400 mt-1">Para asegurar la validez legal, escanea tu rostro. Compararemos tu biometría contra la foto oficial del DNI.</p>
 
-                              <div className="mt-4">
-                                <h4 className="font-bold text-white text-base">¡Contrato Firmado!</h4>
-                                <p className="text-xs text-slate-400 mt-2 px-4 leading-relaxed">
-                                  Se ha emitido la Firma Digital Calificada. El contrato ahora está sellado criptográficamente y respaldado en la Bóveda de Firmix IA.
-                                </p>
-                              </div>
+                                  <div className="my-6 flex justify-center">
+                                    <div className="relative w-44 h-44 rounded-full border-4 border-dashed border-navy-800 overflow-hidden flex items-center justify-center bg-navy-900 shadow-inner">
 
-                              {/* Tiny receipt graphic */}
-                              <div className="w-full bg-navy-900 border border-navy-800 rounded-xl p-3 text-left mt-6">
-                                <span className="text-[8px] font-bold text-emerald-400 uppercase block">Certificado de Validez</span>
-                                <div className="text-[9px] font-mono text-slate-400 mt-1 space-y-1">
-                                  <div>HASH: f15a92a...f92931a</div>
-                                  <div>FECHA: {new Date().toLocaleString()}</div>
-                                  <div>LEGALIDAD: Ley N° 27269 (Perú)</div>
+                                      {faceScanActive ? (
+                                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                          <div className="w-full h-full bg-amber-500/10 animate-pulse flex items-center justify-center">
+                                            {/* Scanning Green Ring */}
+                                            <div className="absolute inset-2 border-2 border-emerald-500 rounded-full animate-ping"></div>
+                                            <span className="text-xl font-bold text-white">{faceScanProgress}%</span>
+                                          </div>
+                                        </div>
+                                      ) : faceScanDone ? (
+                                        <div className="absolute inset-0 bg-emerald-500/10 flex flex-col items-center justify-center">
+                                          <svg className="w-12 h-12 text-emerald-400 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                                          <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider mt-2">Cotejo RENIEC Exitoso</span>
+                                        </div>
+                                      ) : (
+                                        <div className="flex flex-col items-center text-center p-3">
+                                          <svg className="w-10 h-10 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                          <button
+                                            type="button"
+                                            onClick={startFaceScan}
+                                            className="mt-2.5 px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/20 text-[9px] font-bold rounded-lg uppercase tracking-wider"
+                                          >
+                                            Iniciar Cámara
+                                          </button>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="flex space-x-2">
+                                  <button
+                                    onClick={() => setSigStep(1)}
+                                    className="flex-1 py-3 bg-navy-800 text-slate-300 font-bold text-xs rounded-xl border border-navy-700 uppercase"
+                                  >
+                                    Atrás
+                                  </button>
+                                  <button
+                                    onClick={() => faceScanDone && setSigStep(3)}
+                                    disabled={!faceScanDone}
+                                    className={`flex-1 py-3 font-bold text-xs rounded-xl shadow-md transition-all uppercase tracking-wider ${faceScanDone ? 'bg-amber-500 text-navy-950 hover:bg-amber-600' : 'bg-navy-850 text-slate-600 cursor-not-allowed border border-navy-800'
+                                      }`}
+                                  >
+                                    Siguiente
+                                  </button>
                                 </div>
                               </div>
+                            )}
 
-                              <button
-                                onClick={resetSignatureFlow}
-                                className="w-full mt-6 py-3 bg-navy-800 hover:bg-navy-750 text-white font-bold text-xs rounded-xl border border-navy-700 uppercase"
-                              >
-                                Firmar Otro Documento
-                              </button>
-                            </div>
-                          )}
-                        </div>
+                            {/* STEP 3: DRAW SIGNATURE */}
+                            {sigStep === 3 && (
+                              <div className="flex-1 flex flex-col justify-between">
+                                <div>
+                                  <h4 className="font-bold text-white text-sm">Paso 3: Firma Manuscrita</h4>
+                                  <p className="text-[10px] text-slate-400 mt-1">Dibuja tu firma en el recuadro gris usando tu dedo o mouse.</p>
+
+                                  <div className="mt-4">
+                                    <div
+                                      className="w-full h-44 bg-navy-900 border border-navy-800 rounded-xl relative overflow-hidden select-none cursor-crosshair"
+                                      onMouseDown={() => setIsDrawing(true)}
+                                      onMouseUp={() => setIsDrawing(false)}
+                                      onMouseLeave={() => setIsDrawing(false)}
+                                      onMouseMove={handleDrawSignature}
+                                      onTouchStart={() => setIsDrawing(true)}
+                                      onTouchEnd={() => setIsDrawing(false)}
+                                      onTouchMove={handleDrawSignature}
+                                      ref={signatureCanvasRef}
+                                    >
+                                      {sigLines.length === 0 && (
+                                        <div className="absolute inset-0 flex items-center justify-center text-slate-600 pointer-events-none text-[10px] uppercase font-bold tracking-wider">
+                                          Firma aquí
+                                        </div>
+                                      )}
+
+                                      {/* Draw SVG representation of user lines */}
+                                      <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                                        <polyline
+                                          fill="none"
+                                          stroke="#f59e0b"
+                                          strokeWidth="3"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          points={sigLines.map(p => `${p.x},${p.y}`).join(' ')}
+                                        />
+                                      </svg>
+                                    </div>
+
+                                    <div className="flex justify-end mt-2">
+                                      <button
+                                        type="button"
+                                        onClick={clearSignature}
+                                        className="text-[9px] font-bold text-red-400 hover:text-red-300 uppercase tracking-wider"
+                                      >
+                                        Borrar Firma
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="flex space-x-2">
+                                  <button
+                                    onClick={() => setSigStep(2)}
+                                    className="flex-1 py-3 bg-navy-800 text-slate-300 font-bold text-xs rounded-xl border border-navy-700 uppercase"
+                                  >
+                                    Atrás
+                                  </button>
+                                  <button
+                                    onClick={handleSaveSignature}
+                                    disabled={sigLines.length === 0}
+                                    className={`flex-1 py-3 font-bold text-xs rounded-xl shadow-md transition-all uppercase tracking-wider ${sigLines.length > 0 ? 'bg-amber-500 text-navy-950 hover:bg-amber-600' : 'bg-navy-850 text-slate-600 cursor-not-allowed border border-navy-800'
+                                      }`}
+                                  >
+                                    Estampar Firma
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* STEP 4: SIGNED SUCCESS */}
+                            {sigStep === 4 && (
+                              <div className="flex-1 flex flex-col justify-between text-center items-center py-6">
+                                <div className="w-16 h-16 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center border border-emerald-500/20 animate-bounce">
+                                  <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                                </div>
+
+                                <div className="mt-4">
+                                  <h4 className="font-bold text-white text-base">¡Contrato Firmado!</h4>
+                                  <p className="text-xs text-slate-400 mt-2 px-4 leading-relaxed">
+                                    Se ha emitido la Firma Digital Calificada. El contrato ahora está sellado criptográficamente y respaldado en la Bóveda de Firmix IA.
+                                  </p>
+                                </div>
+
+                                {/* Tiny receipt graphic */}
+                                <div className="w-full bg-navy-900 border border-navy-800 rounded-xl p-3 text-left mt-6">
+                                  <span className="text-[8px] font-bold text-emerald-400 uppercase block">Certificado de Validez</span>
+                                  <div className="text-[9px] font-mono text-slate-400 mt-1 space-y-1">
+                                    <div>HASH: f15a92a...f92931a</div>
+                                    <div>FECHA: {new Date().toLocaleString()}</div>
+                                    <div>LEGALIDAD: Ley N° 27269 (Perú)</div>
+                                  </div>
+                                </div>
+
+                                <button
+                                  onClick={resetSignatureFlow}
+                                  className="w-full mt-6 py-3 bg-navy-800 hover:bg-navy-750 text-white font-bold text-xs rounded-xl border border-navy-700 uppercase"
+                                >
+                                  Firmar Otro Documento
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        )
                       )}
 
                     </div>
 
                     {/* App Bottom Navigation Bar */}
-                    <div className="bg-navy-900 border-t border-navy-800/80 px-2 py-2 flex justify-around items-center shrink-0 z-10">
+                    <div className="bg-navy-900 border-t border-navy-800/80 px-1 py-2 flex justify-around items-center shrink-0 z-10">
+
+                      {/* Nav Tab 0: Dashboard */}
+                      <button
+                        onClick={() => setSimTab('dashboard')}
+                        className={`flex flex-col items-center flex-1 relative ${simTab === 'dashboard' ? 'text-amber-500' : 'text-slate-500 hover:text-slate-400'}`}
+                      >
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                        </svg>
+                        <span className="text-[7.5px] font-bold mt-1 uppercase tracking-tight flex items-center gap-0.5">
+                          Panel {!isPremium && <span className="text-[8px]">🔒</span>}
+                        </span>
+                      </button>
 
                       {/* Nav Tab 1 */}
                       <button
@@ -1309,7 +1695,7 @@
                         className={`flex flex-col items-center flex-1 ${simTab === 'scam-shield' ? 'text-amber-500' : 'text-slate-500 hover:text-slate-400'}`}
                       >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                        <span className="text-[8px] font-bold mt-1 uppercase tracking-tight">Scam Shield</span>
+                        <span className="text-[7.5px] font-bold mt-1 uppercase tracking-tight">Scam S.</span>
                       </button>
 
                       {/* Nav Tab 2 */}
@@ -1318,7 +1704,7 @@
                         className={`flex flex-col items-center flex-1 ${simTab === 'chatbot' ? 'text-amber-500' : 'text-slate-500 hover:text-slate-400'}`}
                       >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-                        <span className="text-[8px] font-bold mt-1 uppercase tracking-tight">Abogado IA</span>
+                        <span className="text-[7.5px] font-bold mt-1 uppercase tracking-tight">Chat IA</span>
                       </button>
 
                       {/* Nav Tab 3 */}
@@ -1327,7 +1713,9 @@
                         className={`flex flex-col items-center flex-1 ${simTab === 'vault' ? 'text-amber-500' : 'text-slate-500 hover:text-slate-400'}`}
                       >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                        <span className="text-[8px] font-bold mt-1 uppercase tracking-tight">Bóveda</span>
+                        <span className="text-[7.5px] font-bold mt-1 uppercase tracking-tight flex items-center gap-0.5">
+                          Bóveda {!isPremium && <span className="text-[8px]">🔒</span>}
+                        </span>
                       </button>
 
                       {/* Nav Tab 4 */}
@@ -1336,7 +1724,9 @@
                         className={`flex flex-col items-center flex-1 ${simTab === 'signature' ? 'text-amber-500' : 'text-slate-500 hover:text-slate-400'}`}
                       >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-                        <span className="text-[8px] font-bold mt-1 uppercase tracking-tight">Firma</span>
+                        <span className="text-[7.5px] font-bold mt-1 uppercase tracking-tight flex items-center gap-0.5">
+                          Firma {!isPremium && <span className="text-[8px]">🔒</span>}
+                        </span>
                       </button>
                     </div>
 
@@ -1392,7 +1782,7 @@
                   <div className="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-xl flex items-center justify-center mb-6">
                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
                   </div>
-                  <h3 className="text-lg font-bold text-white">Seguridad legal en un toque ("One-Tap")</h3>
+                  <h3 className="text-lg font-bold text-white">Seguridad legal en un toque (&quot;One-Tap&quot;)</h3>
                   <p className="text-xs text-slate-400 mt-3 leading-relaxed">
                     Formaliza contratos válidos ante notarios y juzgados mediante la firma digital enlazada al cotejo biométrico facial de RENIEC sin salir de casa ni pagar costos notariales exorbitantes.
                   </p>
@@ -1403,7 +1793,7 @@
           </section>
 
           {/* --- PRICING SECTION --- */}
-          <section id="pricing" className="py-16 md:py-24 bg-navy-950 relative">
+          <section id="pricing" className="py-16 md:py-24 bg-navy-950 relative overflow-hidden">
             <div className="absolute top-1/2 left-1/4 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1419,7 +1809,7 @@
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
 
                 {/* Plan Free */}
-                <div className="p-8 bg-navy-900/30 border border-navy-800 rounded-3xl flex flex-col justify-between hover:border-navy-700 transition-all">
+                <div className="p-6 sm:p-8 bg-navy-900/30 border border-navy-800 rounded-3xl flex flex-col justify-between hover:border-navy-700 transition-all">
                   <div>
                     <h4 className="text-lg font-bold text-white">Plan Freemium</h4>
                     <p className="text-xs text-slate-500 mt-1">Ideal para probar la IA</p>
@@ -1454,7 +1844,7 @@
                 </div>
 
                 {/* Plan Premium */}
-                <div className="p-8 bg-navy-900 border-2 border-amber-500 rounded-3xl flex flex-col justify-between relative shadow-glow-navy transform md:-translate-y-4">
+                <div className="p-6 sm:p-8 bg-navy-900 border-2 border-amber-500 rounded-3xl flex flex-col justify-between relative shadow-glow-navy transform md:-translate-y-4">
                   <div className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-amber-500 to-amber-600 text-navy-950 font-display font-extrabold text-[10px] uppercase tracking-wider px-4 py-1.5 rounded-full shadow-md">
                     Más Popular
                   </div>
@@ -1499,7 +1889,7 @@
                 </div>
 
                 {/* Plan Pro */}
-                <div className="p-8 bg-navy-900/30 border border-navy-800 rounded-3xl flex flex-col justify-between hover:border-navy-700 transition-all">
+                <div className="p-6 sm:p-8 bg-navy-900/30 border border-navy-800 rounded-3xl flex flex-col justify-between hover:border-navy-700 transition-all">
                   <div>
                     <h4 className="text-lg font-bold text-white">Plan Inmobiliario / Anual</h4>
                     <p className="text-xs text-slate-500 mt-1">Para arrendadores seriales</p>
@@ -1726,8 +2116,8 @@
               <div className="flex flex-col md:flex-row items-center justify-between gap-6">
 
                 <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center text-navy-950">
-                    ⚖️
+                  <div className="w-8 h-8 bg-gradient-to-tr from-amber-500 to-amber-600 rounded-lg flex items-center justify-center p-1 shadow-md shadow-amber-500/10">
+                    <img src="img/LogoFirmix2.png" className="w-full h-full object-contain" alt="Firmix Logo" />
                   </div>
                   <span className="font-display font-bold text-base text-white tracking-wide">FIRMIX IA</span>
                 </div>
@@ -1742,7 +2132,7 @@
           {/* --- PRICING CHECKOUT MODAL SIMULATOR --- */}
           {pricingPlan && (
             <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
-              <div className="w-full max-w-md bg-navy-900 border border-navy-800 rounded-3xl p-6 relative shadow-2xl">
+              <div className="w-full max-w-md bg-navy-900 border border-navy-800 rounded-3xl p-5 sm:p-6 relative shadow-2xl max-h-[90vh] overflow-y-auto">
 
                 {/* Close Button */}
                 <button
@@ -1754,7 +2144,12 @@
 
                 {!checkoutMethod ? (
                   <div>
-                    <h3 className="font-display font-bold text-xl text-white">Completar Suscripción</h3>
+                    <div className="flex items-center space-x-2.5 mb-2">
+                      <div className="w-8 h-8 bg-gradient-to-tr from-amber-500 to-amber-600 rounded-lg flex items-center justify-center p-1 shrink-0">
+                        <img src="img/LogoFirmix2.png" className="w-full h-full object-contain" alt="Firmix Logo" />
+                      </div>
+                      <h3 className="font-display font-bold text-xl text-white">Completar Suscripción</h3>
+                    </div>
                     <p className="text-xs text-slate-400 mt-1">Estás adquiriendo el {pricingPlan === 'premium' ? 'Plan AI Premium (S/.29/mes)' : 'Plan Anual (S/.69/mes)'}.</p>
 
                     <h4 className="text-xs font-bold text-slate-400 mt-6 uppercase tracking-wider">Elige tu método de pago seguro:</h4>
@@ -1803,7 +2198,10 @@
                     </p>
 
                     <button
-                      onClick={closeCheckout}
+                      onClick={() => {
+                        setIsPremium(true);
+                        closeCheckout();
+                      }}
                       className="mt-6 w-full py-3 bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold text-xs rounded-xl shadow-md transition-all uppercase tracking-wider"
                     >
                       Empezar a usar Premium
@@ -1820,7 +2218,9 @@
                         <div className="my-6 w-44 h-44 bg-white p-3 rounded-2xl mx-auto shadow-inner flex flex-col justify-center items-center relative border border-slate-200">
                           {/* Mock QR lines */}
                           <div className="w-36 h-36 bg-[radial-gradient(#1e293b_30%,transparent_30%)] bg-[size:10px_10px] flex items-center justify-center">
-                            <div className="w-12 h-12 bg-navy-950 rounded-lg flex items-center justify-center text-sm font-bold text-amber-500 border-2 border-white shadow">⚖️</div>
+                            <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center border-2 border-white shadow overflow-hidden">
+                              <img src="img/LogoFirmix.png" className="w-full h-full object-contain" alt="Firmix Logo" />
+                            </div>
                           </div>
                           {/* Scanning light mockup */}
                           <div className="absolute top-2 left-2 right-2 h-0.5 bg-purple-500 animate-bounce"></div>

@@ -1,0 +1,1903 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firmix IA - Tu Abogado Digital de Bolsillo para Alquileres Seguros</title>
+  <meta name="description"
+    content="Audita contratos de alquiler con Inteligencia Artificial, chatea con tu asesor legal 24/7 y firma digitalmente con validez legal. Mobile-first, seguro y rápido.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- React & React DOM CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+
+  <!-- Babel Standalone for in-browser JSX compilation -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Tailwind Custom Config -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              50: '#f4f6fa',
+              100: '#e8edf5',
+              200: '#cbd7e9',
+              300: '#9fb5d7',
+              400: '#6d8dc0',
+              500: '#4a6da7',
+              600: '#385489',
+              700: '#2f446f',
+              800: '#1b263b', // Legal Navy Dark
+              900: '#0d1117',
+              950: '#06090e',
+            },
+            amber: {
+              50: '#fffbeb',
+              100: '#fef3c7',
+              200: '#fde68a',
+              300: '#fcd34d',
+              400: '#fbbf24',
+              500: '#f59e0b', // Accent gold/amber
+              600: '#d97706',
+              700: '#b45309',
+              800: '#92400e',
+              900: '#78350f',
+            },
+            emerald: {
+              50: '#ecfdf5',
+              500: '#10b981', // Safe Green
+              600: '#059669',
+            }
+          },
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          boxShadow: {
+            'glow-amber': '0 0 15px -3px rgba(245, 158, 11, 0.4)',
+            'glow-navy': '0 0 20px -5px rgba(56, 84, 137, 0.5)',
+            'phone': '0 25px 50px -12px rgba(6, 9, 14, 0.5)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style type="text/css">
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: #06090e;
+      color: #cbd7e9;
+      overflow-x: hidden;
+    }
+
+    /* Smooth Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0d1117;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #1b263b;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #385489;
+    }
+
+    /* Laser Scanning Animation for Scam Shield */
+    @keyframes scan {
+      0% {
+        top: 0%;
+        opacity: 0.8;
+      }
+
+      50% {
+        top: 100%;
+        opacity: 0.8;
+      }
+
+      100% {
+        top: 0%;
+        opacity: 0.8;
+      }
+    }
+
+    .scanner-line {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to right, transparent, #f59e0b, transparent);
+      box-shadow: 0 0 8px #f59e0b;
+      animation: scan 2.5s infinite linear;
+      z-index: 10;
+    }
+
+    /* Pulse for recording status */
+    @keyframes pulse-slow {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(1.15);
+        opacity: 0.6;
+      }
+    }
+
+    .pulse-animation {
+      animation: pulse-slow 2s infinite ease-in-out;
+    }
+
+    /* Gradient Background Textures */
+    .bg-grid-pattern {
+      background-size: 40px 40px;
+      background-image:
+        linear-gradient(to right, rgba(27, 38, 59, 0.15) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(27, 38, 59, 0.15) 1px, transparent 1px);
+    }
+  </style>
+</head>
+
+<body class="bg-navy-950 text-slate-300 font-sans selection:bg-amber-500 selection:text-navy-950">
+
+  <!-- Root React App Container -->
+  <div id="root"></div>
+
+  <!-- React Code with Babel -->
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // --- MOCK DATA ---
+    const CONTRACT_PRESETS = {
+      abusivo: {
+        title: "Contrato con Cláusulas Abusivas (Lince)",
+        riskScore: 28, // Out of 100 (Red)
+        originalText: "Contrato Arrendamiento Dpto 402 - Lince.pdf",
+        date: "27 de Mayo, 2026",
+        risks: [
+          {
+            type: "danger",
+            title: "Penalidad Diaria Excesiva",
+            clause: "Cláusula Novena: En caso de mora en el pago del alquiler, el ARRENDATARIO pagará de forma automática e improrrogable una penalidad diaria equivalente a S/ 150 por cada día de retraso.",
+            translation: "Te quieren cobrar S/ 150 diarios si te retrasas. Legalmente en Perú, la mora debe ser proporcional. Esto es abusivo y equivale a más del 150% del valor diario del alquiler regular."
+          },
+          {
+            type: "warning",
+            title: "Retención Ilícita de Garantía",
+            clause: "Cláusula Décima Segunda: El ARRENDADOR devolverá la garantía en un plazo de noventa (90) días calendario posteriores a la entrega de llaves, previa verificación de servicios.",
+            translation: "90 días es demasiado. El plazo de ley y estándar de mercado es de 30 días. Intentarán retener tu dinero de garantía por 3 meses injustificadamente."
+          },
+          {
+            type: "danger",
+            title: "Desalojo Express sin Notificación",
+            clause: "Cláusula Décima Quinta: Ante el incumplimiento de un solo mes de alquiler, el ARRENDADOR podrá ingresar a la propiedad y retirar los bienes del ARRENDATARIO sin mediar orden judicial.",
+            translation: "Nadie puede ingresar a la fuerza a retirar tus cosas sin autorización. Esta cláusula es ilegal (violación de domicilio) y nula, aunque firme el contrato. El Desalojo Express (Ley 30933) requiere un notario y un juez de paz."
+          }
+        ]
+      },
+      renta: {
+        title: "Contrato con Incremento Abrupto de Renta",
+        riskScore: 54, // Out of 100 (Yellow)
+        originalText: "Propuesta Contrato - Surco.pdf",
+        date: "15 de Mayo, 2026",
+        risks: [
+          {
+            type: "warning",
+            title: "Incremento Unilateral de Renta",
+            clause: "Cláusula Quinta: El ARRENDADOR se reserva el derecho de incrementar la merced conductiva hasta en un 25% semestralmente basándose en la inflación y fluctuaciones del tipo de cambio.",
+            translation: "Permite al dueño subirte el precio un 25% cada 6 meses de forma unilateral. El incremento debe estar pactado a un monto fijo o tasa justificada y no dejarlo a libre decisión del dueño."
+          },
+          {
+            type: "safe",
+            title: "Uso de Garantía para Reparaciones",
+            clause: "Cláusula Sétima: La garantía se destinará exclusivamente a resarcir daños estructurales ocasionados directamente por el Arrendatario, excluyendo el desgaste natural.",
+            translation: "¡Cláusula Segura! Protege tu depósito para que no sea usado para pintar paredes por desgaste natural del tiempo."
+          }
+        ]
+      },
+      seguro: {
+        title: "Contrato Estándar Equilibrado (Firmix Certificado)",
+        riskScore: 96, // Out of 100 (Green)
+        originalText: "Contrato Sugerido Firmix - San Isidro.pdf",
+        date: "25 de Mayo, 2026",
+        risks: [
+          {
+            type: "safe",
+            title: "Devolución de Garantía Justa",
+            clause: "Cláusula Octava: La garantía será devuelta íntegramente en un plazo máximo de 30 días calendario tras la devolución del inmueble, deduciendo únicamente daños justificados con comprobantes.",
+            translation: "Esquema ideal y legal. Te asegura que deben demostrar con boletas/recibos si gastan algo de tu garantía."
+          },
+          {
+            type: "safe",
+            title: "Cláusula de Desahucio Express Legal",
+            clause: "Cláusula Décima: Las partes se someten a la Ley N° 30933 (Desahucio Express) con firmas legalizadas notarialmente para garantizar el desalojo pacífico en caso de vencimiento o falta de pago de dos meses.",
+            translation: "Cláusula equilibrada. Otorga seguridad al arrendador frente a morosos sin violar los derechos constitucionales del inquilino."
+          }
+        ]
+      }
+    };
+
+    const CHAT_PRESETS = [
+      {
+        question: "¿Cómo recupero mi garantía si el dueño se niega?",
+        response: "En Perú, la garantía respalda daños, no desgaste normal. Si el propietario no la devuelve en el plazo acordado (usualmente 30 días) y no presenta facturas de reparaciones, está reteniendo tu dinero ilegalmente.\n\nTe recomiendo:\n1. Enviar una Carta Notarial (puedes redactarla en la pestaña Bóveda con Firmix IA).\n2. Si persiste, iniciar una Conciliación Extrajudicial.\n¡Firmix te ayuda en todo el proceso!"
+      },
+      {
+        question: "¿El dueño puede ingresar al departamento sin mi permiso?",
+        response: "¡No! El artículo 2 de la Constitución peruana garantiza la inviolabilidad del domicilio. Una vez que alquilas, tú tienes la posesión. El dueño solo puede ingresar en fechas acordadas previamente para inspecciones u emergencias graves.\n\nSi entra sin avisar o a la fuerza, está cometiendo el delito de violación de domicilio."
+      },
+      {
+        question: "¿Qué pasa si decido mudarme antes de que venza el contrato?",
+        response: "De acuerdo al Código Civil peruano, si deseas resolver el contrato antes de tiempo, debes avisar con un mínimo de 30 días de anticipación. \n\nGeneralmente se pacta una penalidad (lucro cesante), que suele ser el pago de un mes y medio de alquiler si te vas en el primer año. Si no hay cláusula de penalidad expresa, el dueño legalmente podría reclamar daños, por lo que siempre es mejor firmar una adenda de mutuo acuerdo."
+      },
+      {
+        question: "¿Tiene validez legal una firma digital en un contrato de alquiler?",
+        response: "Sí, de acuerdo con la Ley N° 27269 (Ley de Firmas y Certificados Digitales) y su reglamento en Perú, las firmas electrónicas calificadas (con biometría y sellado de tiempo) tienen la misma validez legal y eficacia jurídica que una firma manuscrita. \n\nFirmix IA utiliza biometría facial enlazada a RENIEC y sellado de tiempo criptográfico, lo que hace el contrato 100% infalsificable ante cualquier juzgado."
+      }
+    ];
+
+    // --- INLINE SVG ICONS ---
+    const IconShield = () => (
+      <svg className="w-6 h-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+      </svg>
+    );
+
+    const IconChat = () => (
+      <svg className="w-6 h-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+      </svg>
+    );
+
+    const IconVault = () => (
+      <svg className="w-6 h-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+      </svg>
+    );
+
+    const IconPen = () => (
+      <svg className="w-6 h-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+      </svg>
+    );
+
+    // --- MAIN APP COMPONENT ---
+    function App() {
+      const [simTab, setSimTab] = useState('scam-shield');
+      const [menuOpen, setMenuOpen] = useState(false);
+      const [pricingPlan, setPricingPlan] = useState(null);
+      const [checkoutMethod, setCheckoutMethod] = useState(null);
+      const [checkoutSuccess, setCheckoutSuccess] = useState(false);
+
+      // Scam Shield State
+      const [scamState, setScamState] = useState('idle'); // idle, uploading, analyzing, completed
+      const [selectedPreset, setSelectedPreset] = useState('abusivo');
+      const [uploadedFileName, setUploadedFileName] = useState('');
+      const fileInputRef = useRef(null);
+
+      // Chatbot State
+      const [messages, setMessages] = useState([
+        {
+          sender: 'bot',
+          text: '¡Hola! 🛡️ Soy tu Abogado Digital 24/7. Puedo analizar cualquier duda que tengas sobre tu alquiler o contrato en Lima. Escribe tu duda o toca una de las preguntas frecuentes abajo.',
+          timestamp: '10:00 AM'
+        }
+      ]);
+      const [chatInput, setChatInput] = useState('');
+      const [isTyping, setIsTyping] = useState(false);
+      const chatContainerRef = useRef(null);
+
+      // Vault State
+      const [vaultDocs, setVaultDocs] = useState([
+        { name: "Contrato Alquiler - Dpto 402 Lince.pdf", type: "Contrato", date: "24/02/2026", size: "1.2 MB", verified: true },
+        { name: "Recibo de Garantía - Firmado.pdf", type: "Garantía", date: "24/02/2026", size: "850 KB", verified: true },
+        { name: "Pago Alquiler - Marzo 2026.pdf", type: "Pago", date: "02/03/2026", size: "420 KB", verified: true },
+        { name: "Pago Alquiler - Abril 2026.pdf", type: "Pago", date: "02/04/2026", size: "415 KB", verified: true },
+      ]);
+      const [uploadingDoc, setUploadingDoc] = useState(false);
+      const [showVaultUpload, setShowVaultUpload] = useState(false);
+      const [newDocName, setNewDocName] = useState('');
+      const [newDocType, setNewDocType] = useState('Pago');
+
+      // Signature State
+      const [sigStep, setSigStep] = useState(1);
+      const [landlordName, setLandlordName] = useState('Sofía Beltrán Rivas');
+      const [tenantName, setTenantName] = useState('Daniel Alarcón Cárdenas');
+      const [faceScanActive, setFaceScanActive] = useState(false);
+      const [faceScanProgress, setFaceScanProgress] = useState(0);
+      const [faceScanDone, setFaceScanDone] = useState(false);
+      const [isDrawing, setIsDrawing] = useState(false);
+      const [sigLines, setSigLines] = useState([]);
+      const signatureCanvasRef = useRef(null);
+
+      // Auto scroll chat internally (fixes viewport sliding bug)
+      useEffect(() => {
+        if (chatContainerRef.current) {
+          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+      }, [messages, isTyping]);
+
+      // --- SIMULATION HANDLERS ---
+
+      // Scam Shield Simulation
+      const handleStartAnalysis = (presetKey) => {
+        setSelectedPreset(presetKey);
+        setScamState('analyzing');
+        setTimeout(() => {
+          setScamState('completed');
+        }, 3000); // 3 seconds scan animation
+      };
+
+      const handleFileUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          setUploadedFileName(file.name);
+          setScamState('uploading');
+          setTimeout(() => {
+            setScamState('analyzing');
+            setTimeout(() => {
+              // Map uploaded file to 'abusivo' for demonstration
+              setSelectedPreset('abusivo');
+              setScamState('completed');
+            }, 3000);
+          }, 1500);
+        }
+      };
+
+      const handleResetScam = () => {
+        setScamState('idle');
+        setUploadedFileName('');
+      };
+
+      // Chatbot Simulation
+      const handleSendMessage = (textToSend) => {
+        const messageText = textToSend || chatInput;
+        if (!messageText.trim()) return;
+
+        // Add user message
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        setMessages(prev => [...prev, { sender: 'user', text: messageText, timestamp: timeStr }]);
+        setChatInput('');
+        setIsTyping(true);
+
+        // Find automatic response
+        setTimeout(() => {
+          let botReplyText = "Entiendo tu duda. Como abogado digital en el Perú, te sugiero revisar las cláusulas específicas de resolución y aviso notarial. ¿Deseas redactar una respuesta formal o quieres que verifique si el cobro es legal?";
+
+          // Match keywords
+          const textLower = messageText.toLowerCase();
+          if (textLower.includes('garantía') || textLower.includes('garantia') || textLower.includes('depósito') || textLower.includes('deposito')) {
+            botReplyText = CHAT_PRESETS[0].response;
+          } else if (textLower.includes('entrar') || textLower.includes('ingresar') || textLower.includes('dueño') || textLower.includes('propietario')) {
+            botReplyText = CHAT_PRESETS[1].response;
+          } else if (textLower.includes('mudar') || textLower.includes('irme') || textLower.includes('cancelar') || textLower.includes('resolver')) {
+            botReplyText = CHAT_PRESETS[2].response;
+          } else if (textLower.includes('firma') || textLower.includes('digital') || textLower.includes('validez') || textLower.includes('legal')) {
+            botReplyText = CHAT_PRESETS[3].response;
+          }
+
+          setMessages(prev => [...prev, { sender: 'bot', text: botReplyText, timestamp: timeStr }]);
+          setIsTyping(false);
+        }, 1500);
+      };
+
+      // Vault Simulation
+      const handleAddDocument = (e) => {
+        e.preventDefault();
+        if (!newDocName.trim()) return;
+
+        setUploadingDoc(true);
+        setTimeout(() => {
+          const today = new Date();
+          const dateStr = today.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+          const newDoc = {
+            name: newDocName.endsWith('.pdf') ? newDocName : `${newDocName}.pdf`,
+            type: newDocType,
+            date: dateStr,
+            size: '450 KB',
+            verified: true
+          };
+          setVaultDocs(prev => [newDoc, ...prev]);
+          setNewDocName('');
+          setUploadingDoc(false);
+          setShowVaultUpload(false);
+        }, 2000);
+      };
+
+      // Signature Simulation
+      const startFaceScan = () => {
+        setFaceScanActive(true);
+        setFaceScanProgress(0);
+
+        const interval = setInterval(() => {
+          setFaceScanProgress(prev => {
+            if (prev >= 100) {
+              clearInterval(interval);
+              setTimeout(() => {
+                setFaceScanActive(false);
+                setFaceScanDone(true);
+              }, 500);
+              return 100;
+            }
+            return prev + 10;
+          });
+        }, 150);
+      };
+
+      const handleDrawSignature = (e) => {
+        if (!isDrawing) return;
+        const canvas = signatureCanvasRef.current;
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+
+        setSigLines(prev => [...prev, { x, y }]);
+      };
+
+      const clearSignature = () => {
+        setSigLines([]);
+      };
+
+      const handleSaveSignature = () => {
+        if (sigLines.length === 0) return;
+        setSigStep(4);
+        // Simulate stamping PDF
+        setTimeout(() => {
+          // Success state reached
+        }, 2000);
+      };
+
+      const resetSignatureFlow = () => {
+        setSigStep(1);
+        setFaceScanDone(false);
+        setSigLines([]);
+      };
+
+      // Checkout Simulation
+      const handleCheckout = (method) => {
+        setCheckoutMethod(method);
+        // Spin for 2 seconds then show success
+        setTimeout(() => {
+          setCheckoutSuccess(true);
+        }, 2500);
+      };
+
+      const closeCheckout = () => {
+        setPricingPlan(null);
+        setCheckoutMethod(null);
+        setCheckoutSuccess(false);
+      };
+
+      return (
+        <div className="min-h-screen bg-navy-950 flex flex-col font-sans selection:bg-amber-500 selection:text-navy-950">
+
+          {/* --- NAVBAR --- */}
+          <header className="sticky top-0 z-50 bg-navy-900/80 backdrop-blur-md border-b border-navy-800 transition-all duration-300">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+
+              {/* Brand Logo */}
+              <a href="#" className="flex items-center space-x-2 group">
+                <div className="w-10 h-10 bg-gradient-to-tr from-amber-500 to-amber-600 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:rotate-6 transition-transform">
+                  <svg className="w-6 h-6 text-navy-950" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0z" />
+                  </svg>
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-display font-bold text-xl text-white tracking-wide group-hover:text-amber-400 transition-colors">FIRMIX <span className="text-amber-500 font-extrabold text-sm align-super">IA</span></span>
+                  <span className="text-[10px] text-slate-400 tracking-wider -mt-1 font-semibold uppercase">Abogado Digital</span>
+                </div>
+              </a>
+
+              {/* Desktop Nav Items */}
+              <nav className="hidden md:flex items-center space-x-8">
+                <a href="#features" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">Funcionalidades</a>
+                <a href="#demo" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">Demo en Vivo</a>
+                <a href="#pricing" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">Planes</a>
+                <a href="#testimonials" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">Casos de Éxito</a>
+              </nav>
+
+              <div className="hidden md:flex items-center space-x-4">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  <span className="w-1.5 h-1.5 mr-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  Demo Activa
+                </span>
+                <a href="#demo" className="px-5 py-2 text-sm font-bold bg-amber-500 hover:bg-amber-600 text-navy-950 rounded-xl transition-all hover:shadow-glow-amber hover:-translate-y-0.5">
+                  Probar Scam Shield
+                </a>
+              </div>
+
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                className="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-navy-800 transition-all focus:outline-none"
+              >
+                {menuOpen ? (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                ) : (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                )}
+              </button>
+            </div>
+
+            {/* Mobile Menu Panel */}
+            {menuOpen && (
+              <div className="md:hidden bg-navy-900 border-b border-navy-800 px-4 pt-2 pb-6 space-y-3">
+                <a href="#features" onClick={() => setMenuOpen(false)} className="block px-3 py-2 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-navy-800">Funcionalidades</a>
+                <a href="#demo" onClick={() => setMenuOpen(false)} className="block px-3 py-2 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-navy-800">Demo en Vivo</a>
+                <a href="#pricing" onClick={() => setMenuOpen(false)} className="block px-3 py-2 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-navy-800">Planes</a>
+                <a href="#testimonials" onClick={() => setMenuOpen(false)} className="block px-3 py-2 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-navy-800">Casos de Éxito</a>
+                <div className="pt-2 border-t border-navy-800 flex flex-col space-y-3">
+                  <div className="flex justify-center py-1">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                      <span className="w-1.5 h-1.5 mr-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                      Demo Activa
+                    </span>
+                  </div>
+                  <a href="#demo" onClick={() => setMenuOpen(false)} className="w-full text-center px-4 py-3 bg-amber-500 text-navy-950 font-bold rounded-xl shadow-lg">
+                    Probar Scam Shield Gratis
+                  </a>
+                </div>
+              </div>
+            )}
+          </header>
+
+          {/* --- HERO SECTION --- */}
+          <section className="relative pt-8 pb-16 md:pt-16 md:pb-24 overflow-hidden bg-grid-pattern">
+            {/* Ambient gradients */}
+            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+            <div className="absolute top-1/3 left-1/4 w-[350px] h-[350px] bg-navy-500/10 rounded-full blur-[80px] pointer-events-none"></div>
+
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center max-w-3xl mx-auto mb-10 md:mb-16">
+                <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-tight">
+                  La tranquilidad de alquilar seguro, <span className="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-amber-600">en un solo toque</span>
+                </h1>
+                <p className="mt-6 text-base sm:text-lg md:text-xl text-slate-400 font-light leading-relaxed">
+                  Audita contratos de alquiler con Inteligencia Artificial, chatea con tu abogado de bolsillo 24/7 y firma con validez jurídica absoluta. Protege tu garantía y evita estafas desde tu celular.
+                </p>
+                <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <a href="#demo" className="w-full sm:w-auto px-8 py-4 bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold rounded-2xl shadow-lg shadow-amber-500/15 hover:shadow-glow-amber hover:-translate-y-0.5 transition-all text-center">
+                    Analizar Contrato Gratis (PDF)
+                  </a>
+                  <a href="#pricing" className="w-full sm:w-auto px-8 py-4 border border-navy-700 bg-navy-900/50 hover:bg-navy-900 text-white font-semibold rounded-2xl hover:border-navy-600 transition-all text-center">
+                    Ver Planes S/.29
+                  </a>
+                </div>
+
+                {/* Trust Seals */}
+                <div className="mt-12 pt-8 border-t border-navy-900/50 grid grid-cols-2 sm:grid-cols-4 gap-4 items-center justify-items-center">
+                  <div className="flex items-center space-x-2 text-slate-500">
+                    <svg className="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M6.267 3.455a.75.75 0 00-.708-.523H4.5a2 2 0 00-2 2v1.078a.75.75 0 00.379.65l6 3.464a.75.75 0 00.742 0l6-3.464a.75.75 0 00.379-.65V4.932a2 2 0 00-2-2h-1.059a.75.75 0 00-.708.523L10.25 7.036a.75.75 0 01-.5 0L6.267 3.455zM2.5 9.043v5.457a2 2 0 002 2h11a2 2 0 002-2V9.043l-6.75 3.9a1.75 1.75 0 01-1.5 0L2.5 9.043z" clipRule="evenodd" /></svg>
+                    <span className="text-xs font-semibold tracking-wider uppercase">Validez Ley 27269</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-slate-500">
+                    <svg className="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a5 5 0 00-5 5v2a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2V7a5 5 0 00-5-5zM7 7a3 3 0 016 0v2H7V7z" /></svg>
+                    <span className="text-xs font-semibold tracking-wider uppercase">Seguridad Bancaria</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-slate-500">
+                    <svg className="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
+                    <span className="text-xs font-semibold tracking-wider uppercase">Cotejo RENIEC</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-slate-500">
+                    <svg className="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M2.166 4.9L10 1.154 17.834 4.9A2 2 0 0119 6.74v4.918a9.023 9.023 0 01-4.84 8.013L10 21l-4.16-2.329A9.023 9.023 0 011 11.658V6.74a2 2 0 011.166-1.84zM10 3.16L3 6.52v4.808c0 3.23 1.76 6.2 4.62 7.74l2.38 1.332 2.38-1.332C15.24 17.528 17 14.558 17 11.328V6.52L10 3.16z" clipRule="evenodd" /></svg>
+                    <span className="text-xs font-semibold tracking-wider uppercase">Firma Encriptada</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* --- DUAL INTERACTIVE EXPERIENCE --- */}
+              <div id="demo" className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center bg-navy-900/40 rounded-3xl p-6 sm:p-10 border border-navy-800/80 shadow-2xl">
+
+                {/* Left Panel: Tabs Control & Explanatory cards */}
+                <div className="lg:col-span-5 space-y-4">
+                  <div>
+                    <span className="text-xs font-bold tracking-wider text-amber-500 uppercase">Interactive Sandbox</span>
+                    <h2 className="text-2xl sm:text-3xl font-display font-bold text-white mt-1">Experimenta el App</h2>
+                    <p className="text-slate-400 text-sm mt-2 leading-relaxed">
+                      Haz clic en las pestañas para probar las características principales tal como las verías en tu teléfono celular.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3 mt-6">
+                    {/* Tab 1 Card */}
+                    <button
+                      onClick={() => setSimTab('scam-shield')}
+                      className={`w-full text-left p-4 rounded-2xl border transition-all duration-300 flex items-start space-x-4 ${simTab === 'scam-shield' ? 'border-amber-500 bg-navy-800/60 shadow-glow-navy' : 'border-navy-800 hover:border-navy-700 bg-transparent'}`}
+                    >
+                      <div className={`p-3 rounded-xl ${simTab === 'scam-shield' ? 'bg-amber-500/10 text-amber-400' : 'bg-navy-800 text-slate-400'}`}>
+                        <IconShield />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-white text-base">1. Scam Shield (Escudo Anti-Estafas)</h4>
+                        <p className="text-xs text-slate-400 mt-1">Escanea contratos, resalta cláusulas abusivas en semáforo de riesgo y las traduce al instante.</p>
+                      </div>
+                    </button>
+
+                    {/* Tab 2 Card */}
+                    <button
+                      onClick={() => setSimTab('chatbot')}
+                      className={`w-full text-left p-4 rounded-2xl border transition-all duration-300 flex items-start space-x-4 ${simTab === 'chatbot' ? 'border-amber-500 bg-navy-800/60 shadow-glow-navy' : 'border-navy-800 hover:border-navy-700 bg-transparent'}`}
+                    >
+                      <div className={`p-3 rounded-xl ${simTab === 'chatbot' ? 'bg-amber-500/10 text-amber-400' : 'bg-navy-800 text-slate-400'}`}>
+                        <IconChat />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-white text-base">2. Abogado IA 24/7</h4>
+                        <p className="text-xs text-slate-400 mt-1">Chat interactivo en tiempo real estructurado con WhatsApp API para tus dudas de alquiler.</p>
+                      </div>
+                    </button>
+
+                    {/* Tab 3 Card */}
+                    <button
+                      onClick={() => setSimTab('vault')}
+                      className={`w-full text-left p-4 rounded-2xl border transition-all duration-300 flex items-start space-x-4 ${simTab === 'vault' ? 'border-amber-500 bg-navy-800/60 shadow-glow-navy' : 'border-navy-800 hover:border-navy-700 bg-transparent'}`}
+                    >
+                      <div className={`p-3 rounded-xl ${simTab === 'vault' ? 'bg-amber-500/10 text-amber-400' : 'bg-navy-800 text-slate-400'}`}>
+                        <IconVault />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-white text-base">3. Smart Vault (Bóveda Segura)</h4>
+                        <p className="text-xs text-slate-400 mt-1">Almacena contratos, registra recibos y crea tu perfil financiero de inquilino confiable.</p>
+                      </div>
+                    </button>
+
+                    {/* Tab 4 Card */}
+                    <button
+                      onClick={() => setSimTab('signature')}
+                      className={`w-full text-left p-4 rounded-2xl border transition-all duration-300 flex items-start space-x-4 ${simTab === 'signature' ? 'border-amber-500 bg-navy-800/60 shadow-glow-navy' : 'border-navy-800 hover:border-navy-700 bg-transparent'}`}
+                    >
+                      <div className={`p-3 rounded-xl ${simTab === 'signature' ? 'bg-amber-500/10 text-amber-400' : 'bg-navy-800 text-slate-400'}`}>
+                        <IconPen />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-white text-base">4. Firma Digital Biométrica</h4>
+                        <p className="text-xs text-slate-400 mt-1">Valida identidad con cotejo de rostro ante RENIEC y firma legalmente desde casa.</p>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Right Panel: Simulated Phone Mockup */}
+                <div className="lg:col-span-7 flex justify-center">
+                  <div className="relative w-full max-w-[360px] h-[720px] bg-navy-900 border-8 border-navy-800 rounded-[50px] shadow-phone overflow-hidden flex flex-col">
+
+                    {/* iPhone Status Bar Overlay */}
+                    <div className="bg-navy-900 px-6 pt-3 pb-2 flex justify-between items-center text-xs font-bold text-white select-none z-30 shrink-0">
+                      <span>10:00</span>
+                      {/* Notch */}
+                      <div className="absolute top-2 left-1/2 -translate-x-1/2 w-28 h-5 bg-black rounded-full"></div>
+                      <div className="flex items-center space-x-1">
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A1.75 1.75 0 014 7.5h12a1.75 1.75 0 011.707 1.793z" clipRule="evenodd" /></svg>
+                        <span className="text-[10px]">5G</span>
+                        <div className="w-5 h-2.5 border border-white/60 rounded-sm p-0.5 flex items-center"><div className="w-3.5 h-full bg-white rounded-2xs"></div></div>
+                      </div>
+                    </div>
+
+                    {/* App Internal Nav */}
+                    <div className="bg-navy-800/90 border-b border-navy-700/60 px-4 py-3 flex items-center justify-between shrink-0 z-10">
+                      <div className="flex items-center space-x-1.5">
+                        <div className="w-2.5 h-2.5 bg-amber-500 rounded-full"></div>
+                        <span className="font-display font-extrabold text-white text-sm tracking-wide">FIRMIX IA</span>
+                      </div>
+                      <span className="text-[10px] bg-amber-500/10 text-amber-400 font-bold px-2 py-0.5 rounded-full border border-amber-500/20">ABOGADO MÓVIL</span>
+                    </div>
+
+                    {/* App Content Area (Changes based on active tab) */}
+                    <div className="flex-1 bg-navy-950 overflow-y-auto relative flex flex-col">
+
+                      {/* --- VIEW: SCAM SHIELD --- */}
+                      {simTab === 'scam-shield' && (
+                        <div className="p-4 flex-1 flex flex-col text-slate-300">
+                          {scamState === 'idle' && (
+                            <div className="flex-1 flex flex-col justify-center items-center text-center px-2">
+                              <div className="w-16 h-16 bg-amber-500/10 text-amber-400 rounded-2xl flex items-center justify-center mb-4 border border-amber-500/20">
+                                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+                              </div>
+                              <h3 className="font-bold text-white text-base">Escudo Anti-Estafas</h3>
+                              <p className="text-xs text-slate-400 mt-2">Sube un contrato de alquiler o escoge un caso real de Lima para analizar con nuestra IA en 60 segundos.</p>
+
+                              {/* Action Buttons */}
+                              <div className="w-full space-y-2.5 mt-6">
+                                <input
+                                  type="file"
+                                  ref={fileInputRef}
+                                  onChange={handleFileUpload}
+                                  className="hidden"
+                                  accept=".pdf"
+                                />
+                                <button
+                                  onClick={() => fileInputRef.current.click()}
+                                  className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center space-x-2"
+                                >
+                                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+                                  <span>Subir Contrato PDF</span>
+                                </button>
+
+                                <div className="flex items-center my-4">
+                                  <div className="flex-1 h-px bg-navy-800"></div>
+                                  <span className="px-2 text-[10px] text-slate-500 font-bold uppercase tracking-wider">O probar plantillas</span>
+                                  <div className="flex-1 h-px bg-navy-800"></div>
+                                </div>
+
+                                <button
+                                  onClick={() => handleStartAnalysis('abusivo')}
+                                  className="w-full p-3 bg-navy-900 border border-red-500/30 hover:border-red-500/60 rounded-xl text-left transition-all"
+                                >
+                                  <div className="flex justify-between items-center">
+                                    <span className="text-xs font-bold text-white">1. Contrato Abusivo (Mora S/.150)</span>
+                                    <span className="px-1.5 py-0.5 text-[9px] bg-red-500/10 text-red-400 font-extrabold rounded uppercase">Riesgo Alto</span>
+                                  </div>
+                                  <p className="text-[10px] text-slate-400 mt-1">Ubicación típica: Dpto en Lince con dueños conflictivos.</p>
+                                </button>
+
+                                <button
+                                  onClick={() => handleStartAnalysis('renta')}
+                                  className="w-full p-3 bg-navy-900 border border-amber-500/30 hover:border-amber-500/60 rounded-xl text-left transition-all"
+                                >
+                                  <div className="flex justify-between items-center">
+                                    <span className="text-xs font-bold text-white">2. Contrato Inestable (Surco)</span>
+                                    <span className="px-1.5 py-0.5 text-[9px] bg-amber-500/10 text-amber-400 font-extrabold rounded uppercase">Alerta Media</span>
+                                  </div>
+                                  <p className="text-[10px] text-slate-400 mt-1">Incremento unilateral de precio semestralmente.</p>
+                                </button>
+
+                                <button
+                                  onClick={() => handleStartAnalysis('seguro')}
+                                  className="w-full p-3 bg-navy-900 border border-emerald-500/30 hover:border-emerald-500/60 rounded-xl text-left transition-all"
+                                >
+                                  <div className="flex justify-between items-center">
+                                    <span className="text-xs font-bold text-white">3. Contrato Seguro (Firmix)</span>
+                                    <span className="px-1.5 py-0.5 text-[9px] bg-emerald-500/10 text-emerald-400 font-extrabold rounded uppercase">Confiable</span>
+                                  </div>
+                                  <p className="text-[10px] text-slate-400 mt-1">Redactado bajo leyes vigentes de arrendamiento.</p>
+                                </button>
+                              </div>
+                            </div>
+                          )}
+
+                          {scamState === 'uploading' && (
+                            <div className="flex-1 flex flex-col justify-center items-center text-center p-6">
+                              <div className="w-16 h-16 bg-navy-900 border border-navy-800 rounded-2xl flex items-center justify-center mb-6 relative">
+                                <div className="absolute inset-0 border-2 border-amber-500 border-t-transparent rounded-2xl animate-spin"></div>
+                                <svg className="w-8 h-8 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                              </div>
+                              <h4 className="font-bold text-white text-sm">Subiendo archivo...</h4>
+                              <p className="text-xs text-slate-400 mt-1 max-w-[200px] truncate">{uploadedFileName}</p>
+                            </div>
+                          )}
+
+                          {scamState === 'analyzing' && (
+                            <div className="flex-1 flex flex-col justify-center items-center text-center p-6 relative overflow-hidden bg-navy-900/20 rounded-2xl border border-navy-800">
+                              <div className="scanner-line"></div>
+                              <div className="w-16 h-16 bg-amber-500/10 border border-amber-500/30 rounded-2xl flex items-center justify-center mb-6 relative">
+                                <svg className="w-8 h-8 text-amber-400 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                              </div>
+                              <h4 className="font-bold text-white text-sm">Escaneando con Firmix IA...</h4>
+                              <p className="text-xs text-slate-400 mt-2">Buscando cláusulas abusivas, penalidades ocultas y validando marco legal de LATAM...</p>
+                              <div className="mt-4 w-40 bg-navy-800 h-1.5 rounded-full overflow-hidden">
+                                <div className="bg-amber-500 h-full w-[65%] rounded-full animate-pulse"></div>
+                              </div>
+                            </div>
+                          )}
+
+                          {scamState === 'completed' && (
+                            <div className="flex-1 flex flex-col">
+                              {/* Trust Score Card */}
+                              <div className="p-3.5 bg-navy-900 border border-navy-800 rounded-2xl flex items-center justify-between shadow-md">
+                                <div className="flex items-center space-x-3">
+                                  {/* Color indicator based on score */}
+                                  <div className={`w-12 h-12 rounded-xl flex flex-col items-center justify-center font-display font-extrabold text-sm ${CONTRACT_PRESETS[selectedPreset].riskScore >= 80 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                                      CONTRACT_PRESETS[selectedPreset].riskScore >= 50 ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+                                        'bg-red-500/10 text-red-400 border border-red-500/20'
+                                    }`}>
+                                    {CONTRACT_PRESETS[selectedPreset].riskScore}
+                                    <span className="text-[7px] text-slate-400 -mt-1 font-semibold">SCORE</span>
+                                  </div>
+                                  <div>
+                                    <h4 className="text-xs font-bold text-white max-w-[150px] truncate">{uploadedFileName || CONTRACT_PRESETS[selectedPreset].title}</h4>
+                                    <p className="text-[10px] text-slate-400">{CONTRACT_PRESETS[selectedPreset].date}</p>
+                                  </div>
+                                </div>
+                                <button
+                                  onClick={handleResetScam}
+                                  className="text-[10px] font-bold text-amber-500 hover:text-amber-400 bg-amber-500/5 px-2.5 py-1.5 rounded-lg border border-amber-500/15"
+                                >
+                                  Reiniciar
+                                </button>
+                              </div>
+
+                              <h5 className="text-[11px] font-bold text-slate-400 mt-4 uppercase tracking-wider">Reporte de Riesgos Encontrados:</h5>
+
+                              {/* Risks List */}
+                              <div className="space-y-3 mt-2 overflow-y-auto max-h-[350px] pr-1">
+                                {CONTRACT_PRESETS[selectedPreset].risks.map((risk, index) => (
+                                  <div
+                                    key={index}
+                                    className={`p-3 rounded-xl border ${risk.type === 'danger' ? 'bg-red-950/20 border-red-500/20' :
+                                        risk.type === 'warning' ? 'bg-amber-950/20 border-amber-500/20' :
+                                          'bg-emerald-950/20 border-emerald-500/20'
+                                      }`}
+                                  >
+                                    <div className="flex items-center space-x-2">
+                                      <span className={`w-2.5 h-2.5 rounded-full ${risk.type === 'danger' ? 'bg-red-500' :
+                                          risk.type === 'warning' ? 'bg-amber-500' :
+                                            'bg-emerald-500'
+                                        }`}></span>
+                                      <span className="text-xs font-bold text-white">{risk.title}</span>
+                                    </div>
+                                    <div className="mt-2 p-2 bg-black/30 rounded text-[10px] font-mono text-slate-400 break-words border border-navy-800">
+                                      "{risk.clause}"
+                                    </div>
+                                    <div className="mt-2 flex items-start space-x-1.5">
+                                      <span className="text-amber-500 text-xs">💡</span>
+                                      <p className="text-[10px] text-slate-300 font-medium leading-relaxed">
+                                        <strong className="text-amber-500">Traducción Firmix:</strong> {risk.translation}
+                                      </p>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+
+                              {/* Conversion Trigger */}
+                              <div className="mt-4 p-3 bg-gradient-to-r from-navy-900 to-navy-850 border border-amber-500/20 rounded-xl text-center shadow-lg">
+                                <p className="text-[10px] text-slate-300 font-semibold">¿Quieres descargar el reporte completo de 12 páginas y exportar una adenda legal?</p>
+                                <button
+                                  onClick={() => setPricingPlan('premium')}
+                                  className="mt-2 w-full py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-navy-950 font-bold text-xs rounded-lg shadow-md transition-all"
+                                >
+                                  Desbloquear Dashboard Premium
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* --- VIEW: LEGAL CHATBOT --- */}
+                      {simTab === 'chatbot' && (
+                        <div className="flex-1 flex flex-col h-full bg-navy-950">
+                          {/* Messages Window */}
+                          <div ref={chatContainerRef} className="flex-1 p-3 space-y-3 overflow-y-auto max-h-[440px] flex flex-col">
+                            {messages.map((msg, index) => (
+                              <div
+                                key={index}
+                                className={`flex flex-col max-w-[85%] ${msg.sender === 'user' ? 'self-end items-end' : 'self-start items-start'}`}
+                              >
+                                <div className={`p-3 rounded-2xl text-xs leading-relaxed ${msg.sender === 'user'
+                                    ? 'bg-amber-500 text-navy-950 font-medium rounded-tr-none'
+                                    : 'bg-navy-900 text-slate-200 border border-navy-800 rounded-tl-none'
+                                  }`}>
+                                  {msg.text.split('\n').map((para, i) => (
+                                    <p key={i} className={i > 0 ? 'mt-2' : ''}>{para}</p>
+                                  ))}
+                                </div>
+                                <span className="text-[9px] text-slate-500 mt-1 px-1 font-semibold">{msg.timestamp}</span>
+                              </div>
+                            ))}
+                            {isTyping && (
+                              <div className="self-start flex flex-col items-start max-w-[80%]">
+                                <div className="p-3 bg-navy-900 border border-navy-800 rounded-2xl rounded-tl-none flex items-center space-x-1">
+                                  <div className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                                  <div className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                                  <div className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Quick Preset Buttons (Chips) */}
+                          <div className="p-2 border-t border-navy-800 bg-navy-900/40 shrink-0">
+                            <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider px-1">Preguntas Frecuentes:</span>
+                            <div className="flex space-x-2 overflow-x-auto pb-1 pt-1 scrollbar-none">
+                              {CHAT_PRESETS.map((preset, idx) => (
+                                <button
+                                  key={idx}
+                                  onClick={() => handleSendMessage(preset.question)}
+                                  className="shrink-0 px-3 py-1.5 bg-navy-900 hover:bg-navy-800 border border-navy-800 hover:border-slate-700 rounded-full text-[10px] text-slate-300 font-medium transition-colors"
+                                >
+                                  {preset.question}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Input Bar */}
+                          <div className="p-2 border-t border-navy-800 bg-navy-900 shrink-0 flex items-center space-x-2">
+                            <input
+                              type="text"
+                              value={chatInput}
+                              onChange={(e) => setChatInput(e.target.value)}
+                              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                              placeholder="Escribe tu consulta legal aquí..."
+                              className="flex-1 bg-navy-950 border border-navy-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500 font-medium"
+                            />
+                            <button
+                              onClick={() => handleSendMessage()}
+                              className="w-8 py-2 bg-amber-500 hover:bg-amber-600 rounded-xl flex items-center justify-center text-navy-950 shadow-md transition-all shrink-0"
+                            >
+                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* --- VIEW: SMART VAULT --- */}
+                      {simTab === 'vault' && (
+                        <div className="p-4 flex-1 flex flex-col bg-navy-950">
+
+                          {/* Top Vault Metrics */}
+                          <div className="grid grid-cols-2 gap-3 mb-4 shrink-0">
+                            <div className="p-3 bg-navy-900 border border-navy-800 rounded-xl text-center">
+                              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Inquilino Scoring</span>
+                              <div className="text-xl font-display font-extrabold text-emerald-400 mt-1">980/1000</div>
+                              <span className="text-[9px] bg-emerald-500/10 text-emerald-400 font-semibold px-2 py-0.5 rounded-full mt-1.5 inline-block">Excelente</span>
+                            </div>
+                            <div className="p-3 bg-navy-900 border border-navy-800 rounded-xl text-center">
+                              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Espacio Seguro</span>
+                              <div className="text-xl font-display font-extrabold text-white mt-1">2.4 MB</div>
+                              <span className="text-[9px] text-slate-400 mt-1.5 inline-block font-semibold">100% Cifrado SSL</span>
+                            </div>
+                          </div>
+
+                          <div className="flex justify-between items-center mb-2 shrink-0">
+                            <h5 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Mis Documentos Activos</h5>
+                            <button
+                              onClick={() => setShowVaultUpload(true)}
+                              className="text-[10px] font-bold text-amber-500 hover:text-amber-400 flex items-center space-x-1"
+                            >
+                              <span>+ Subir Pago</span>
+                            </button>
+                          </div>
+
+                          {/* Documents List */}
+                          <div className="flex-1 overflow-y-auto space-y-2.5 max-h-[300px] pr-1">
+                            {vaultDocs.map((doc, idx) => (
+                              <div key={idx} className="p-3 bg-navy-900 border border-navy-800/80 rounded-xl flex items-center justify-between shadow-xs">
+                                <div className="flex items-center space-x-2.5 min-w-0">
+                                  {/* Icon based on doc type */}
+                                  <div className={`p-2 rounded-lg shrink-0 ${doc.type === 'Contrato' ? 'bg-blue-500/10 text-blue-400' :
+                                      doc.type === 'Garantía' ? 'bg-amber-500/10 text-amber-400' :
+                                        'bg-emerald-500/10 text-emerald-400'
+                                    }`}>
+                                    {doc.type === 'Contrato' ? (
+                                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                    ) : (
+                                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                                    )}
+                                  </div>
+                                  <div className="truncate min-w-0">
+                                    <h6 className="text-[11px] font-bold text-white truncate">{doc.name}</h6>
+                                    <p className="text-[9px] text-slate-500 mt-0.5">{doc.date} • {doc.size}</p>
+                                  </div>
+                                </div>
+                                <div className="flex items-center space-x-2 shrink-0">
+                                  {doc.verified && (
+                                    <span className="text-[9px] font-bold bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-500/10">Respaldado</span>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* Action Report Card */}
+                          <div className="mt-3 p-3 bg-gradient-to-tr from-amber-500/10 to-amber-600/5 border border-amber-500/25 rounded-xl shrink-0">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <h6 className="text-xs font-bold text-white">Reporte de Buen Inquilino</h6>
+                                <p className="text-[9px] text-slate-400 mt-0.5">Demuestra tu puntualidad respaldado en Blockchain.</p>
+                              </div>
+                              <button
+                                onClick={() => alert("Reporte de Buen Pagador generado en PDF (Simulado). ¡Ideal para presentar a tu próximo arrendador!")}
+                                className="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold text-[9px] rounded-lg shadow-sm transition-all"
+                              >
+                                Descargar
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Simple Upload Modal overlay */}
+                          {showVaultUpload && (
+                            <div className="absolute inset-0 bg-navy-950/95 z-20 p-4 flex flex-col justify-center">
+                              <form onSubmit={handleAddDocument} className="bg-navy-900 border border-navy-800 p-4 rounded-2xl space-y-3">
+                                <h4 className="font-bold text-white text-sm">Registrar Pago de Alquiler</h4>
+
+                                <div className="space-y-1">
+                                  <label className="text-[9px] font-bold text-slate-400 uppercase">Mes correspondiente</label>
+                                  <input
+                                    type="text"
+                                    required
+                                    placeholder="Ej. Mayo 2026"
+                                    value={newDocName}
+                                    onChange={(e) => setNewDocName(e.target.value)}
+                                    className="w-full bg-navy-950 border border-navy-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                                  />
+                                </div>
+
+                                <div className="space-y-1">
+                                  <label className="text-[9px] font-bold text-slate-400 uppercase">Tipo de Documento</label>
+                                  <select
+                                    value={newDocType}
+                                    onChange={(e) => setNewDocType(e.target.value)}
+                                    className="w-full bg-navy-950 border border-navy-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                                  >
+                                    <option value="Pago">Recibo de Alquiler / Transferencia</option>
+                                    <option value="Servicio">Recibo de Luz/Agua/Internet</option>
+                                    <option value="Garantía">Firma de Adenda / Acuerdo</option>
+                                  </select>
+                                </div>
+
+                                <div className="pt-2 flex space-x-2">
+                                  <button
+                                    type="button"
+                                    onClick={() => setShowVaultUpload(false)}
+                                    className="flex-1 py-2 bg-navy-800 hover:bg-navy-750 text-slate-300 font-bold text-xs rounded-lg border border-navy-700"
+                                  >
+                                    Cancelar
+                                  </button>
+                                  <button
+                                    type="submit"
+                                    disabled={uploadingDoc}
+                                    className="flex-1 py-2 bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold text-xs rounded-lg shadow-md transition-all flex items-center justify-center"
+                                  >
+                                    {uploadingDoc ? 'Cargando...' : 'Subir y Cifrar'}
+                                  </button>
+                                </div>
+                              </form>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* --- VIEW: DIGITAL SIGNATURE --- */}
+                      {simTab === 'signature' && (
+                        <div className="p-4 flex-1 flex flex-col bg-navy-950 text-slate-300">
+
+                          {/* Step Progress Dots */}
+                          <div className="flex items-center justify-between px-6 mb-4 shrink-0">
+                            {[1, 2, 3, 4].map(step => (
+                              <div key={step} className="flex items-center flex-1 last:flex-initial">
+                                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${sigStep === step ? 'bg-amber-500 text-navy-950 ring-4 ring-amber-500/20' :
+                                    sigStep > step ? 'bg-emerald-500 text-white' : 'bg-navy-800 text-slate-500'
+                                  }`}>
+                                  {sigStep > step ? '✓' : step}
+                                </div>
+                                {step < 4 && (
+                                  <div className={`h-0.5 flex-1 mx-2 ${sigStep > step ? 'bg-emerald-500' : 'bg-navy-800'}`}></div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* STEP 1: PARTICIPANTS */}
+                          {sigStep === 1 && (
+                            <div className="flex-1 flex flex-col justify-between">
+                              <div>
+                                <h4 className="font-bold text-white text-sm">Paso 1: Identificación</h4>
+                                <p className="text-[10px] text-slate-400 mt-1">Valida los firmantes del contrato con DNI vigentes.</p>
+
+                                <div className="space-y-3 mt-4">
+                                  <div className="p-3 bg-navy-900 border border-navy-800 rounded-xl">
+                                    <span className="text-[8px] font-extrabold text-amber-500 uppercase">Arrendador (Dueño)</span>
+                                    <input
+                                      type="text"
+                                      value={landlordName}
+                                      onChange={(e) => setLandlordName(e.target.value)}
+                                      className="w-full bg-transparent border-b border-navy-800 focus:border-amber-500 focus:outline-none text-xs text-white py-1 font-medium"
+                                    />
+                                    <span className="text-[9px] text-slate-500 block mt-1 font-semibold">Validación DNI: Activa • RENIEC Perú</span>
+                                  </div>
+
+                                  <div className="p-3 bg-navy-900 border border-navy-800 rounded-xl">
+                                    <span className="text-[8px] font-extrabold text-amber-500 uppercase">Arrendatario (Inquilino)</span>
+                                    <input
+                                      type="text"
+                                      value={tenantName}
+                                      onChange={(e) => setTenantName(e.target.value)}
+                                      className="w-full bg-transparent border-b border-navy-800 focus:border-amber-500 focus:outline-none text-xs text-white py-1 font-medium"
+                                    />
+                                    <span className="text-[9px] text-slate-500 block mt-1 font-semibold">Validación DNI: Activa • RENIEC Perú</span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <button
+                                onClick={() => setSigStep(2)}
+                                className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold text-xs rounded-xl shadow-md transition-all uppercase tracking-wider"
+                              >
+                                Ir a Validación Facial
+                              </button>
+                            </div>
+                          )}
+
+                          {/* STEP 2: FACE BIOMETRICS */}
+                          {sigStep === 2 && (
+                            <div className="flex-1 flex flex-col justify-between">
+                              <div>
+                                <h4 className="font-bold text-white text-sm">Paso 2: Validación Facial</h4>
+                                <p className="text-[10px] text-slate-400 mt-1">Para asegurar la validez legal, escanea tu rostro. Compararemos tu biometría contra la foto oficial del DNI.</p>
+
+                                <div className="my-6 flex justify-center">
+                                  <div className="relative w-44 h-44 rounded-full border-4 border-dashed border-navy-800 overflow-hidden flex items-center justify-center bg-navy-900 shadow-inner">
+
+                                    {faceScanActive ? (
+                                      <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                        <div className="w-full h-full bg-amber-500/10 animate-pulse flex items-center justify-center">
+                                          {/* Scanning Green Ring */}
+                                          <div className="absolute inset-2 border-2 border-emerald-500 rounded-full animate-ping"></div>
+                                          <span className="text-xl font-bold text-white">{faceScanProgress}%</span>
+                                        </div>
+                                      </div>
+                                    ) : faceScanDone ? (
+                                      <div className="absolute inset-0 bg-emerald-500/10 flex flex-col items-center justify-center">
+                                        <svg className="w-12 h-12 text-emerald-400 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                                        <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider mt-2">Cotejo RENIEC Exitoso</span>
+                                      </div>
+                                    ) : (
+                                      <div className="flex flex-col items-center text-center p-3">
+                                        <svg className="w-10 h-10 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                        <button
+                                          type="button"
+                                          onClick={startFaceScan}
+                                          className="mt-2.5 px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/20 text-[9px] font-bold rounded-lg uppercase tracking-wider"
+                                        >
+                                          Iniciar Cámara
+                                        </button>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="flex space-x-2">
+                                <button
+                                  onClick={() => setSigStep(1)}
+                                  className="flex-1 py-3 bg-navy-800 text-slate-300 font-bold text-xs rounded-xl border border-navy-700 uppercase"
+                                >
+                                  Atrás
+                                </button>
+                                <button
+                                  onClick={() => faceScanDone && setSigStep(3)}
+                                  disabled={!faceScanDone}
+                                  className={`flex-1 py-3 font-bold text-xs rounded-xl shadow-md transition-all uppercase tracking-wider ${faceScanDone ? 'bg-amber-500 text-navy-950 hover:bg-amber-600' : 'bg-navy-850 text-slate-600 cursor-not-allowed border border-navy-800'
+                                    }`}
+                                >
+                                  Siguiente
+                                </button>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* STEP 3: DRAW SIGNATURE */}
+                          {sigStep === 3 && (
+                            <div className="flex-1 flex flex-col justify-between">
+                              <div>
+                                <h4 className="font-bold text-white text-sm">Paso 3: Firma Manuscrita</h4>
+                                <p className="text-[10px] text-slate-400 mt-1">Dibuja tu firma en el recuadro gris usando tu dedo o mouse.</p>
+
+                                <div className="mt-4">
+                                  <div
+                                    className="w-full h-44 bg-navy-900 border border-navy-800 rounded-xl relative overflow-hidden select-none cursor-crosshair"
+                                    onMouseDown={() => setIsDrawing(true)}
+                                    onMouseUp={() => setIsDrawing(false)}
+                                    onMouseLeave={() => setIsDrawing(false)}
+                                    onMouseMove={handleDrawSignature}
+                                    onTouchStart={() => setIsDrawing(true)}
+                                    onTouchEnd={() => setIsDrawing(false)}
+                                    onTouchMove={handleDrawSignature}
+                                    ref={signatureCanvasRef}
+                                  >
+                                    {sigLines.length === 0 && (
+                                      <div className="absolute inset-0 flex items-center justify-center text-slate-600 pointer-events-none text-[10px] uppercase font-bold tracking-wider">
+                                        Firma aquí
+                                      </div>
+                                    )}
+
+                                    {/* Draw SVG representation of user lines */}
+                                    <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                                      <polyline
+                                        fill="none"
+                                        stroke="#f59e0b"
+                                        strokeWidth="3"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        points={sigLines.map(p => `${p.x},${p.y}`).join(' ')}
+                                      />
+                                    </svg>
+                                  </div>
+
+                                  <div className="flex justify-end mt-2">
+                                    <button
+                                      type="button"
+                                      onClick={clearSignature}
+                                      className="text-[9px] font-bold text-red-400 hover:text-red-300 uppercase tracking-wider"
+                                    >
+                                      Borrar Firma
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="flex space-x-2">
+                                <button
+                                  onClick={() => setSigStep(2)}
+                                  className="flex-1 py-3 bg-navy-800 text-slate-300 font-bold text-xs rounded-xl border border-navy-700 uppercase"
+                                >
+                                  Atrás
+                                </button>
+                                <button
+                                  onClick={handleSaveSignature}
+                                  disabled={sigLines.length === 0}
+                                  className={`flex-1 py-3 font-bold text-xs rounded-xl shadow-md transition-all uppercase tracking-wider ${sigLines.length > 0 ? 'bg-amber-500 text-navy-950 hover:bg-amber-600' : 'bg-navy-850 text-slate-600 cursor-not-allowed border border-navy-800'
+                                    }`}
+                                >
+                                  Estampar Firma
+                                </button>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* STEP 4: SIGNED SUCCESS */}
+                          {sigStep === 4 && (
+                            <div className="flex-1 flex flex-col justify-between text-center items-center py-6">
+                              <div className="w-16 h-16 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center border border-emerald-500/20 animate-bounce">
+                                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                              </div>
+
+                              <div className="mt-4">
+                                <h4 className="font-bold text-white text-base">¡Contrato Firmado!</h4>
+                                <p className="text-xs text-slate-400 mt-2 px-4 leading-relaxed">
+                                  Se ha emitido la Firma Digital Calificada. El contrato ahora está sellado criptográficamente y respaldado en la Bóveda de Firmix IA.
+                                </p>
+                              </div>
+
+                              {/* Tiny receipt graphic */}
+                              <div className="w-full bg-navy-900 border border-navy-800 rounded-xl p-3 text-left mt-6">
+                                <span className="text-[8px] font-bold text-emerald-400 uppercase block">Certificado de Validez</span>
+                                <div className="text-[9px] font-mono text-slate-400 mt-1 space-y-1">
+                                  <div>HASH: f15a92a...f92931a</div>
+                                  <div>FECHA: {new Date().toLocaleString()}</div>
+                                  <div>LEGALIDAD: Ley N° 27269 (Perú)</div>
+                                </div>
+                              </div>
+
+                              <button
+                                onClick={resetSignatureFlow}
+                                className="w-full mt-6 py-3 bg-navy-800 hover:bg-navy-750 text-white font-bold text-xs rounded-xl border border-navy-700 uppercase"
+                              >
+                                Firmar Otro Documento
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                    </div>
+
+                    {/* App Bottom Navigation Bar */}
+                    <div className="bg-navy-900 border-t border-navy-800/80 px-2 py-2 flex justify-around items-center shrink-0 z-10">
+
+                      {/* Nav Tab 1 */}
+                      <button
+                        onClick={() => setSimTab('scam-shield')}
+                        className={`flex flex-col items-center flex-1 ${simTab === 'scam-shield' ? 'text-amber-500' : 'text-slate-500 hover:text-slate-400'}`}
+                      >
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                        <span className="text-[8px] font-bold mt-1 uppercase tracking-tight">Scam Shield</span>
+                      </button>
+
+                      {/* Nav Tab 2 */}
+                      <button
+                        onClick={() => setSimTab('chatbot')}
+                        className={`flex flex-col items-center flex-1 ${simTab === 'chatbot' ? 'text-amber-500' : 'text-slate-500 hover:text-slate-400'}`}
+                      >
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                        <span className="text-[8px] font-bold mt-1 uppercase tracking-tight">Abogado IA</span>
+                      </button>
+
+                      {/* Nav Tab 3 */}
+                      <button
+                        onClick={() => setSimTab('vault')}
+                        className={`flex flex-col items-center flex-1 ${simTab === 'vault' ? 'text-amber-500' : 'text-slate-500 hover:text-slate-400'}`}
+                      >
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                        <span className="text-[8px] font-bold mt-1 uppercase tracking-tight">Bóveda</span>
+                      </button>
+
+                      {/* Nav Tab 4 */}
+                      <button
+                        onClick={() => setSimTab('signature')}
+                        className={`flex flex-col items-center flex-1 ${simTab === 'signature' ? 'text-amber-500' : 'text-slate-500 hover:text-slate-400'}`}
+                      >
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                        <span className="text-[8px] font-bold mt-1 uppercase tracking-tight">Firma</span>
+                      </button>
+                    </div>
+
+                    {/* Home Indicator */}
+                    <div className="bg-navy-900 pb-2 pt-1 flex justify-center shrink-0">
+                      <div className="w-28 h-1 bg-white/40 rounded-full"></div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+          {/* --- WHY FIRMIX SECTION --- */}
+          <section id="features" className="py-16 md:py-24 bg-navy-900/25 border-y border-navy-900/60 relative">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+              <div className="text-center max-w-3xl mx-auto mb-16">
+                <span className="text-xs font-bold tracking-wider text-amber-500 uppercase">Dolores Resueltos</span>
+                <h2 className="text-3xl sm:text-4xl font-display font-bold text-white mt-2">La respuesta digital a la burocracia de alquileres</h2>
+                <p className="text-slate-400 mt-4 font-light text-sm sm:text-base">
+                  Diseñado para jóvenes independientes en Lima Metropolitana que valoran su paz mental y su dinero.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+                {/* Feature 1 */}
+                <div className="p-6 bg-navy-900/40 border border-navy-800 rounded-2xl relative overflow-hidden group hover:border-amber-500/30 transition-all duration-300">
+                  <div className="w-12 h-12 bg-red-500/10 text-red-400 rounded-xl flex items-center justify-center mb-6">
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                  </div>
+                  <h3 className="text-lg font-bold text-white">Adiós al miedo de perder la garantía</h3>
+                  <p className="text-xs text-slate-400 mt-3 leading-relaxed">
+                    Nuestra IA resalta inmediatamente cláusulas abusivas de retención de garantía y te provee del marco legal peruano para exigir tu dinero de vuelta con total base técnica.
+                  </p>
+                </div>
+
+                {/* Feature 2 */}
+                <div className="p-6 bg-navy-900/40 border border-navy-800 rounded-2xl relative overflow-hidden group hover:border-amber-500/30 transition-all duration-300">
+                  <div className="w-12 h-12 bg-amber-500/10 text-amber-400 rounded-xl flex items-center justify-center mb-6">
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  </div>
+                  <h3 className="text-lg font-bold text-white">Traducción a lenguaje humano</h3>
+                  <p className="text-xs text-slate-400 mt-3 leading-relaxed">
+                    Evita leer páginas repletas de jerga legal incomprensible. La IA traduce todo a viñetas simples en menos de 60 segundos para que firmes entendiendo el 100%.
+                  </p>
+                </div>
+
+                {/* Feature 3 */}
+                <div className="p-6 bg-navy-900/40 border border-navy-800 rounded-2xl relative overflow-hidden group hover:border-amber-500/30 transition-all duration-300">
+                  <div className="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-xl flex items-center justify-center mb-6">
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                  </div>
+                  <h3 className="text-lg font-bold text-white">Seguridad legal en un toque ("One-Tap")</h3>
+                  <p className="text-xs text-slate-400 mt-3 leading-relaxed">
+                    Formaliza contratos válidos ante notarios y juzgados mediante la firma digital enlazada al cotejo biométrico facial de RENIEC sin salir de casa ni pagar costos notariales exorbitantes.
+                  </p>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+          {/* --- PRICING SECTION --- */}
+          <section id="pricing" className="py-16 md:py-24 bg-navy-950 relative">
+            <div className="absolute top-1/2 left-1/4 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+              <div className="text-center max-w-3xl mx-auto mb-16">
+                <span className="text-xs font-bold tracking-wider text-amber-500 uppercase">Precios Transparentes</span>
+                <h2 className="text-3xl sm:text-4xl font-display font-bold text-white mt-2">Planes a tu medida para alquilar con paz mental</h2>
+                <p className="text-slate-400 mt-4 text-sm sm:text-base font-light">
+                  Ahorra miles de soles en abogados tradicionales. Elige el plan ideal para tu alquiler.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+
+                {/* Plan Free */}
+                <div className="p-8 bg-navy-900/30 border border-navy-800 rounded-3xl flex flex-col justify-between hover:border-navy-700 transition-all">
+                  <div>
+                    <h4 className="text-lg font-bold text-white">Plan Freemium</h4>
+                    <p className="text-xs text-slate-500 mt-1">Ideal para probar la IA</p>
+                    <div className="mt-6 flex items-baseline">
+                      <span className="text-4xl font-display font-extrabold text-white">S/.0</span>
+                      <span className="text-slate-500 text-xs ml-2">/ único</span>
+                    </div>
+
+                    <ul className="mt-8 space-y-4 text-xs text-slate-400">
+                      <li className="flex items-center space-x-3">
+                        <svg className="w-4 h-4 text-amber-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                        <span>1 Escaneo Scam Shield básico</span>
+                      </li>
+                      <li className="flex items-center space-x-3">
+                        <svg className="w-4 h-4 text-amber-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                        <span>Detección de hasta 3 riesgos críticos</span>
+                      </li>
+                      <li className="flex items-center space-x-3">
+                        <svg className="w-4 h-4 text-slate-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
+                        <span className="text-slate-600 line-through">Abogado IA Chatbot ilimitado</span>
+                      </li>
+                      <li className="flex items-center space-x-3">
+                        <svg className="w-4 h-4 text-slate-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
+                        <span className="text-slate-600 line-through">Firma Digital Certificada RENIEC</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <a href="#demo" className="mt-8 w-full py-4 text-center border border-navy-700 bg-navy-900/50 hover:bg-navy-900 text-white font-bold text-xs rounded-2xl transition-all">
+                    Probar Demo Gratis
+                  </a>
+                </div>
+
+                {/* Plan Premium */}
+                <div className="p-8 bg-navy-900 border-2 border-amber-500 rounded-3xl flex flex-col justify-between relative shadow-glow-navy transform md:-translate-y-4">
+                  <div className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-amber-500 to-amber-600 text-navy-950 font-display font-extrabold text-[10px] uppercase tracking-wider px-4 py-1.5 rounded-full shadow-md">
+                    Más Popular
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold text-white">Plan AI Premium</h4>
+                    <p className="text-xs text-amber-500 mt-1 font-semibold">Tranquilidad Absoluta para tu Alquiler</p>
+                    <div className="mt-6 flex items-baseline">
+                      <span className="text-4xl font-display font-extrabold text-white">S/.29</span>
+                      <span className="text-slate-400 text-xs ml-2">/ mensual</span>
+                    </div>
+
+                    <ul className="mt-8 space-y-4 text-xs text-slate-300">
+                      <li className="flex items-center space-x-3">
+                        <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                        <span className="font-semibold text-white">Escaneos ilimitados Scam Shield</span>
+                      </li>
+                      <li className="flex items-center space-x-3">
+                        <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                        <span>Traducción a lenguaje simple completa</span>
+                      </li>
+                      <li className="flex items-center space-x-3">
+                        <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                        <span>Abogado IA Chatbot ilimitado 24/7</span>
+                      </li>
+                      <li className="flex items-center space-x-3">
+                        <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                        <span>Firma Digital Certificada para ambas partes</span>
+                      </li>
+                      <li className="flex items-center space-x-3">
+                        <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                        <span>Smart Vault de contratos y recibos</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <button
+                    onClick={() => setPricingPlan('premium')}
+                    className="mt-8 w-full py-4 text-center bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-navy-950 font-bold text-xs rounded-2xl shadow-md shadow-amber-500/20 hover:shadow-glow-amber transition-all uppercase tracking-wider"
+                  >
+                    Obtener Plan Premium
+                  </button>
+                </div>
+
+                {/* Plan Pro */}
+                <div className="p-8 bg-navy-900/30 border border-navy-800 rounded-3xl flex flex-col justify-between hover:border-navy-700 transition-all">
+                  <div>
+                    <h4 className="text-lg font-bold text-white">Plan Inmobiliario / Anual</h4>
+                    <p className="text-xs text-slate-500 mt-1">Para arrendadores seriales</p>
+                    <div className="mt-6 flex items-baseline">
+                      <span className="text-4xl font-display font-extrabold text-white">S/.69</span>
+                      <span className="text-slate-500 text-xs ml-2">/ mensual</span>
+                    </div>
+
+                    <ul className="mt-8 space-y-4 text-xs text-slate-400">
+                      <li className="flex items-center space-x-3">
+                        <svg className="w-4 h-4 text-amber-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                        <span>Hasta 5 propiedades administradas</span>
+                      </li>
+                      <li className="flex items-center space-x-3">
+                        <svg className="w-4 h-4 text-amber-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                        <span>Todo lo del Plan Premium incluido</span>
+                      </li>
+                      <li className="flex items-center space-x-3">
+                        <svg className="w-4 h-4 text-amber-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                        <span>Generación de reporte financiero histórico</span>
+                      </li>
+                      <li className="flex items-center space-x-3">
+                        <svg className="w-4 h-4 text-amber-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                        <span>Integración directa con Yape/Plin automatizada</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <button
+                    onClick={() => setPricingPlan('annual')}
+                    className="mt-8 w-full py-4 text-center border border-navy-700 bg-navy-900/50 hover:bg-navy-900 text-white font-bold text-xs rounded-2xl transition-all"
+                  >
+                    Obtener Plan Anual
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+          {/* --- TESTIMONIALS SECTION --- */}
+          <section id="testimonials" className="py-16 md:py-24 bg-navy-900/20 border-t border-navy-900/60 relative">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+              <div className="text-center max-w-3xl mx-auto mb-16">
+                <span className="text-xs font-bold tracking-wider text-amber-500 uppercase">Opiniones Reales</span>
+                <h2 className="text-3xl sm:text-4xl font-display font-bold text-white mt-2">Salvados de estafas por Firmix IA</h2>
+                <p className="text-slate-400 mt-4 text-sm sm:text-base font-light">
+                  Conoce la experiencia de inquilinos jóvenes en Lima que tomaron el control de su seguridad legal.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+                {/* Testimonial 1 */}
+                <div className="p-6 bg-navy-900/40 border border-navy-800 rounded-2xl">
+                  <div className="flex items-center space-x-1.5 text-amber-500 mb-4">
+                    {"★★★★★".split("").map((star, i) => <span key={i}>{star}</span>)}
+                  </div>
+                  <p className="text-xs text-slate-300 italic leading-relaxed">
+                    "Estaba a punto de alquilar un departamento en Lince. Subí el contrato a Firmix y la IA me alertó que el dueño me cobraría una multa de S/.200 diarios si me retrasaba tan solo un día. Al final renegociamos esa cláusula abusiva. ¡Me salvé de pagar de más!"
+                  </p>
+                  <div className="mt-6 flex items-center space-x-3">
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-navy-500 to-amber-500 flex items-center justify-center text-xs font-extrabold text-white">
+                      DA
+                    </div>
+                    <div>
+                      <h5 className="text-xs font-bold text-white">Daniel Alarcón</h5>
+                      <p className="text-[10px] text-slate-500">28 años, Diseñador • Lince</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Testimonial 2 */}
+                <div className="p-6 bg-navy-900/40 border border-navy-800 rounded-2xl">
+                  <div className="flex items-center space-x-1.5 text-amber-500 mb-4">
+                    {"★★★★★".split("").map((star, i) => <span key={i}>{star}</span>)}
+                  </div>
+                  <p className="text-xs text-slate-300 italic leading-relaxed">
+                    "Toda mi vida me ha dado flojera la burocracia notarial en el Perú. Con Firmix pudimos firmar mi dueña y yo usando biometría facial desde el celular. El contrato se selló en 5 minutos y es totalmente legal ante un juez."
+                  </p>
+                  <div className="mt-6 flex items-center space-x-3">
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-navy-500 to-emerald-500 flex items-center justify-center text-xs font-extrabold text-white">
+                      MB
+                    </div>
+                    <div>
+                      <h5 className="text-xs font-bold text-white">María Beltrán</h5>
+                      <p className="text-[10px] text-slate-500">31 años, Arquitecta • Surco</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Testimonial 3 */}
+                <div className="p-6 bg-navy-900/40 border border-navy-800 rounded-2xl">
+                  <div className="flex items-center space-x-1.5 text-amber-500 mb-4">
+                    {"★★★★★".split("").map((star, i) => <span key={i}>{star}</span>)}
+                  </div>
+                  <p className="text-xs text-slate-300 italic leading-relaxed">
+                    "La Bóveda Digital me encanta. Registro mis transferencias mensuales y me genera un reporte de buen pagador avalado. Gracias a esto pude aplicar de manera confiable a mi segundo departamento sin trabas financieras."
+                  </p>
+                  <div className="mt-6 flex items-center space-x-3">
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-500 to-emerald-500 flex items-center justify-center text-xs font-extrabold text-white">
+                      JC
+                    </div>
+                    <div>
+                      <h5 className="text-xs font-bold text-white">Juan Carlos Vega</h5>
+                      <p className="text-[10px] text-slate-500">26 años, Programador • Magdalena</p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+          {/* ========================================================================= */}
+          {/* === SECCIÓN DE BLOGS: MODIFICA ESTO PARA CAMBIAR LOS 5 LINKS DE BLOG === */}
+          {/* ========================================================================= */}
+          <section id="blog" className="py-16 md:py-24 bg-navy-950 border-t border-navy-900/60 relative">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+              <div className="text-center max-w-3xl mx-auto mb-12">
+                <span className="text-xs font-bold tracking-wider text-amber-500 uppercase">Recursos Gratuitos</span>
+                <h2 className="text-3xl font-display font-bold text-white mt-2">Blog & Guías de Alquiler Seguro</h2>
+                <p className="text-slate-400 mt-3 text-sm font-light">
+                  Aprende sobre tus derechos y deberes como inquilino o propietario en Lima Metropolitana.
+                </p>
+              </div>
+
+              {/* Grid de 5 blogs */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                {/* BLOG 1: Garantías de Alquiler */}
+                <div className="p-6 bg-navy-900/40 border border-navy-800 hover:border-amber-500/30 rounded-2xl flex flex-col justify-between transition-all group">
+                  <div>
+                    <span className="text-[10px] font-extrabold text-amber-500 uppercase tracking-widest">Garantías</span>
+                    <h4 className="text-base font-bold text-white mt-2 group-hover:text-amber-400 transition-colors">Cómo recuperar tu garantía de alquiler en Lima sin conflictos</h4>
+                    <p className="text-xs text-slate-400 mt-2 leading-relaxed">Pasos legales y consejos basados en el Código Civil para que te devuelvan el depósito a tiempo.</p>
+                  </div>
+                  <div className="mt-6 pt-4 border-t border-navy-800/60">
+                    {/* ENLACE BLOG 1: Modifica el href a tu link real */}
+                    <a href="https://example.com/blog/recuperar-garantia-alquiler" target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-amber-500 hover:text-amber-400 flex items-center space-x-1">
+                      <span>Leer Artículo</span>
+                      <span>→</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* BLOG 2: Ley de Desahucio Express */}
+                <div className="p-6 bg-navy-900/40 border border-navy-800 hover:border-amber-500/30 rounded-2xl flex flex-col justify-between transition-all group">
+                  <div>
+                    <span className="text-[10px] font-extrabold text-amber-500 uppercase tracking-widest">Leyes</span>
+                    <h4 className="text-base font-bold text-white mt-2 group-hover:text-amber-400 transition-colors">Entendiendo la Ley de Desahucio Express (Ley 30933)</h4>
+                    <p className="text-xs text-slate-400 mt-2 leading-relaxed">Todo lo que propietarios e inquilinos deben saber sobre esta cláusula notarial de desalojo.</p>
+                  </div>
+                  <div className="mt-6 pt-4 border-t border-navy-800/60">
+                    {/* ENLACE BLOG 2: Modifica el href a tu link real */}
+                    <a href="https://example.com/blog/ley-desahucio-express-peru" target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-amber-500 hover:text-amber-400 flex items-center space-x-1">
+                      <span>Leer Artículo</span>
+                      <span>→</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* BLOG 3: Cláusulas Abusivas */}
+                <div className="p-6 bg-navy-900/40 border border-navy-800 hover:border-amber-500/30 rounded-2xl flex flex-col justify-between transition-all group">
+                  <div>
+                    <span className="text-[10px] font-extrabold text-amber-500 uppercase tracking-widest">Contratos</span>
+                    <h4 className="text-base font-bold text-white mt-2 group-hover:text-amber-400 transition-colors">5 Cláusulas abusivas en contratos que nunca debes firmar</h4>
+                    <p className="text-xs text-slate-400 mt-2 leading-relaxed">Identifica penalidades excesivas y retenciones de llaves ilegales antes de firmar.</p>
+                  </div>
+                  <div className="mt-6 pt-4 border-t border-navy-800/60">
+                    {/* ENLACE BLOG 3: Modifica el href a tu link real */}
+                    <a href="https://example.com/blog/clausulas-abusivas-alquiler" target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-amber-500 hover:text-amber-400 flex items-center space-x-1">
+                      <span>Leer Artículo</span>
+                      <span>→</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* BLOG 4: Firma Digital Validez */}
+                <div className="p-6 bg-navy-900/40 border border-navy-800 hover:border-amber-500/30 rounded-2xl flex flex-col justify-between transition-all group lg:col-start-2">
+                  <div>
+                    <span className="text-[10px] font-extrabold text-amber-500 uppercase tracking-widest">Seguridad</span>
+                    <h4 className="text-base font-bold text-white mt-2 group-hover:text-amber-400 transition-colors">Validez legal de la firma digital en contratos de alquiler</h4>
+                    <p className="text-xs text-slate-400 mt-2 leading-relaxed">¿Es 100% legal un contrato firmado por WhatsApp o web en el Perú? Lo que dice la Ley 27269.</p>
+                  </div>
+                  <div className="mt-6 pt-4 border-t border-navy-800/60">
+                    {/* ENLACE BLOG 4: Modifica el href a tu link real */}
+                    <a href="https://example.com/blog/validez-legal-firma-digital" target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-amber-500 hover:text-amber-400 flex items-center space-x-1">
+                      <span>Leer Artículo</span>
+                      <span>→</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* BLOG 5: Impuestos SUNAT */}
+                <div className="p-6 bg-navy-900/40 border border-navy-800 hover:border-amber-500/30 rounded-2xl flex flex-col justify-between transition-all group">
+                  <div>
+                    <span className="text-[10px] font-extrabold text-amber-500 uppercase tracking-widest">Impuestos</span>
+                    <h4 className="text-base font-bold text-white mt-2 group-hover:text-amber-400 transition-colors">Declaración de Impuesto al Alquiler ante SUNAT</h4>
+                    <p className="text-xs text-slate-400 mt-2 leading-relaxed">Guía paso a paso sobre el pago del 5% del alquiler (Renta de 1era Categoría).</p>
+                  </div>
+                  <div className="mt-6 pt-4 border-t border-navy-800/60">
+                    {/* ENLACE BLOG 5: Modifica el href a tu link real */}
+                    <a href="https://example.com/blog/impuesto-alquiler-sunat" target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-amber-500 hover:text-amber-400 flex items-center space-x-1">
+                      <span>Leer Artículo</span>
+                      <span>→</span>
+                    </a>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </section>
+          {/* ========================================================================= */}
+          {/* === FIN SECCIÓN DE BLOGS === */}
+          {/* ========================================================================= */}
+
+          {/* --- FOOTER --- */}
+          <footer className="bg-navy-900 border-t border-navy-800 py-12 shrink-0">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center text-navy-950">
+                    ⚖️
+                  </div>
+                  <span className="font-display font-bold text-base text-white tracking-wide">FIRMIX IA</span>
+                </div>
+
+                <p className="text-[11px] text-slate-500 text-center md:text-right max-w-md leading-relaxed">
+                  © 2026 Firmix IA. Todos los derechos reservados. Las firmas digitales emitidas cumplen estrictamente con la Ley N° 27269 de Firmas y Certificados Digitales de la República del Perú.
+                </p>
+              </div>
+            </div>
+          </footer>
+
+          {/* --- PRICING CHECKOUT MODAL SIMULATOR --- */}
+          {pricingPlan && (
+            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
+              <div className="w-full max-w-md bg-navy-900 border border-navy-800 rounded-3xl p-6 relative shadow-2xl">
+
+                {/* Close Button */}
+                <button
+                  onClick={closeCheckout}
+                  className="absolute top-4 right-4 text-slate-500 hover:text-white p-1 rounded-full hover:bg-navy-800 transition-colors focus:outline-none"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+
+                {!checkoutMethod ? (
+                  <div>
+                    <h3 className="font-display font-bold text-xl text-white">Completar Suscripción</h3>
+                    <p className="text-xs text-slate-400 mt-1">Estás adquiriendo el {pricingPlan === 'premium' ? 'Plan AI Premium (S/.29/mes)' : 'Plan Anual (S/.69/mes)'}.</p>
+
+                    <h4 className="text-xs font-bold text-slate-400 mt-6 uppercase tracking-wider">Elige tu método de pago seguro:</h4>
+
+                    <div className="space-y-3 mt-3">
+                      {/* Yape/Plin button */}
+                      <button
+                        onClick={() => handleCheckout('yape')}
+                        className="w-full p-4 bg-gradient-to-r from-purple-600/10 to-purple-800/10 border border-purple-500/30 hover:border-purple-500 rounded-2xl flex items-center justify-between text-left transition-all"
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center text-lg font-bold text-white">Y</div>
+                          <div>
+                            <h5 className="text-xs font-bold text-white">Yape / Plin</h5>
+                            <p className="text-[10px] text-slate-400">Pago instantáneo con QR</p>
+                          </div>
+                        </div>
+                        <span className="text-purple-400 text-xs font-extrabold uppercase">One-Tap</span>
+                      </button>
+
+                      {/* Credit Card button */}
+                      <button
+                        onClick={() => handleCheckout('card')}
+                        className="w-full p-4 bg-navy-950 border border-navy-800 hover:border-amber-500/50 rounded-2xl flex items-center justify-between text-left transition-all"
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center text-sm font-bold text-white">💳</div>
+                          <div>
+                            <h5 className="text-xs font-bold text-white">Tarjeta de Crédito / Débito</h5>
+                            <p className="text-[10px] text-slate-400">Visa, Mastercard, Amex</p>
+                          </div>
+                        </div>
+                        <span className="text-slate-500 text-xs font-bold">Stripe</span>
+                      </button>
+                    </div>
+                  </div>
+                ) : checkoutSuccess ? (
+                  <div className="text-center py-6">
+                    <div className="w-16 h-16 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center border border-emerald-500/20 mx-auto animate-bounce">
+                      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                    </div>
+
+                    <h4 className="font-display font-bold text-xl text-white mt-6">¡Pago Confirmado!</h4>
+                    <p className="text-xs text-slate-400 mt-2 px-4 leading-relaxed">
+                      ¡Tu cuenta ha sido actualizada a Premium! Ya tienes acceso ilimitado a Scam Shield, la Firma Digital y la Bóveda Segura.
+                    </p>
+
+                    <button
+                      onClick={closeCheckout}
+                      className="mt-6 w-full py-3 bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold text-xs rounded-xl shadow-md transition-all uppercase tracking-wider"
+                    >
+                      Empezar a usar Premium
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    {checkoutMethod === 'yape' ? (
+                      <div className="text-center py-4">
+                        <h4 className="font-bold text-white text-base">Escanea el Código QR para pagar</h4>
+                        <p className="text-xs text-slate-400 mt-1">Abre Yape o Plin y escanea este código para transferir S/.{pricingPlan === 'premium' ? '29.00' : '69.00'}</p>
+
+                        {/* QR Box mockup */}
+                        <div className="my-6 w-44 h-44 bg-white p-3 rounded-2xl mx-auto shadow-inner flex flex-col justify-center items-center relative border border-slate-200">
+                          {/* Mock QR lines */}
+                          <div className="w-36 h-36 bg-[radial-gradient(#1e293b_30%,transparent_30%)] bg-[size:10px_10px] flex items-center justify-center">
+                            <div className="w-12 h-12 bg-navy-950 rounded-lg flex items-center justify-center text-sm font-bold text-amber-500 border-2 border-white shadow">⚖️</div>
+                          </div>
+                          {/* Scanning light mockup */}
+                          <div className="absolute top-2 left-2 right-2 h-0.5 bg-purple-500 animate-bounce"></div>
+                        </div>
+
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => setCheckoutMethod(null)}
+                            className="flex-1 py-3 bg-navy-800 text-slate-300 font-bold text-xs rounded-xl border border-navy-700"
+                          >
+                            Atrás
+                          </button>
+                          <button
+                            onClick={() => handleCheckout('yape')} // triggers success on second call
+                            className="flex-1 py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-md transition-all"
+                          >
+                            Simular Pago Exitoso
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        <h4 className="font-bold text-white text-base">Ingresa los datos de tu tarjeta</h4>
+
+                        <div className="space-y-3">
+                          <div className="space-y-1">
+                            <label className="text-[9px] font-bold text-slate-400 uppercase">Número de Tarjeta</label>
+                            <div className="bg-navy-950 border border-navy-800 rounded-xl px-3 py-2.5 text-xs text-white flex justify-between items-center">
+                              <input type="text" placeholder="4242 4242 4242 4242" className="bg-transparent focus:outline-none flex-1 font-mono" />
+                              <span className="text-[9px] font-extrabold text-slate-500">VISA</span>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-slate-400 uppercase">Vencimiento</label>
+                              <input type="text" placeholder="MM / AA" className="w-full bg-navy-950 border border-navy-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none font-mono" />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-slate-400 uppercase">CVC</label>
+                              <input type="password" placeholder="123" className="w-full bg-navy-950 border border-navy-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none font-mono" />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="pt-2 flex space-x-2">
+                          <button
+                            onClick={() => setCheckoutMethod(null)}
+                            className="flex-1 py-3 bg-navy-800 text-slate-300 font-bold text-xs rounded-xl border border-navy-700"
+                          >
+                            Atrás
+                          </button>
+                          <button
+                            onClick={() => handleCheckout('card')}
+                            className="flex-1 py-3 bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold text-xs rounded-xl shadow-md transition-all uppercase tracking-wider"
+                          >
+                            Pagar S/.{pricingPlan === 'premium' ? '29.00' : '69.00'}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+              </div>
+            </div>
+          )}
+
+        </div>
+      );
+    }
+
+    // Mount to DOM
+    const rootElement = document.getElementById('root');
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(<App />);
+  </script>
+</body>
+
+</html>

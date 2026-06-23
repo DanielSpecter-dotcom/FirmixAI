@@ -1,0 +1,2832 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firmix IA - Tu Abogado Digital de Bolsillo para Alquileres Seguros</title>
+  <meta name="description"
+    content="Audita contratos de alquiler con Inteligencia Artificial, chatea con tu asesor legal 24/7 y firma digitalmente con validez legal. Mobile-first, seguro y rápido.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="img/LogoFirmix.ico">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Custom Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              50: '#f4f6fa', 100: '#e8edf5', 200: '#cbd7e9', 300: '#9fb5d7',
+              400: '#6d8dc0', 500: '#4a6da7', 600: '#385489', 700: '#2f446f',
+              800: '#1b263b', 900: '#0d1117', 950: '#0e131b'
+            },
+            amber: {
+              50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 300: '#fcd34d',
+              400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 700: '#b45309',
+              800: '#92400e', 900: '#78350f',
+            },
+          },
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          boxShadow: {
+            'glow-amber': '0 0 20px -4px rgba(245, 158, 11, 0.5)',
+            'glow-navy': '0 0 20px -5px rgba(56, 84, 137, 0.5)',
+            'phone': '0 30px 60px -12px rgba(6, 9, 14, 0.7)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: #0e131b;
+      color: #cbd7e9;
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0d1117;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #1b263b;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #385489;
+    }
+
+    .bg-grid-pattern {
+      background-size: 40px 40px;
+      background-image:
+        linear-gradient(to right, rgba(27, 38, 59, 0.15) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(27, 38, 59, 0.15) 1px, transparent 1px);
+    }
+
+    /* ── Slideshow ── */
+    .slide {
+      display: none;
+      animation: slideIn 0.6s ease-out;
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Slide indicator dots */
+    .slide-dot {
+      transition: all 0.3s;
+    }
+
+    .slide-dot.active {
+      background-color: #f59e0b;
+      width: 20px;
+      border-radius: 4px;
+    }
+
+    /* Gradient text */
+    .text-gradient {
+      background: linear-gradient(to right, #fbbf24, #d97706);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Feature card hover */
+    .feature-card {
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+    }
+
+    /* Email form glow on focus */
+    #email-input:focus {
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25);
+    }
+
+    /* StoryTelling Section */
+    .story-timeline-line {
+      background: linear-gradient(to bottom, transparent, #f59e0b, transparent);
+    }
+
+    .story-video-wrapper {
+      position: relative;
+      background: #0d1117;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(245, 158, 11, 0.15);
+    }
+
+    .story-video-wrapper::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .story-step {
+      transition: all 0.3s;
+    }
+
+    .story-step:hover .story-step-dot {
+      transform: scale(1.3);
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.5);
+    }
+
+    @keyframes filmGrain {
+
+      0%,
+      100% {
+        opacity: 0.03;
+      }
+
+      50% {
+        opacity: 0.06;
+      }
+    }
+
+    .film-grain {
+      animation: filmGrain 0.5s steps(2) infinite;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    /* Floating ambient blobs */
+    .blob {
+      border-radius: 50%;
+      filter: blur(80px);
+      position: absolute;
+      pointer-events: none;
+    }
+
+    /* Nav link hover */
+    nav a {
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #f59e0b;
+      transition: width 0.3s;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    /* Notification toast */
+    #toast {
+      transition: all 0.4s ease;
+      transform: translateY(20px);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body class="bg-[#0e131b] text-slate-300 font-sans selection:bg-amber-500 selection:text-navy-950">
+
+  <!-- ═══════════════════════════════════════════════════════ NAVBAR -->
+  <header id="navbar"
+    class="sticky top-0 z-50 bg-navy-900/80 backdrop-blur-md border-b border-navy-800 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center space-x-2 group">
+        <div
+          class="w-10 h-10 bg-gradient-to-tr from-amber-500 to-amber-600 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:rotate-6 transition-transform p-1.5">
+          <img src="img/LogoFirmix2.png" class="w-full h-full object-contain" alt="Firmix Logo">
+        </div>
+        <div class="flex flex-col">
+          <span
+            class="font-display font-bold text-xl text-white tracking-wide group-hover:text-amber-400 transition-colors">FIRMIX
+            <span class="text-amber-500 font-extrabold text-sm align-super">IA</span></span>
+          <span class="text-[10px] text-slate-400 tracking-wider -mt-1 font-semibold uppercase">Abogado Digital</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center space-x-8">
+        <a href="#features"
+          class="text-sm font-medium text-slate-300 hover:text-white transition-colors">Funcionalidades</a>
+        <a href="#demo" class="text-sm font-medium text-slate-300 hover:text-white transition-colors">Demo</a>
+        <a href="#storytelling"
+          class="text-sm font-medium text-slate-300 hover:text-white transition-colors">Historia</a>
+        <a href="#pricing" class="text-sm font-medium text-slate-300 hover:text-white transition-colors">Planes</a>
+        <a href="#testimonials" class="text-sm font-medium text-slate-300 hover:text-white transition-colors">Casos de
+          Éxito</a>
+      </nav>
+
+      <div class="hidden md:flex items-center space-x-4">
+        <span
+          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          Demo Activa
+        </span>
+        <a href="app.html" target="_blank" id="nav-cta"
+          class="px-5 py-2.5 text-sm font-bold bg-amber-500 hover:bg-amber-600 text-navy-950 rounded-xl transition-all hover:shadow-glow-amber hover:-translate-y-0.5 flex items-center space-x-1.5">
+          <span>Ir a la App</span>
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="mobile-menu-btn"
+        class="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-navy-800 transition-all focus:outline-none">
+        <svg id="icon-open" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <svg id="icon-close" class="w-6 h-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Menu Panel -->
+    <div id="mobile-menu" class="hidden md:hidden bg-navy-900 border-b border-navy-800 px-4 pt-2 pb-6 space-y-2">
+      <a href="#features"
+        class="block px-3 py-2 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-navy-800">Funcionalidades</a>
+      <a href="#demo"
+        class="block px-3 py-2 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-navy-800">Demo</a>
+      <a href="#storytelling"
+        class="block px-3 py-2 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-navy-800">Historia</a>
+      <a href="#pricing"
+        class="block px-3 py-2 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-navy-800">Planes</a>
+      <a href="#testimonials"
+        class="block px-3 py-2 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-navy-800">Casos
+        de Éxito</a>
+      <div class="pt-3 border-t border-navy-800">
+        <a href="app.html" target="_blank"
+          class="w-full block text-center px-4 py-3 bg-amber-500 text-navy-950 font-bold rounded-xl shadow-lg">
+          Ir a la App →
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════ HERO -->
+  <section class="relative pt-10 pb-20 md:pt-20 md:pb-32 overflow-hidden bg-grid-pattern">
+    <!-- Ambient blobs -->
+    <div class="blob w-[500px] h-[500px] bg-amber-500/5 top-1/4 left-1/2 -translate-x-1/2"></div>
+    <div class="blob w-[350px] h-[350px] bg-navy-500/10 top-1/3 left-1/4"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto">
+        <!-- Eyebrow badge -->
+        <div
+          class="inline-flex items-center px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold tracking-wider uppercase mb-6">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-400 mr-2 animate-pulse"></span>
+          Nueva versión disponible — Perú 2026
+        </div>
+
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-6">
+          <div class="flex-1">
+            <h1
+              class="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-tight">
+              La tranquilidad de alquilar seguro,
+              <span class="text-gradient"> en un solo toque</span>
+            </h1>
+            <p class="mt-6 text-base sm:text-lg text-slate-400 font-light leading-relaxed">
+              Audita contratos con Inteligencia Artificial, chatea con tu abogado de bolsillo 24/7 y firma con validez
+              jurídica absoluta. Protege tu garantía y evita estafas desde tu celular.
+            </p>
+          </div>
+          <!-- Owl mascot -->
+          <div class="flex-shrink-0 select-none">
+            <video class="w-52 h-52 object-contain" autoplay loop muted playsinline preload="auto">
+              <source src="img/FirmixAnimate.webm" type="video/webm">
+              <img src="img/LogoFirmix2.png" alt="Firmix IA">
+            </video>
+          </div>
+        </div>
+
+        <!-- CTAs -->
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="app.html" id="hero-cta-primary" target="_blank"
+            class="w-full sm:w-auto px-8 py-4 bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold rounded-2xl shadow-lg shadow-amber-500/15 hover:shadow-glow-amber hover:-translate-y-0.5 transition-all text-center">
+            Analizar Contrato Gratis (PDF)
+          </a>
+          <a href="#pricing"
+            class="w-full sm:w-auto px-8 py-4 border border-navy-700 bg-navy-900/50 hover:bg-navy-900 text-white font-semibold rounded-2xl hover:border-navy-600 transition-all text-center">
+            Ver Planes desde S/.29
+          </a>
+        </div>
+
+        <!-- Trust Seals -->
+        <div
+          class="mt-12 pt-8 border-t border-navy-900/50 grid grid-cols-2 sm:grid-cols-4 gap-y-6 gap-x-4 items-center justify-items-center">
+          <div class="flex flex-col sm:flex-row items-center space-y-1 sm:space-y-0 sm:space-x-2 text-slate-500">
+            <svg class="w-5 h-5 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M6.267 3.455a.75.75 0 00-.708-.523H4.5a2 2 0 00-2 2v1.078a.75.75 0 00.379.65l6 3.464a.75.75 0 00.742 0l6-3.464a.75.75 0 00.379-.65V4.932a2 2 0 00-2-2h-1.059a.75.75 0 00-.708.523L10.25 7.036a.75.75 0 01-.5 0L6.267 3.455zM2.5 9.043v5.457a2 2 0 002 2h11a2 2 0 002-2V9.043l-6.75 3.9a1.75 1.75 0 01-1.5 0L2.5 9.043z"
+                clip-rule="evenodd" />
+            </svg>
+            <span class="text-[10px] sm:text-xs font-semibold tracking-wider uppercase text-center">Validez Ley
+              27269</span>
+          </div>
+          <div class="flex flex-col sm:flex-row items-center space-y-1 sm:space-y-0 sm:space-x-2 text-slate-500">
+            <svg class="w-5 h-5 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                d="M10 2a5 5 0 00-5 5v2a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2V7a5 5 0 00-5-5zM7 7a3 3 0 016 0v2H7V7z" />
+            </svg>
+            <span class="text-[10px] sm:text-xs font-semibold tracking-wider uppercase text-center">Seguridad
+              Bancaria</span>
+          </div>
+          <div class="flex flex-col sm:flex-row items-center space-y-1 sm:space-y-0 sm:space-x-2 text-slate-500">
+            <svg class="w-5 h-5 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                clip-rule="evenodd" />
+            </svg>
+            <span class="text-[10px] sm:text-xs font-semibold tracking-wider uppercase text-center">Cotejo RENIEC</span>
+          </div>
+          <div class="flex flex-col sm:flex-row items-center space-y-1 sm:space-y-0 sm:space-x-2 text-slate-500">
+            <svg class="w-5 h-5 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M2.166 4.9L10 1.154 17.834 4.9A2 2 0 0119 6.74v4.918a9.023 9.023 0 01-4.84 8.013L10 21l-4.16-2.329A9.023 9.023 0 011 11.658V6.74a2 2 0 011.166-1.84zM10 3.16L3 6.52v4.808c0 3.23 1.76 6.2 4.62 7.74l2.38 1.332 2.38-1.332C15.24 17.528 17 14.558 17 11.328V6.52L10 3.16z"
+                clip-rule="evenodd" />
+            </svg>
+            <span class="text-[10px] sm:text-xs font-semibold tracking-wider uppercase text-center">Firma
+              Encriptada</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ DEMO SLIDESHOW -->
+  <section id="demo" class="py-16 md:py-24 bg-navy-900/25 relative overflow-hidden">
+    <div class="blob w-[400px] h-[400px] bg-amber-500/5 top-1/2 right-0"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <span class="text-xs font-bold tracking-wider text-amber-500 uppercase">Vista Previa del App</span>
+        <h2 class="text-3xl sm:text-4xl font-display font-bold text-white mt-2">Todo lo que necesitas, en un solo lugar
+        </h2>
+        <p class="text-slate-400 mt-3 text-sm sm:text-base font-light max-w-2xl mx-auto">
+          Explora las 4 herramientas que convierten Firmix IA en el escudo legal más completo para inquilinos en Lima.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+        <!-- Left: Feature selector -->
+        <div class="space-y-3" id="feature-cards">
+          <!-- Card 0: Scam Shield -->
+          <button onclick="goToSlide(0)" id="fcard-0"
+            class="feature-selector w-full text-left p-5 rounded-2xl border border-amber-500 bg-navy-800/60 shadow-glow-navy transition-all duration-300 flex items-start space-x-4">
+            <div class="p-3 rounded-xl bg-amber-500/10 text-amber-400 shrink-0">
+              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-white text-base">1. Scam Shield — Escudo Anti-Estafas</h4>
+              <p class="text-xs text-slate-400 mt-1">Detecta cláusulas abusivas con semáforo de riesgo en menos de 60
+                segundos.</p>
+            </div>
+          </button>
+
+          <!-- Card 1: Chatbot -->
+          <button onclick="goToSlide(1)" id="fcard-1"
+            class="feature-selector w-full text-left p-5 rounded-2xl border border-navy-800 hover:border-navy-700 bg-transparent transition-all duration-300 flex items-start space-x-4">
+            <div class="p-3 rounded-xl bg-navy-800 text-slate-400 shrink-0">
+              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-white text-base">2. Abogado IA 24/7</h4>
+              <p class="text-xs text-slate-400 mt-1">Chat legal en tiempo real con respuestas basadas en el Código Civil
+                peruano.</p>
+            </div>
+          </button>
+
+          <!-- Card 2: Vault -->
+          <button onclick="goToSlide(2)" id="fcard-2"
+            class="feature-selector w-full text-left p-5 rounded-2xl border border-navy-800 hover:border-navy-700 bg-transparent transition-all duration-300 flex items-start space-x-4">
+            <div class="p-3 rounded-xl bg-navy-800 text-slate-400 shrink-0">
+              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h4 class="font-bold text-white text-base">3. Smart Vault — Bóveda Segura</h4>
+                <span
+                  class="text-[9px] bg-amber-500/15 text-amber-400 font-extrabold px-2 py-0.5 rounded border border-amber-500/30 tracking-wide">PREMIUM</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">Almacena contratos y recibos con cifrado militar y registro en
+                Blockchain.</p>
+            </div>
+          </button>
+
+          <!-- Card 3: Signature -->
+          <button onclick="goToSlide(3)" id="fcard-3"
+            class="feature-selector w-full text-left p-5 rounded-2xl border border-navy-800 hover:border-navy-700 bg-transparent transition-all duration-300 flex items-start space-x-4">
+            <div class="p-3 rounded-xl bg-navy-800 text-slate-400 shrink-0">
+              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h4 class="font-bold text-white text-base">4. Firma Digital Biométrica</h4>
+                <span
+                  class="text-[9px] bg-amber-500/15 text-amber-400 font-extrabold px-2 py-0.5 rounded border border-amber-500/30 tracking-wide">PREMIUM</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">Firma con cotejo biométrico RENIEC y sellado de tiempo oficial
+                Indecopi.</p>
+            </div>
+          </button>
+        </div>
+
+        <!-- Right: Phone Mockup Slideshow -->
+        <div class="flex flex-col items-center">
+          <div
+            class="relative w-full max-w-[300px] h-[580px] bg-navy-900 border-[7px] border-navy-800 rounded-[44px] shadow-phone overflow-hidden flex flex-col">
+
+            <!-- Status bar -->
+            <div
+              class="bg-navy-900 px-5 pt-3 pb-2 flex justify-between items-center text-xs font-bold text-white select-none shrink-0">
+              <span>10:00</span>
+              <div class="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-4 bg-black rounded-full"></div>
+              <div class="flex items-center space-x-1">
+                <span class="text-[10px]">5G</span>
+                <div class="w-5 h-2.5 border border-white/60 rounded-sm p-0.5 flex items-center">
+                  <div class="w-3.5 h-full bg-white rounded-sm"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- App header -->
+            <div
+              class="bg-navy-800/90 border-b border-navy-700/60 px-4 py-3 flex items-center justify-between shrink-0">
+              <div class="flex items-center space-x-1.5">
+                <img src="img/LogoFirmix2.png" class="w-4 h-4 object-contain" alt="Firmix">
+                <span class="font-display font-extrabold text-white text-sm">FIRMIX IA</span>
+              </div>
+              <span
+                class="text-[10px] bg-amber-500/10 text-amber-400 font-bold px-2 py-0.5 rounded-full border border-amber-500/20">DEMO</span>
+            </div>
+
+            <!-- Slides container -->
+            <div class="flex-1 bg-navy-950 overflow-hidden relative">
+
+              <!-- SLIDE 0: Scam Shield -->
+              <div class="slide active flex-col p-4 h-full" id="slide-0">
+                <h3 class="font-bold text-white text-xs mb-3 flex items-center space-x-1.5">
+                  <svg class="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                  <span>Scam Shield — Reporte</span>
+                </h3>
+                <!-- Score Card -->
+                <div class="p-3 bg-navy-900 border border-red-500/20 rounded-xl flex items-center space-x-3 mb-3">
+                  <div
+                    class="w-11 h-11 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 flex flex-col items-center justify-center font-display font-extrabold text-sm">
+                    28 <span class="text-[7px] text-slate-400 -mt-0.5">SCORE</span>
+                  </div>
+                  <div>
+                    <p class="text-[11px] font-bold text-white">Contrato Abusivo — Lince</p>
+                    <p class="text-[10px] text-slate-500">27 de Mayo, 2026</p>
+                  </div>
+                </div>
+                <!-- Risk items -->
+                <div class="space-y-2">
+                  <div class="p-2.5 bg-red-950/20 border border-red-500/20 rounded-xl">
+                    <div class="flex items-center space-x-1.5 mb-1">
+                      <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                      <span class="text-[11px] font-bold text-white">Penalidad Diaria Excesiva</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 leading-relaxed">S/.150 diarios por mora. Esto es abusivo y
+                      supera el 150% del valor diario del alquiler.</p>
+                  </div>
+                  <div class="p-2.5 bg-amber-950/20 border border-amber-500/20 rounded-xl">
+                    <div class="flex items-center space-x-1.5 mb-1">
+                      <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                      <span class="text-[11px] font-bold text-white">Retención Ilícita de Garantía</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 leading-relaxed">90 días para devolver garantía. El estándar
+                      legal es 30 días.</p>
+                  </div>
+                  <div class="p-2.5 bg-red-950/20 border border-red-500/20 rounded-xl">
+                    <div class="flex items-center space-x-1.5 mb-1">
+                      <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                      <span class="text-[11px] font-bold text-white">Desalojo sin Orden Judicial</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 leading-relaxed">Cláusula ilegal. Viola el artículo 2 de la
+                      Constitución peruana.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SLIDE 1: Chatbot -->
+              <div class="slide flex-col h-full" id="slide-1">
+                <div class="flex-1 p-3 space-y-2 overflow-hidden flex flex-col">
+                  <!-- Bot message -->
+                  <div class="self-start max-w-[85%]">
+                    <div
+                      class="p-3 bg-navy-900 border border-navy-800 rounded-2xl rounded-tl-none text-[11px] text-slate-200 leading-relaxed">
+                      ¡Hola! 🛡️ Soy tu Abogado Digital 24/7. ¿Tienes dudas sobre tu contrato de alquiler en Lima?
+                    </div>
+                    <span class="text-[9px] text-slate-600 mt-1 block">10:00 AM</span>
+                  </div>
+                  <!-- User message -->
+                  <div class="self-end max-w-[85%]">
+                    <div
+                      class="p-3 bg-amber-500 text-navy-950 rounded-2xl rounded-tr-none text-[11px] font-medium leading-relaxed">
+                      ¿El dueño puede ingresar sin mi permiso?
+                    </div>
+                    <span class="text-[9px] text-slate-600 mt-1 block text-right">10:01 AM</span>
+                  </div>
+                  <!-- Bot reply -->
+                  <div class="self-start max-w-[85%]">
+                    <div
+                      class="p-3 bg-navy-900 border border-navy-800 rounded-2xl rounded-tl-none text-[11px] text-slate-200 leading-relaxed">
+                      ¡No! El artículo 2 de la Constitución peruana garantiza la inviolabilidad del domicilio. Si entra
+                      sin avisar, comete el delito de violación de domicilio.
+                    </div>
+                    <span class="text-[9px] text-slate-600 mt-1 block">10:01 AM</span>
+                  </div>
+                  <!-- Typing -->
+                  <div class="self-start">
+                    <div
+                      class="p-2.5 bg-navy-900 border border-navy-800 rounded-2xl rounded-tl-none flex items-center space-x-1">
+                      <div class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-bounce" style="animation-delay:0ms">
+                      </div>
+                      <div class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-bounce" style="animation-delay:150ms">
+                      </div>
+                      <div class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-bounce" style="animation-delay:300ms">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Input bar -->
+                <div class="p-3 border-t border-navy-800 bg-navy-900 shrink-0 flex items-center space-x-2">
+                  <div
+                    class="flex-1 bg-navy-950 border border-navy-800 rounded-xl px-3 py-2 text-[11px] text-slate-500">
+                    Escribe tu consulta legal...
+                  </div>
+                  <div class="w-8 h-8 bg-amber-500 rounded-xl flex items-center justify-center shrink-0">
+                    <svg class="w-3.5 h-3.5 text-navy-950" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                      stroke-width="3">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SLIDE 2: Vault -->
+              <div class="slide flex-col p-4 h-full" id="slide-2">
+                <h3 class="font-bold text-white text-xs mb-3 flex items-center justify-between">
+                  <span class="flex items-center space-x-1.5">
+                    <svg class="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                      stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <span>Smart Vault</span>
+                  </span>
+                  <span
+                    class="text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-1.5 py-0.5 rounded font-bold">Blockchain
+                    OK</span>
+                </h3>
+                <!-- Metrics -->
+                <div class="grid grid-cols-2 gap-2 mb-3">
+                  <div class="p-2.5 bg-navy-900 border border-navy-800 rounded-xl text-center">
+                    <span class="text-[8px] font-bold text-slate-500 uppercase">Scoring</span>
+                    <div class="text-lg font-display font-extrabold text-emerald-400">980</div>
+                  </div>
+                  <div class="p-2.5 bg-navy-900 border border-navy-800 rounded-xl text-center">
+                    <span class="text-[8px] font-bold text-slate-500 uppercase">Cifrado</span>
+                    <div class="text-lg font-display font-extrabold text-white">SSL</div>
+                  </div>
+                </div>
+                <!-- Doc list -->
+                <div class="space-y-1.5">
+                  <p class="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Mis Documentos</p>
+                  <div class="p-2.5 bg-navy-900 border border-navy-800/80 rounded-xl flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                      <div class="p-1.5 bg-blue-500/10 text-blue-400 rounded-lg"><svg class="w-3 h-3" fill="none"
+                          viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg></div>
+                      <div>
+                        <p class="text-[10px] font-bold text-white">Contrato - Dpto 402</p>
+                        <p class="text-[9px] text-slate-500">24/02/2026 · 1.2 MB</p>
+                      </div>
+                    </div>
+                    <span
+                      class="text-[8px] font-bold bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded">OK</span>
+                  </div>
+                  <div class="p-2.5 bg-navy-900 border border-navy-800/80 rounded-xl flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                      <div class="p-1.5 bg-amber-500/10 text-amber-400 rounded-lg"><svg class="w-3 h-3" fill="none"
+                          viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                        </svg></div>
+                      <div>
+                        <p class="text-[10px] font-bold text-white">Recibo Garantía</p>
+                        <p class="text-[9px] text-slate-500">24/02/2026 · 850 KB</p>
+                      </div>
+                    </div>
+                    <span
+                      class="text-[8px] font-bold bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded">OK</span>
+                  </div>
+                  <div class="p-2.5 bg-navy-900 border border-navy-800/80 rounded-xl flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                      <div class="p-1.5 bg-emerald-500/10 text-emerald-400 rounded-lg"><svg class="w-3 h-3" fill="none"
+                          viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg></div>
+                      <div>
+                        <p class="text-[10px] font-bold text-white">Pago Alquiler Abril</p>
+                        <p class="text-[9px] text-slate-500">02/04/2026 · 415 KB</p>
+                      </div>
+                    </div>
+                    <span
+                      class="text-[8px] font-bold bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded">OK</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SLIDE 3: Signature -->
+              <div class="slide flex-col p-4 h-full" id="slide-3">
+                <h3 class="font-bold text-white text-xs mb-4 flex items-center space-x-1.5">
+                  <svg class="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                  </svg>
+                  <span>Firma Digital Biométrica</span>
+                </h3>
+                <!-- Steps -->
+                <div class="flex items-center justify-center space-x-2 mb-5">
+                  <div
+                    class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-bold">
+                    ✓</div>
+                  <div class="h-0.5 flex-1 bg-emerald-500"></div>
+                  <div
+                    class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-bold">
+                    ✓</div>
+                  <div class="h-0.5 flex-1 bg-emerald-500"></div>
+                  <div
+                    class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-bold">
+                    ✓</div>
+                  <div class="h-0.5 flex-1 bg-navy-800"></div>
+                  <div
+                    class="w-6 h-6 rounded-full bg-amber-500 text-navy-950 flex items-center justify-center text-[10px] font-bold ring-4 ring-amber-500/20">
+                    4</div>
+                </div>
+                <!-- Success state -->
+                <div class="flex-1 flex flex-col items-center justify-center text-center">
+                  <div
+                    class="w-16 h-16 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center border border-emerald-500/20 mb-4">
+                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <h4 class="font-bold text-white text-sm">¡Contrato Firmado!</h4>
+                  <p class="text-[11px] text-slate-400 mt-1.5 leading-relaxed max-w-[200px]">
+                    Firma Digital Calificada emitida y sellada con sello de tiempo oficial Indecopi.
+                  </p>
+                  <div class="mt-4 w-full p-2.5 bg-navy-900 border border-navy-800 rounded-xl text-left">
+                    <span class="text-[8px] font-bold text-emerald-400 uppercase block mb-1">Certificado</span>
+                    <div class="text-[9px] font-mono text-slate-400 space-y-0.5">
+                      <div>HASH: f15a92a...f92931a</div>
+                      <div>LEY N° 27269 (Perú)</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Bottom Nav -->
+            <div class="bg-navy-900 border-t border-navy-800/80 px-1 py-2 flex justify-around items-center shrink-0">
+              <button onclick="goToSlide(0)" class="slide-nav-btn flex flex-col items-center flex-1 text-amber-500">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                <span class="text-[7px] font-bold mt-0.5 uppercase">Escudo</span>
+              </button>
+              <button onclick="goToSlide(1)"
+                class="slide-nav-btn flex flex-col items-center flex-1 text-slate-500 hover:text-slate-400">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                <span class="text-[7px] font-bold mt-0.5 uppercase">Chat IA</span>
+              </button>
+              <button onclick="goToSlide(2)"
+                class="slide-nav-btn flex flex-col items-center flex-1 text-slate-500 hover:text-slate-400">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <span class="text-[7px] font-bold mt-0.5 uppercase">Bóveda</span>
+              </button>
+              <button onclick="goToSlide(3)"
+                class="slide-nav-btn flex flex-col items-center flex-1 text-slate-500 hover:text-slate-400">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                </svg>
+                <span class="text-[7px] font-bold mt-0.5 uppercase">Firma</span>
+              </button>
+            </div>
+
+            <!-- Home indicator -->
+            <div class="bg-navy-900 pb-2 pt-1 flex justify-center shrink-0">
+              <div class="w-24 h-1 bg-white/40 rounded-full"></div>
+            </div>
+          </div>
+
+          <!-- Slide dots -->
+          <div class="flex items-center space-x-2 mt-5" id="slide-dots">
+            <span class="slide-dot active h-2 w-5 bg-amber-500 rounded-full"></span>
+            <span class="slide-dot h-2 w-2 bg-navy-700 rounded-full"></span>
+            <span class="slide-dot h-2 w-2 bg-navy-700 rounded-full"></span>
+            <span class="slide-dot h-2 w-2 bg-navy-700 rounded-full"></span>
+          </div>
+
+          <!-- CTA -->
+          <a href="app.html" target="_blank"
+            class="mt-6 px-8 py-3.5 bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold rounded-2xl shadow-md shadow-amber-500/20 hover:shadow-glow-amber transition-all text-sm uppercase tracking-wider flex items-center space-x-2">
+            <span>Probar la App Gratis</span>
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ STORYTELLING -->
+  <section id="storytelling" class="py-20 md:py-32 bg-navy-950 relative overflow-hidden">
+    <!-- Ambient background -->
+    <div class="blob w-[600px] h-[600px] bg-amber-500/4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+    <div class="blob w-[300px] h-[300px] bg-navy-600/8 top-0 right-0"></div>
+    <div class="blob w-[250px] h-[250px] bg-navy-600/8 bottom-0 left-0"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div
+          class="inline-flex items-center px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold tracking-wider uppercase mb-5">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-400 mr-2 animate-pulse"></span>
+          Nuestra Historia
+        </div>
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-white mt-2 leading-tight">
+          ¿Por qué nació
+          <span class="text-gradient"> Firmix IA</span>?
+        </h2>
+        <p class="text-slate-400 mt-5 text-sm sm:text-base font-light leading-relaxed max-w-2xl mx-auto">
+          Una historia real de un inquilino que perdió su garantía por no leer una cláusula abusiva.
+          Esto nos inspiró a crear la solución que todo peruano necesita.
+        </p>
+      </div>
+
+      <!-- Main Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-20">
+
+        <!-- Left: Video -->
+        <div class="order-2 lg:order-1">
+          <div class="story-video-wrapper aspect-video">
+            <!-- Film grain overlay -->
+            <div class="film-grain absolute inset-0 z-10 pointer-events-none rounded-2xl opacity-[0.04]"></div>
+
+            <!-- Video badge -->
+            <div class="absolute top-4 left-4 z-20 flex items-center gap-2">
+              <span
+                class="flex items-center gap-1.5 px-2.5 py-1 bg-black/60 backdrop-blur-sm border border-white/10 rounded-full text-[10px] font-bold text-white uppercase tracking-wider">
+                <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                Video
+              </span>
+            </div>
+
+            <!-- Google Drive embed -->
+            <iframe src="https://drive.google.com/file/d/1AM_npGaESxKwz_D05ca6TrTzlO4LIs09/preview" width="100%"
+              height="100%" style="border:none; position:absolute; top:0; left:0; width:100%; height:100%;"
+              frameborder="0" allowfullscreen title="Firmix IA — Video Storytelling"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+          </div>
+
+          <!-- Video caption -->
+          <p class="text-center text-xs text-slate-500 mt-4 flex items-center justify-center gap-2">
+            <svg class="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zm12.553 1.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
+            </svg>
+            Video de presentación del equipo Firmix IA — UPC 2026
+          </p>
+        </div>
+
+        <!-- Right: Narrative -->
+        <div class="order-1 lg:order-2">
+          <div class="space-y-8">
+
+            <!-- Step 1: El Problema -->
+            <div class="story-step flex items-start gap-5">
+              <div class="flex flex-col items-center shrink-0">
+                <div
+                  class="story-step-dot w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 transition-all">
+                  <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <div class="story-timeline-line w-0.5 h-8 mt-2"></div>
+              </div>
+              <div class="pt-1">
+                <span class="text-[10px] font-bold text-red-400 uppercase tracking-widest">El Problema</span>
+                <h3 class="text-lg font-bold text-white mt-1">Miles de inquilinos pierden su garantía</h3>
+                <p class="text-slate-400 text-sm mt-2 leading-relaxed">
+                  En Lima, el <strong class="text-white">68% de contratos de alquiler</strong> contienen al menos una
+                  cláusula abusiva.
+                  La mayoría de inquilinos las firma sin entenderlas porque están redactadas en lenguaje legal
+                  incomprensible.
+                </p>
+              </div>
+            </div>
+
+            <!-- Step 2: La Chispa -->
+            <div class="story-step flex items-start gap-5">
+              <div class="flex flex-col items-center shrink-0">
+                <div
+                  class="story-step-dot w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 transition-all">
+                  <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <div class="story-timeline-line w-0.5 h-8 mt-2"></div>
+              </div>
+              <div class="pt-1">
+                <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest">La Chispa</span>
+                <h3 class="text-lg font-bold text-white mt-1">Un caso real que lo cambió todo</h3>
+                <p class="text-slate-400 text-sm mt-2 leading-relaxed">
+                  Un compañero perdió <strong class="text-white">S/.3,500 de garantía</strong> por no notar que el
+                  contrato
+                  permitía al arrendador retenerla 90 días. Con un abogado habría costado más de S/.800 solo la
+                  consulta.
+                </p>
+              </div>
+            </div>
+
+            <!-- Step 3: La Solución -->
+            <div class="story-step flex items-start gap-5">
+              <div class="flex flex-col items-center shrink-0">
+                <div
+                  class="story-step-dot w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 transition-all">
+                  <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+              </div>
+              <div class="pt-1">
+                <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">La Solución</span>
+                <h3 class="text-lg font-bold text-white mt-1">Firmix IA: Tu abogado de bolsillo</h3>
+                <p class="text-slate-400 text-sm mt-2 leading-relaxed">
+                  Democratizamos el acceso a la justicia legal para inquilinos. Con IA, cualquier peruano puede
+                  entender su contrato, proteger su garantía y firmar con seguridad. <strong
+                    class="text-amber-400">Desde S/.0.</strong>
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Bar -->
+      <div
+        class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 sm:p-8 bg-navy-900/60 border border-navy-800 rounded-3xl backdrop-blur-sm">
+        <div class="text-center">
+          <div class="text-3xl sm:text-4xl font-display font-extrabold text-amber-400">68%</div>
+          <p class="text-xs text-slate-400 mt-1.5 leading-snug">de contratos en Lima tienen cláusulas abusivas</p>
+        </div>
+        <div class="text-center border-l border-navy-800">
+          <div class="text-3xl sm:text-4xl font-display font-extrabold text-white">S/.800+</div>
+          <p class="text-xs text-slate-400 mt-1.5 leading-snug">cuesta una consulta de abogado tradicional</p>
+        </div>
+        <div class="text-center border-l border-navy-800">
+          <div class="text-3xl sm:text-4xl font-display font-extrabold text-emerald-400">&lt;60s</div>
+          <p class="text-xs text-slate-400 mt-1.5 leading-snug">tarda Firmix IA en auditar tu contrato completo</p>
+        </div>
+        <div class="text-center border-l border-navy-800">
+          <div class="text-3xl sm:text-4xl font-display font-extrabold text-amber-400">S/.29</div>
+          <p class="text-xs text-slate-400 mt-1.5 leading-snug">mes vs miles en asesoría legal tradicional</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ FEATURES -->
+  <section id="features" class="py-16 md:py-24 bg-navy-900/25 border-y border-navy-900/60 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-bold tracking-wider text-amber-500 uppercase">Dolores Resueltos</span>
+        <h2 class="text-3xl sm:text-4xl font-display font-bold text-white mt-2">La respuesta digital a la burocracia de
+          alquileres</h2>
+        <p class="text-slate-400 mt-4 font-light text-sm sm:text-base">
+          Diseñado para jóvenes independientes en Lima Metropolitana que valoran su paz mental y su dinero.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="feature-card p-6 bg-navy-900/40 border border-navy-800 rounded-2xl hover:border-amber-500/30">
+          <div class="w-12 h-12 bg-red-500/10 text-red-400 rounded-xl flex items-center justify-center mb-6">
+            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-white">Adiós al miedo de perder la garantía</h3>
+          <p class="text-sm text-slate-400 mt-3 leading-relaxed">
+            Nuestra IA resalta inmediatamente cláusulas abusivas de retención de garantía y te provee del marco legal
+            peruano para exigir tu dinero de vuelta.
+          </p>
+        </div>
+
+        <div class="feature-card p-6 bg-navy-900/40 border border-navy-800 rounded-2xl hover:border-amber-500/30">
+          <div class="w-12 h-12 bg-amber-500/10 text-amber-400 rounded-xl flex items-center justify-center mb-6">
+            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-white">Traducción a lenguaje humano</h3>
+          <p class="text-sm text-slate-400 mt-3 leading-relaxed">
+            Evita leer páginas repletas de jerga legal incomprensible. La IA traduce todo a viñetas simples en menos de
+            60 segundos.
+          </p>
+        </div>
+
+        <div class="feature-card p-6 bg-navy-900/40 border border-navy-800 rounded-2xl hover:border-amber-500/30">
+          <div class="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-xl flex items-center justify-center mb-6">
+            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-white">Seguridad legal en un toque ("One-Tap")</h3>
+          <p class="text-sm text-slate-400 mt-3 leading-relaxed">
+            Formaliza contratos válidos ante notarios y juzgados mediante firma digital con biometría facial de RENIEC
+            sin salir de casa.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ CONTRACT QUIZ -->
+  <section id="contract-quiz"
+    class="py-16 md:py-24 bg-navy-950/60 border-t border-b border-navy-900/60 relative overflow-hidden">
+    <div class="blob w-[300px] h-[300px] bg-amber-500/5 top-10 right-10"></div>
+    <div class="blob w-[300px] h-[300px] bg-navy-500/5 bottom-10 left-10"></div>
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="text-xs font-bold tracking-wider text-amber-500 uppercase">Pon a prueba tu conocimiento</span>
+        <h2 class="text-3xl sm:text-4xl font-display font-bold text-white mt-2">¿Realmente entiendes los contratos que
+          firmas?</h2>
+        <p class="text-slate-400 mt-3 text-sm sm:text-base font-light">
+          Muchos inquilinos y propietarios en Lima firman cláusulas que les cuestan miles de soles o les causan
+          problemas legales graves.
+        </p>
+      </div>
+
+      <!-- Quiz Card -->
+      <div class="bg-navy-900/40 border border-navy-800 rounded-3xl p-6 sm:p-10 backdrop-blur-md shadow-2xl relative">
+        <!-- Progress Bar (hidden initially) -->
+        <div id="quiz-progress-container" class="mb-8 hidden">
+          <div class="flex justify-between items-center text-xs text-slate-400 mb-2">
+            <span>Progreso del Test</span>
+            <span id="quiz-progress-text">Pregunta 1 de 3</span>
+          </div>
+          <div class="w-full bg-navy-950 h-2 rounded-full overflow-hidden">
+            <div id="quiz-progress-bar"
+              class="bg-gradient-to-r from-amber-500 to-amber-600 h-full rounded-full transition-all duration-300"
+              style="width: 33%"></div>
+          </div>
+        </div>
+
+        <!-- Question Area -->
+        <div id="quiz-question-container">
+          <!-- Step 0: Datos del Lead & Objetivo -->
+          <div class="quiz-step" data-step="0">
+            <div class="text-center mb-6">
+              <div
+                class="w-12 h-12 bg-amber-500/10 text-amber-500 rounded-full flex items-center justify-center mx-auto mb-3 text-xl shadow-inner shadow-amber-500/10">
+                📝
+              </div>
+              <h3 class="text-xl font-bold text-white mb-1.5 leading-snug">
+                ¡Te damos la bienvenida al Test Legal de Firmix IA!
+              </h3>
+              <p class="text-xs text-slate-400 max-w-sm mx-auto font-light leading-relaxed">
+                Descubre en menos de 2 minutos qué tan protegido estás contra estafas y cláusulas abusivas en el mercado
+                peruano.
+              </p>
+            </div>
+
+            <div class="space-y-4 max-w-md mx-auto text-left">
+              <div>
+                <label for="quiz-lead-name" class="block text-xs font-semibold text-slate-400 mb-1.5">Nombre
+                  completo</label>
+                <input type="text" id="quiz-lead-name" placeholder="Ej. Juan Pérez"
+                  class="w-full bg-navy-950 border border-navy-800 focus:border-amber-500 rounded-xl px-4 py-3 text-xs text-white placeholder-slate-600 focus:outline-none transition-all">
+              </div>
+              <div>
+                <label for="quiz-lead-email" class="block text-xs font-semibold text-slate-400 mb-1.5">Correo
+                  electrónico</label>
+                <input type="email" id="quiz-lead-email" placeholder="Ej. juan@correo.com"
+                  class="w-full bg-navy-950 border border-navy-800 focus:border-amber-500 rounded-xl px-4 py-3 text-xs text-white placeholder-slate-600 focus:outline-none transition-all">
+              </div>
+              <div>
+                <label for="quiz-lead-goal" class="block text-xs font-semibold text-slate-400 mb-1.5">¿Cuál es tu
+                  objetivo?</label>
+                <select id="quiz-lead-goal"
+                  class="w-full bg-navy-950 border border-navy-800 focus:border-amber-500 rounded-xl px-4 py-3 text-xs text-white focus:outline-none transition-all cursor-pointer">
+                  <option value="" disabled selected>Selecciona tu objetivo...</option>
+                  <option value="inquilino-residencial">Alquilar un departamento/casa (Inquilino)</option>
+                  <option value="inquilino-comercial">Alquilar un local comercial/oficina (Inquilino)</option>
+                  <option value="propietario">Poner en alquiler mi propiedad (Dueño)</option>
+                </select>
+              </div>
+              <div class="pt-2">
+                <button onclick="startQuizQuestions()"
+                  class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-navy-950 font-bold text-xs rounded-xl shadow-md shadow-amber-500/20 hover:shadow-glow-amber transition-all uppercase tracking-wider">
+                  Comenzar Test Legal
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Question 1 (hidden initially) -->
+          <div class="quiz-step hidden" data-step="1">
+            <h3 class="text-lg font-bold text-white mb-6 leading-snug">
+              1. Si tu contrato dice que el depósito de garantía se devolverá "dentro de los 30 días de desocupado el
+              inmueble previa conformidad del propietario", ¿qué riesgo corres?
+            </h3>
+            <div class="space-y-4">
+              <button onclick="selectOption(1, 'A')"
+                class="option-btn w-full text-left bg-navy-950 hover:bg-navy-900 border border-navy-800 hover:border-amber-500/40 text-slate-300 hover:text-white rounded-2xl p-4 text-sm transition-all focus:outline-none flex justify-between items-center group">
+                <span>A) Ninguno, la ley obliga a devolver la garantía a los 30 días de todas formas.</span>
+                <span
+                  class="w-5 h-5 rounded-full border border-slate-700 flex-shrink-0 group-hover:border-amber-500 transition-colors ml-4"></span>
+              </button>
+              <button onclick="selectOption(1, 'B')"
+                class="option-btn w-full text-left bg-navy-950 hover:bg-navy-900 border border-navy-800 hover:border-amber-500/40 text-slate-300 hover:text-white rounded-2xl p-4 text-sm transition-all focus:outline-none flex justify-between items-center group">
+                <span>B) Alto riesgo. La frase "previa conformidad" le permite retenerla indefinidamente inventando
+                  desperfectos sin justificación formal.</span>
+                <span
+                  class="w-5 h-5 rounded-full border border-slate-700 flex-shrink-0 group-hover:border-amber-500 transition-colors ml-4"></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Question 2 -->
+          <div class="quiz-step hidden" data-step="2">
+            <h3 class="text-lg font-bold text-white mb-6 leading-snug">
+              2. Tu contrato especifica: "El pago del alquiler se realizará en efectivo en el domicilio del arrendador".
+              Sin embargo, le transfieres por Yape o banco mensualmente. ¿Es esto legalmente seguro?
+            </h3>
+            <div class="space-y-4">
+              <button onclick="selectOption(2, 'A')"
+                class="option-btn w-full text-left bg-navy-950 hover:bg-navy-900 border border-navy-800 hover:border-amber-500/40 text-slate-300 hover:text-white rounded-2xl p-4 text-sm transition-all focus:outline-none flex justify-between items-center group">
+                <span>A) No. Legalmente el contrato rige el lugar y forma de pago. El arrendador podría demandar falta
+                  de pago y tendrías que ir a juicio para validarlo.</span>
+                <span
+                  class="w-5 h-5 rounded-full border border-slate-700 flex-shrink-0 group-hover:border-amber-500 transition-colors ml-4"></span>
+              </button>
+              <button onclick="selectOption(2, 'B')"
+                class="option-btn w-full text-left bg-navy-950 hover:bg-navy-900 border border-navy-800 hover:border-amber-500/40 text-slate-300 hover:text-white rounded-2xl p-4 text-sm transition-all focus:outline-none flex justify-between items-center group">
+                <span>B) Sí, los comprobantes de depósito bancario o captura de Yape anulan cualquier regla escrita en
+                  el contrato.</span>
+                <span
+                  class="w-5 h-5 rounded-full border border-slate-700 flex-shrink-0 group-hover:border-amber-500 transition-colors ml-4"></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Question 3 -->
+          <div class="quiz-step hidden" data-step="3">
+            <h3 class="text-lg font-bold text-white mb-6 leading-snug">
+              3. ¿Qué implicancia tiene firmar una cláusula de "Allanamiento Futuro" y "Desalojo con Intervención
+              Notarial" (Ley N. 30933) si te atrasas más de 2 meses?
+            </h3>
+            <div class="space-y-4">
+              <button onclick="selectOption(3, 'A')"
+                class="option-btn w-full text-left bg-navy-950 hover:bg-navy-900 border border-navy-800 hover:border-amber-500/40 text-slate-300 hover:text-white rounded-2xl p-4 text-sm transition-all focus:outline-none flex justify-between items-center group">
+                <span>A) Permite al dueño desalojarte rápidamente mediante un trámite notarial y policial en pocos días,
+                  saltándose juicios largos.</span>
+                <span
+                  class="w-5 h-5 rounded-full border border-slate-700 flex-shrink-0 group-hover:border-amber-500 transition-colors ml-4"></span>
+              </button>
+              <button onclick="selectOption(3, 'B')"
+                class="option-btn w-full text-left bg-navy-950 hover:bg-navy-900 border border-navy-800 hover:border-amber-500/40 text-slate-300 hover:text-white rounded-2xl p-4 text-sm transition-all focus:outline-none flex justify-between items-center group">
+                <span>B) No tiene efecto si eres puntual; de todos modos, un desalojo siempre toma de 2 a 3 años por vía
+                  judicial ordinaria.</span>
+                <span
+                  class="w-5 h-5 rounded-full border border-slate-700 flex-shrink-0 group-hover:border-amber-500 transition-colors ml-4"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Explanation Area -->
+        <div id="quiz-feedback-box" class="mt-8 hidden p-5 rounded-2xl border transition-all duration-300">
+          <div class="flex items-start space-x-3">
+            <div id="feedback-icon"
+              class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0 mt-0.5">
+            </div>
+            <div>
+              <h4 id="feedback-title" class="font-bold text-sm text-white">Respuesta correcta</h4>
+              <p id="feedback-desc" class="text-xs text-slate-300 mt-1 leading-relaxed"></p>
+            </div>
+          </div>
+          <div class="mt-4 flex justify-end">
+            <button id="quiz-next-btn"
+              class="bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold text-xs px-4 py-2.5 rounded-xl transition-all hover:scale-105 active:scale-95">
+              Siguiente Pregunta
+            </button>
+          </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="quiz-result-container" class="hidden text-center py-6">
+          <div
+            class="w-24 h-24 rounded-full flex flex-col items-center justify-center mx-auto mb-6 border-4 shadow-lg transition-all duration-500"
+            id="risk-gauge-circle">
+            <span id="risk-percentage-val" class="text-3xl font-black text-white">85%</span>
+            <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider -mt-1">Riesgo</span>
+          </div>
+
+          <h3 class="text-2xl font-bold text-white">Reporte de Riesgo para <span id="report-lead-name"
+              class="text-amber-500">Juan</span></h3>
+          <p class="text-xs text-slate-400 mt-1">Objetivo: <span id="report-lead-goal"
+              class="text-white font-medium">Alquilar departamento</span></p>
+
+          <div id="quiz-badge"
+            class="inline-block mt-3 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider"></div>
+          <p id="quiz-score-text" class="text-slate-300 text-sm mt-4 max-w-md mx-auto leading-relaxed"></p>
+
+          <!-- Divider -->
+          <div class="my-8 border-t border-navy-800"></div>
+
+          <!-- CTA Block -->
+          <div
+            class="p-6 bg-navy-950 border border-navy-800 rounded-2xl max-w-xl mx-auto shadow-inner relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-tr from-amber-500/5 to-transparent pointer-events-none"></div>
+            <h4 class="text-base font-bold text-white tracking-wide">¡No arriesgues tu dinero ni tu tranquilidad!</h4>
+            <p class="text-slate-400 text-xs mt-2 leading-relaxed max-w-md mx-auto">
+              La Inteligencia Artificial de **Firmix IA** escanea tu contrato en segundos, detecta penalidades excesivas
+              y te alerta antes de que firmes.
+            </p>
+            <div class="mt-5 flex flex-col sm:flex-row justify-center items-center gap-4">
+              <a href="app.html" target="_blank"
+                class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-navy-950 font-bold text-xs rounded-xl shadow-md shadow-amber-500/20 hover:shadow-glow-amber transition-all uppercase tracking-wider">
+                Probar Firmix IA Gratis
+              </a>
+              <button onclick="resetQuiz()"
+                class="text-xs text-slate-400 hover:text-white transition-colors underline decoration-dotted">
+                Volver a intentar el test
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ PRICING -->
+  <section id="pricing" class="py-16 md:py-24 bg-navy-950 relative overflow-hidden">
+    <div class="blob w-[400px] h-[400px] bg-amber-500/5 top-1/2 left-1/4"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-bold tracking-wider text-amber-500 uppercase">Precios Transparentes</span>
+        <h2 class="text-3xl sm:text-4xl font-display font-bold text-white mt-2">Planes a tu medida para alquilar con paz
+          mental</h2>
+        <p class="text-slate-400 mt-4 text-sm sm:text-base font-light">
+          Ahorra miles de soles en abogados tradicionales. Elige el plan ideal para tu alquiler.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+        <!-- Free -->
+        <div
+          class="p-6 sm:p-8 bg-navy-900/30 border border-navy-800 rounded-3xl flex flex-col justify-between hover:border-navy-700 transition-all">
+          <div>
+            <h4 class="text-lg font-bold text-white">Plan Freemium</h4>
+            <p class="text-xs text-slate-500 mt-1">Ideal para probar la IA</p>
+            <div class="mt-6 flex items-baseline">
+              <span class="text-4xl font-display font-extrabold text-white">S/.0</span>
+              <span class="text-slate-500 text-xs ml-2">/ único</span>
+            </div>
+            <ul class="mt-8 space-y-4 text-sm text-slate-400">
+              <li class="flex items-center space-x-3"><svg class="w-4 h-4 text-amber-500 shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                </svg><span>3 Escaneos Scam Shield gratuitos</span></li>
+              <li class="flex items-center space-x-3"><svg class="w-4 h-4 text-amber-500 shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                </svg><span>Reporte de Riesgos Encontrados</span></li>
+              <li class="flex items-center space-x-3"><svg class="w-4 h-4 text-slate-600 shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" />
+                </svg><span class="text-slate-600 line-through">Abogado IA ilimitado</span></li>
+              <li class="flex items-center space-x-3"><svg class="w-4 h-4 text-slate-600 shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" />
+                </svg><span class="text-slate-600 line-through">Firma Digital Certificada</span></li>
+            </ul>
+          </div>
+          <a href="app.html" target="_blank"
+            class="mt-8 w-full py-4 text-center border border-navy-700 bg-navy-900/50 hover:bg-navy-900 text-white font-bold text-sm rounded-2xl transition-all">
+            Probar Gratis
+          </a>
+        </div>
+
+        <!-- Premium (highlighted) -->
+        <div
+          class="p-6 sm:p-8 bg-navy-900 border-2 border-amber-500 rounded-3xl flex flex-col justify-between relative shadow-glow-navy transform md:-translate-y-4">
+          <div
+            class="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-amber-500 to-amber-600 text-navy-950 font-display font-extrabold text-[10px] uppercase tracking-wider px-4 py-1.5 rounded-full shadow-md">
+            Más Popular
+          </div>
+          <div>
+            <h4 class="text-lg font-bold text-white">Plan AI Premium</h4>
+            <p class="text-xs text-amber-500 mt-1 font-semibold">Tranquilidad Absoluta</p>
+            <div class="mt-6 flex items-baseline">
+              <span class="text-4xl font-display font-extrabold text-white">S/.29</span>
+              <span class="text-slate-400 text-xs ml-2">/ mensual</span>
+            </div>
+            <ul class="mt-8 space-y-4 text-sm text-slate-300">
+              <li class="flex items-center space-x-3"><svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                </svg><span class="font-semibold text-white">Escaneos ilimitados Scam Shield</span></li>
+              <li class="flex items-center space-x-3"><svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                </svg><span>Traducción completa a lenguaje simple</span></li>
+              <li class="flex items-center space-x-3"><svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                </svg><span>Abogado IA Chatbot ilimitado 24/7</span></li>
+              <li class="flex items-center space-x-3"><svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                </svg><span>Firma Digital Certificada RENIEC</span></li>
+              <li class="flex items-center space-x-3"><svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                </svg><span>Smart Vault de contratos y recibos</span></li>
+            </ul>
+          </div>
+          <a href="app.html" target="_blank"
+            class="mt-8 w-full py-4 text-center bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-navy-950 font-bold text-sm rounded-2xl shadow-md shadow-amber-500/20 hover:shadow-glow-amber transition-all uppercase tracking-wider">
+            Obtener Plan Premium
+          </a>
+        </div>
+
+        <!-- Annual -->
+        <div
+          class="p-6 sm:p-8 bg-navy-900/30 border border-navy-800 rounded-3xl flex flex-col justify-between hover:border-navy-700 transition-all">
+          <div>
+            <h4 class="text-lg font-bold text-white">Plan Inmobiliario / Anual</h4>
+            <p class="text-xs text-slate-500 mt-1">Para arrendadores seriales</p>
+            <div class="mt-6 flex items-baseline">
+              <span class="text-4xl font-display font-extrabold text-white">S/.69</span>
+              <span class="text-slate-500 text-xs ml-2">/ mensual</span>
+            </div>
+            <ul class="mt-8 space-y-4 text-sm text-slate-400">
+              <li class="flex items-center space-x-3"><svg class="w-4 h-4 text-amber-500 shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                </svg><span>Hasta 5 propiedades administradas</span></li>
+              <li class="flex items-center space-x-3"><svg class="w-4 h-4 text-amber-500 shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                </svg><span>Todo lo del Plan Premium incluido</span></li>
+              <li class="flex items-center space-x-3"><svg class="w-4 h-4 text-amber-500 shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                </svg><span>Reporte financiero histórico</span></li>
+              <li class="flex items-center space-x-3"><svg class="w-4 h-4 text-amber-500 shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                </svg><span>Integración Yape/Plin automatizada</span></li>
+            </ul>
+          </div>
+          <a href="app.html" target="_blank"
+            class="mt-8 w-full py-4 text-center border border-navy-700 bg-navy-900/50 hover:bg-navy-900 text-white font-bold text-sm rounded-2xl transition-all">
+            Obtener Plan Anual
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ TESTIMONIALS -->
+  <section id="testimonials" class="py-16 md:py-24 bg-navy-900/20 border-t border-navy-900/60 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-bold tracking-wider text-amber-500 uppercase">Opiniones Reales</span>
+        <h2 class="text-3xl sm:text-4xl font-display font-bold text-white mt-2">Salvados de estafas por Firmix IA</h2>
+        <p class="text-slate-400 mt-4 text-sm sm:text-base font-light">
+          Conoce la experiencia de inquilinos jóvenes en Lima que tomaron el control de su seguridad legal.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="p-6 bg-navy-900/40 border border-navy-800 rounded-2xl hover:border-amber-500/20 transition-all">
+          <div class="flex items-center space-x-1 text-amber-500 mb-4">★★★★★</div>
+          <p class="text-sm text-slate-300 italic leading-relaxed">
+            "Estaba a punto de alquilar un departamento en Lince. Subí el contrato a Firmix y la IA me alertó que el
+            dueño me cobraría una multa de S/.200 diarios si me retrasaba un solo día. ¡Me salvé de pagar de más!"
+          </p>
+          <div class="mt-6 flex items-center space-x-3">
+            <div
+              class="w-9 h-9 rounded-full bg-gradient-to-tr from-navy-500 to-amber-500 flex items-center justify-center text-xs font-extrabold text-white">
+              DA</div>
+            <div>
+              <h5 class="text-sm font-bold text-white">Daniel Alarcón</h5>
+              <p class="text-[11px] text-slate-500">28 años, Diseñador · Lince</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 bg-navy-900/40 border border-navy-800 rounded-2xl hover:border-amber-500/20 transition-all">
+          <div class="flex items-center space-x-1 text-amber-500 mb-4">★★★★★</div>
+          <p class="text-sm text-slate-300 italic leading-relaxed">
+            "Toda mi vida me dio flojera la burocracia notarial. Con Firmix pudimos firmar mi dueña y yo usando
+            biometría facial desde el celular. El contrato se selló en 5 minutos y es totalmente legal ante un juez."
+          </p>
+          <div class="mt-6 flex items-center space-x-3">
+            <div
+              class="w-9 h-9 rounded-full bg-gradient-to-tr from-navy-500 to-emerald-500 flex items-center justify-center text-xs font-extrabold text-white">
+              MB</div>
+            <div>
+              <h5 class="text-sm font-bold text-white">María Beltrán</h5>
+              <p class="text-[11px] text-slate-500">31 años, Arquitecta · Surco</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 bg-navy-900/40 border border-navy-800 rounded-2xl hover:border-amber-500/20 transition-all">
+          <div class="flex items-center space-x-1 text-amber-500 mb-4">★★★★★</div>
+          <p class="text-sm text-slate-300 italic leading-relaxed">
+            "La Bóveda Digital me encanta. Registro mis transferencias mensuales y me genera un reporte de buen pagador
+            avalado. Gracias a esto apliqué confiablemente a mi segundo departamento."
+          </p>
+          <div class="mt-6 flex items-center space-x-3">
+            <div
+              class="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-500 to-emerald-500 flex items-center justify-center text-xs font-extrabold text-white">
+              JC</div>
+            <div>
+              <h5 class="text-sm font-bold text-white">Juan Carlos Vega</h5>
+              <p class="text-[11px] text-slate-500">26 años, Programador · Magdalena</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ BLOG -->
+  <section id="blog" class="py-16 md:py-24 bg-navy-950 border-t border-navy-900/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="text-xs font-bold tracking-wider text-amber-500 uppercase">Recursos Gratuitos</span>
+        <h2 class="text-3xl font-display font-bold text-white mt-2">Blog &amp; Guías de Alquiler Seguro</h2>
+        <p class="text-slate-400 mt-3 text-sm font-light">
+          Aprende sobre tus derechos y deberes como inquilino o propietario en Lima Metropolitana.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6">
+        <div
+          class="col-span-1 md:col-span-2 lg:col-span-2 p-6 bg-navy-900/40 border border-navy-800 hover:border-amber-500/30 rounded-2xl flex flex-col justify-between transition-all group">
+          <div>
+            <span class="text-[10px] font-extrabold text-amber-500 uppercase tracking-widest">Inteligencia
+              Artificial</span>
+            <h4 class="text-base font-bold text-white mt-2 group-hover:text-amber-400 transition-colors">Cómo la IA te
+              salva de firmar un contrato abusivo en 2 minutos</h4>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">Usa herramientas de auditoría inteligente para
+              detectar penalidades ocultas antes de firmar.</p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-navy-800/60">
+            <a href="https://josue191005.github.io/blog_firmix/" target="_blank" rel="noopener noreferrer"
+              class="text-xs font-bold text-amber-500 hover:text-amber-400 flex items-center space-x-1">
+              <span>Leer Artículo</span><span>→</span>
+            </a>
+          </div>
+        </div>
+
+        <div
+          class="col-span-1 md:col-span-2 lg:col-span-2 p-6 bg-navy-900/40 border border-navy-800 hover:border-amber-500/30 rounded-2xl flex flex-col justify-between transition-all group">
+          <div>
+            <span class="text-[10px] font-extrabold text-amber-500 uppercase tracking-widest">Garantías</span>
+            <h4 class="text-base font-bold text-white mt-2 group-hover:text-amber-400 transition-colors">¿El propietario
+              se quedó con tu garantía? Conoce tus derechos</h4>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">Pasos legales basados en el Código Civil peruano para
+              recuperar tu depósito.</p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-navy-800/60">
+            <a href="https://danielspecter-dotcom.github.io/FirmixAI-Blog/" target="_blank" rel="noopener noreferrer"
+              class="text-xs font-bold text-amber-500 hover:text-amber-400 flex items-center space-x-1">
+              <span>Leer Artículo</span><span>→</span>
+            </a>
+          </div>
+        </div>
+
+        <div
+          class="col-span-1 md:col-span-2 lg:col-span-2 p-6 bg-navy-900/40 border border-navy-800 hover:border-amber-500/30 rounded-2xl flex flex-col justify-between transition-all group">
+          <div>
+            <span class="text-[10px] font-extrabold text-amber-500 uppercase tracking-widest">Contratos</span>
+            <h4 class="text-base font-bold text-white mt-2 group-hover:text-amber-400 transition-colors">Estafas con
+              contratos en Lima: cómo detectar cláusulas abusivas</h4>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">Aprende a reconocer las modalidades de fraude más
+              comunes y protege tu presupuesto.</p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-navy-800/60">
+            <a href="https://pilcovaleriia.github.io/BlogFirmix/" target="_blank" rel="noopener noreferrer"
+              class="text-xs font-bold text-amber-500 hover:text-amber-400 flex items-center space-x-1">
+              <span>Leer Artículo</span><span>→</span>
+            </a>
+          </div>
+        </div>
+
+        <div
+          class="col-span-1 md:col-span-2 lg:col-span-2 lg:col-start-2 p-6 bg-navy-900/40 border border-navy-800 hover:border-amber-500/30 rounded-2xl flex flex-col justify-between transition-all group">
+          <div>
+            <span class="text-[10px] font-extrabold text-amber-500 uppercase tracking-widest">Cláusulas Abusivas</span>
+            <h4 class="text-base font-bold text-white mt-2 group-hover:text-amber-400 transition-colors">Cómo detectar
+              multas excesivas y trampas ocultas a tiempo</h4>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">Aprende a identificar penalidades desproporcionadas y
+              retenciones ilegales.</p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-navy-800/60">
+            <a href="https://pamt16.github.io/firmix_blog/" target="_blank" rel="noopener noreferrer"
+              class="text-xs font-bold text-amber-500 hover:text-amber-400 flex items-center space-x-1">
+              <span>Leer Artículo</span><span>→</span>
+            </a>
+          </div>
+        </div>
+
+        <div
+          class="col-span-1 md:col-span-2 md:col-start-2 lg:col-span-2 lg:col-start-4 p-6 bg-navy-900/40 border border-navy-800 hover:border-amber-500/30 rounded-2xl flex flex-col justify-between transition-all group">
+          <div>
+            <span class="text-[10px] font-extrabold text-amber-500 uppercase tracking-widest">Derechos de
+              Inquilinos</span>
+            <h4 class="text-base font-bold text-white mt-2 group-hover:text-amber-400 transition-colors">Derechos del
+              inquilino en Lima ante cobros abusivos y desalojos</h4>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">Conoce el marco legal que te protege y cómo defender
+              tu tranquilidad.</p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-navy-800/60">
+            <a href="https://adriangth3.github.io/BlogFirmix" target="_blank" rel="noopener noreferrer"
+              class="text-xs font-bold text-amber-500 hover:text-amber-400 flex items-center space-x-1">
+              <span>Leer Artículo</span><span>→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ EMAIL CAPTURE -->
+  <section id="contacto" class="py-16 md:py-24 bg-navy-900/40 border-t border-navy-900/60 relative overflow-hidden">
+    <div class="blob w-[500px] h-[300px] bg-amber-500/5 top-0 left-1/2 -translate-x-1/2"></div>
+
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center mb-10">
+        <span class="text-xs font-bold tracking-wider text-amber-500 uppercase">Mantente Informado</span>
+        <h2 class="text-3xl sm:text-4xl font-display font-bold text-white mt-2">¿Quieres saber cuándo lancemos nuevas
+          funciones?</h2>
+        <p class="text-slate-400 mt-4 text-sm sm:text-base font-light leading-relaxed">
+          Déjanos tu correo y te avisaremos antes que nadie sobre actualizaciones de Firmix IA, guías legales exclusivas
+          y ofertas especiales para usuarios tempranos en Lima.
+        </p>
+      </div>
+
+      <!-- Email form card -->
+      <div class="bg-navy-900/80 border border-navy-800 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-sm">
+        <form id="email-capture-form" onsubmit="handleEmailSubmit(event)" class="space-y-4">
+          <!-- Row 1: Nombre y Teléfono -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <!-- Nombre -->
+            <div>
+              <label for="name-input" class="sr-only">Tu nombre completo</label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                  <svg class="w-5 h-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </div>
+                <input type="text" id="name-input" name="name" required placeholder="Tu nombre completo"
+                  class="w-full bg-navy-950 border border-navy-700 focus:border-amber-500 rounded-xl pl-10 pr-4 py-3.5 text-sm text-white placeholder-slate-500 focus:outline-none transition-all" />
+              </div>
+            </div>
+            <!-- Teléfono -->
+            <div>
+              <label for="phone-input" class="sr-only">Tu número de teléfono</label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                  <svg class="w-5 h-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                </div>
+                <input type="tel" id="phone-input" name="phone" required placeholder="+51 999 999 999"
+                  class="w-full bg-navy-950 border border-navy-700 focus:border-amber-500 rounded-xl pl-10 pr-4 py-3.5 text-sm text-white placeholder-slate-500 focus:outline-none transition-all" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2: Correo -->
+          <div>
+            <label for="email-input" class="sr-only">Tu correo electrónico</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                <svg class="w-5 h-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                  stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <input type="email" id="email-input" name="email" required placeholder="tu@correo.com"
+                class="w-full bg-navy-950 border border-navy-700 focus:border-amber-500 rounded-xl pl-10 pr-4 py-3.5 text-sm text-white placeholder-slate-500 focus:outline-none transition-all" />
+            </div>
+          </div>
+
+          <!-- Row 3: Botón enviar -->
+          <button type="submit" id="email-submit-btn"
+            class="w-full px-6 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-navy-950 font-bold rounded-xl shadow-md shadow-amber-500/20 transition-all text-sm uppercase tracking-wider hover:shadow-glow-amber hover:-translate-y-0.5 flex items-center justify-center space-x-2">
+            <span>Enviar</span>
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </button>
+
+          <p class="text-[11px] text-slate-600 text-center leading-relaxed">
+            🔒 Tu información es privada. No enviamos spam. Puedes darte de baja en cualquier momento.
+          </p>
+        </form>
+
+        <!-- Features of being on the list -->
+        <div class="mt-6 pt-6 border-t border-navy-800 grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="flex items-start space-x-3">
+            <span class="text-amber-500 text-lg shrink-0">⚡</span>
+            <div>
+              <p class="text-xs font-bold text-white">Acceso Anticipado</p>
+              <p class="text-[11px] text-slate-500 mt-0.5">Sé el primero en probar nuevas funciones</p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-amber-500 text-lg shrink-0">📋</span>
+            <div>
+              <p class="text-xs font-bold text-white">Guías Legales Gratis</p>
+              <p class="text-[11px] text-slate-500 mt-0.5">Recursos exclusivos sobre alquileres en Lima</p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-amber-500 text-lg shrink-0">🎁</span>
+            <div>
+              <p class="text-xs font-bold text-white">Descuentos Exclusivos</p>
+              <p class="text-[11px] text-slate-500 mt-0.5">Ofertas especiales para usuarios tempranos</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ FOOTER -->
+  <footer class="bg-navy-900 border-t border-navy-800 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center space-x-2">
+          <div
+            class="w-8 h-8 bg-gradient-to-tr from-amber-500 to-amber-600 rounded-lg flex items-center justify-center p-1 shadow-md shadow-amber-500/10">
+            <img src="img/LogoFirmix2.png" class="w-full h-full object-contain" alt="Firmix Logo">
+          </div>
+          <span class="font-display font-bold text-base text-white tracking-wide">FIRMIX IA</span>
+        </div>
+
+        <div class="flex items-center space-x-6 text-sm">
+          <a href="#features" class="text-slate-500 hover:text-amber-500 transition-colors">Funcionalidades</a>
+          <a href="#pricing" class="text-slate-500 hover:text-amber-500 transition-colors">Planes</a>
+          <a href="#blog" class="text-slate-500 hover:text-amber-500 transition-colors">Blog</a>
+          <a href="app.html" target="_blank"
+            class="text-amber-500 hover:text-amber-400 font-semibold transition-colors">App →</a>
+        </div>
+
+        <p class="text-[11px] text-slate-500 text-center md:text-right max-w-md leading-relaxed">
+          © 2026 Firmix IA. Todos los derechos reservados. Las firmas digitales emitidas cumplen con la Ley N° 27269 de
+          Firmas y Certificados Digitales de la República del Perú.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════════════ TOAST -->
+  <div id="toast"
+    class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-3 bg-emerald-600 text-white text-sm font-bold rounded-2xl shadow-2xl flex items-center space-x-2">
+    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+    </svg>
+    <span id="toast-msg">¡Gracias! Te contactaremos pronto.</span>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ SUCCESS MODAL -->
+  <div id="success-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <!-- Backdrop -->
+    <div id="modal-backdrop" class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeSuccessModal()"></div>
+    <!-- Modal card -->
+    <div
+      class="relative bg-navy-900 border border-navy-700 rounded-3xl shadow-2xl p-8 max-w-sm w-full text-center z-10 animate-modal-in">
+      <!-- Icono de éxito -->
+      <div
+        class="w-20 h-20 bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto mb-5">
+        <svg class="w-10 h-10 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+          stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <!-- Título -->
+      <h3 class="text-xl font-display font-bold text-white leading-snug">¡Registro exitoso!</h3>
+      <!-- Mensaje -->
+      <p class="text-slate-400 text-sm mt-2 leading-relaxed">
+        Te mantendremos informado. ¡Descarga nuestra guía gratuita de alquiler seguro!
+      </p>
+      <!-- Divider -->
+      <div class="my-5 border-t border-navy-800"></div>
+      <!-- Botones -->
+      <div class="space-y-2">
+        <button onclick="downloadPdfFromModal()" id="modal-pdf-btn"
+          class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-navy-950 font-bold rounded-xl text-sm shadow-md shadow-amber-500/20 transition-all flex items-center justify-center space-x-2">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span>↓ Descargar Guía PDF Gratuita</span>
+        </button>
+        <a href="app.html" onclick="closeSuccessModal()"
+          class="w-full py-3 border border-navy-700 bg-navy-800 hover:bg-navy-700 text-white font-semibold rounded-xl text-sm transition-all flex items-center justify-center space-x-2">
+          <span>Probar la App ahora</span>
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    #success-modal {
+      display: none;
+    }
+
+    #success-modal.modal-visible {
+      display: flex !important;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(0.92) translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .animate-modal-in {
+      animation: modalIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+  </style>
+
+  <!-- ═══════════════════════════════════════════════════════ SCRIPTS -->
+  <!-- jsPDF CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    // ── Mobile Menu ──────────────────────────────────────────────────────────
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const iconOpen = document.getElementById('icon-open');
+    const iconClose = document.getElementById('icon-close');
+
+    mobileBtn.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('hidden');
+      iconOpen.classList.toggle('hidden', !open);
+      iconClose.classList.toggle('hidden', open);
+    });
+
+    // Close mobile menu on link click
+    mobileMenu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        iconOpen.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+      });
+    });
+
+    // ── Slideshow ────────────────────────────────────────────────────────────
+    let currentSlide = 0;
+    const totalSlides = 4;
+    let autoplayTimer = null;
+
+    function goToSlide(index) {
+      // Hide all slides
+      document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+      // Show target
+      document.getElementById('slide-' + index).classList.add('active');
+
+      // Update dots
+      document.querySelectorAll('.slide-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === index);
+        d.style.backgroundColor = i === index ? '#f59e0b' : '#1b263b';
+        d.style.width = i === index ? '20px' : '8px';
+      });
+
+      // Update bottom nav buttons
+      document.querySelectorAll('.slide-nav-btn').forEach((b, i) => {
+        b.style.color = i === index ? '#f59e0b' : '#64748b';
+      });
+
+      // Update feature cards
+      document.querySelectorAll('.feature-selector').forEach((c, i) => {
+        if (i === index) {
+          c.classList.add('border-amber-500', 'bg-navy-800/60', 'shadow-glow-navy');
+          c.classList.remove('border-navy-800', 'bg-transparent');
+          c.querySelector('.p-3').classList.add('bg-amber-500/10', 'text-amber-400');
+          c.querySelector('.p-3').classList.remove('bg-navy-800', 'text-slate-400');
+        } else {
+          c.classList.remove('border-amber-500', 'bg-navy-800/60', 'shadow-glow-navy');
+          c.classList.add('border-navy-800', 'bg-transparent');
+          c.querySelector('.p-3').classList.remove('bg-amber-500/10', 'text-amber-400');
+          c.querySelector('.p-3').classList.add('bg-navy-800', 'text-slate-400');
+        }
+      });
+
+      currentSlide = index;
+      resetAutoplay();
+    }
+
+    function nextSlide() {
+      goToSlide((currentSlide + 1) % totalSlides);
+    }
+
+    function resetAutoplay() {
+      if (autoplayTimer) clearInterval(autoplayTimer);
+      autoplayTimer = setInterval(nextSlide, 3500);
+    }
+
+    // Initialize dots color
+    document.querySelectorAll('.slide-dot').forEach((d, i) => {
+      d.style.backgroundColor = i === 0 ? '#f59e0b' : '#1b263b';
+      d.style.width = i === 0 ? '20px' : '8px';
+    });
+
+    resetAutoplay();
+
+    // ── Email Capture ────────────────────────────────────────────────────────
+    // Configuración de EmailJS (Regístrate gratis en emailjs.com para activarlo)
+    const EMAILJS_CONFIG = {
+      serviceId: 'YOUR_SERVICE_ID', // Tu Service ID de EmailJS
+      templateId: 'YOUR_TEMPLATE_ID', // Tu Template ID de EmailJS
+      publicKey: 'YOUR_PUBLIC_KEY'   // Tu Public Key de EmailJS
+    };
+
+    function showToast(msg, isError = false) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-msg');
+      toastMsg.textContent = msg;
+      toast.style.backgroundColor = isError ? '#dc2626' : '#059669';
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 4000);
+    }
+
+    function handleEmailSubmit(e) {
+      e.preventDefault();
+      const nameInput = document.getElementById('name-input');
+      const phoneInput = document.getElementById('phone-input');
+      const emailInput = document.getElementById('email-input');
+      const btn = document.getElementById('email-submit-btn');
+
+      const name = nameInput.value.trim();
+      const phone = phoneInput.value.trim();
+      const email = emailInput.value.trim();
+
+      if (!name || !phone || !email) return;
+
+      // Save to localStorage
+      const key = 'firmix_leads';
+      const leads = JSON.parse(localStorage.getItem(key) || '[]');
+      leads.push({ name, phone, email, date: new Date().toISOString() });
+      localStorage.setItem(key, JSON.stringify(leads));
+
+      // Visual feedback on button
+      btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg><span>Enviando...</span>';
+      btn.disabled = true;
+
+      // Lógica de Envío de EmailJS
+      const sendEmail = () => {
+        // Fallback en caso de que no estén las credenciales configuradas
+        if (
+          EMAILJS_CONFIG.serviceId === 'YOUR_SERVICE_ID' ||
+          EMAILJS_CONFIG.templateId === 'YOUR_TEMPLATE_ID' ||
+          EMAILJS_CONFIG.publicKey === 'YOUR_PUBLIC_KEY'
+        ) {
+          console.log('%c[Firmix] Simulación de correo enviado con EmailJS exitosa 🚀', 'color: #f59e0b; font-weight: bold;', { name, phone, email });
+          return new Promise((resolve) => setTimeout(resolve, 1000));
+        }
+
+        // Llamada real a la REST API de EmailJS
+        return fetch('https://api.emailjs.com/api/v1.0/email/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            service_id: EMAILJS_CONFIG.serviceId,
+            template_id: EMAILJS_CONFIG.templateId,
+            user_id: EMAILJS_CONFIG.publicKey,
+            template_params: {
+              to_name: name,
+              to_email: email,
+              user_name: name,
+              user_phone: phone,
+              user_email: email
+            }
+          })
+        }).then(response => {
+          if (!response.ok) {
+            throw new Error('Error al enviar el correo con EmailJS');
+          }
+          return response;
+        });
+      };
+
+      sendEmail()
+        .then(() => {
+          // Reset form
+          nameInput.value = '';
+          phoneInput.value = '';
+          emailInput.value = '';
+
+          btn.innerHTML = '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>¡Enviado!</span>';
+          btn.style.background = 'linear-gradient(to right, #10b981, #059669)';
+
+          // Show success modal
+          _pdfLeadName = name;
+          openSuccessModal();
+
+          setTimeout(() => {
+            btn.innerHTML = '<span>Enviar</span><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>';
+            btn.style.background = '';
+            btn.disabled = false;
+          }, 3000);
+        })
+        .catch(err => {
+          console.error(err);
+          showToast('Hubo un error al registrar tus datos. Inténtalo de nuevo. ❌', true);
+          btn.innerHTML = '<span>Enviar</span><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>';
+          btn.style.background = '';
+          btn.disabled = false;
+        });
+    }
+
+    function openSuccessModal() {
+      const modal = document.getElementById('success-modal');
+      modal.classList.add('modal-visible');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSuccessModal() {
+      const modal = document.getElementById('success-modal');
+      modal.classList.remove('modal-visible');
+      document.body.style.overflow = '';
+    }
+
+    // ── Navbar scroll effect ─────────────────────────────────────────────────
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 20) {
+        navbar.style.boxShadow = '0 4px 30px rgba(0,0,0,0.4)';
+      } else {
+        navbar.style.boxShadow = 'none';
+      }
+    });
+
+    // ── PDF Generator ────────────────────────────────────────────────────────
+    let _pdfLeadName = '';
+
+    function downloadPdfFromModal() {
+      generateFirmixPDF(_pdfLeadName);
+    }
+
+    function generateFirmixPDF(leadName) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const W = 210;
+      const margin = 18;
+      const contentW = W - margin * 2;
+      let y = 0;
+
+      // ── PORTADA ──────────────────────────────────────────────────────────
+      doc.setFillColor(14, 19, 27);
+      doc.rect(0, 0, W, 297, 'F');
+
+      // Franja dorada superior
+      doc.setFillColor(245, 158, 11);
+      doc.rect(0, 0, W, 3, 'F');
+      // Franja dorada izquierda
+      doc.rect(0, 0, 3, 297, 'F');
+
+      // Badge FIRMIX IA
+      doc.setFillColor(245, 158, 11);
+      doc.roundedRect(margin, 32, 44, 10, 2, 2, 'F');
+      doc.setTextColor(14, 19, 27);
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'bold');
+      doc.text('FIRMIX IA', margin + 22, 38.5, { align: 'center' });
+
+      // Título
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(28);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Guia Gratuita', margin, 60);
+      doc.text('de Alquiler Seguro', margin, 72);
+
+      // Subtítulo dorado
+      doc.setTextColor(245, 158, 11);
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Lima, Peru | 2026', margin, 83);
+
+      // Línea separadora
+      doc.setDrawColor(245, 158, 11);
+      doc.setLineWidth(0.4);
+      doc.line(margin, 90, W - margin, 90);
+
+      // Saludo personalizado
+      doc.setTextColor(203, 215, 233);
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'normal');
+      const greeting = leadName ? 'Hola, ' + leadName + ':' : 'Estimado usuario:';
+      doc.text(greeting, margin, 102);
+
+      const introLines = doc.splitTextToSize(
+        'Gracias por unirte a la comunidad Firmix IA. Esta guia resume los recursos mas importantes de nuestro blog para que puedas alquilar con seguridad, conocer tus derechos y proteger tu garantia en Lima.',
+        contentW
+      );
+      doc.text(introLines, margin, 112);
+
+      // Beneficios
+      const features = [
+        '3 escaneos Scam Shield gratuitos al registrarte',
+        'Reporte de riesgos de cada contrato analizado',
+        'Abogado IA disponible 24/7 para consultas legales',
+        'Firma Digital con validez legal (Ley N. 27269)',
+      ];
+      doc.setTextColor(203, 215, 233);
+      doc.setFontSize(9.5);
+      doc.setFont('helvetica', 'normal');
+      let fy = 140;
+      features.forEach(f => {
+        // Dibujar un checkmark dorado vectorial
+        doc.setDrawColor(245, 158, 11);
+        doc.setLineWidth(0.5);
+        doc.line(margin, fy - 1.8, margin + 1.5, fy - 0.3);
+        doc.line(margin + 1.5, fy - 0.3, margin + 4, fy - 3.8);
+
+        doc.text(f, margin + 7, fy);
+        fy += 8;
+      });
+
+      // Box URL app
+      doc.setFillColor(27, 38, 59);
+      doc.roundedRect(margin, 180, contentW, 14, 3, 3, 'F');
+      doc.setTextColor(245, 158, 11);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Accede a la App:', margin + 5, 188.5);
+      doc.setTextColor(203, 215, 233);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Abre app.html en tu navegador', margin + 44, 188.5);
+
+      // Footer portada
+      doc.setTextColor(75, 85, 99);
+      doc.setFontSize(7.5);
+      doc.text('(c) 2026 Firmix IA | Todos los derechos reservados | Ley N. 27269 | Peru', W / 2, 285, { align: 'center' });
+
+      // ── PÁGINA 2: ARTÍCULOS DEL BLOG ────────────────────────────────────
+      doc.addPage();
+      doc.setFillColor(14, 19, 27);
+      doc.rect(0, 0, W, 297, 'F');
+      doc.setFillColor(245, 158, 11);
+      doc.rect(0, 0, W, 3, 'F');
+      doc.rect(0, 0, 3, 297, 'F');
+
+      // Título sección
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(18);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Blog y Guias de Alquiler Seguro', margin, 24);
+
+      doc.setTextColor(245, 158, 11);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Recursos gratuitos para inquilinos en Lima Metropolitana', margin, 32);
+
+      doc.setDrawColor(27, 38, 59);
+      doc.setLineWidth(0.3);
+      doc.line(margin, 37, W - margin, 37);
+
+      const articles = [
+        {
+          num: '01', cat: 'INTELIGENCIA ARTIFICIAL',
+          title: 'Como la IA te salva de firmar un contrato abusivo en 2 minutos',
+          desc: 'Usa herramientas de auditoria inteligente para detectar penalidades ocultas antes de firmar tu contrato.',
+          url: 'josue191005.github.io/blog_firmix/',
+        },
+        {
+          num: '02', cat: 'GARANTIAS',
+          title: 'El propietario se quedo con tu garantia? Conoce tus derechos',
+          desc: 'Pasos legales basados en el Codigo Civil peruano para recuperar tu deposito de garantia.',
+          url: 'danielspecter-dotcom.github.io/FirmixAI-Blog/',
+        },
+        {
+          num: '03', cat: 'CONTRATOS',
+          title: 'Estafas con contratos en Lima: como detectar clausulas abusivas',
+          desc: 'Aprende a reconocer las modalidades de fraude mas comunes en alquileres y protege tu presupuesto.',
+          url: 'pilcovaleriia.github.io/BlogFirmix/',
+        },
+        {
+          num: '04', cat: 'CLAUSULAS ABUSIVAS',
+          title: 'Como detectar multas excesivas y trampas ocultas a tiempo',
+          desc: 'Aprende a identificar penalidades desproporcionadas y retenciones ilegales en contratos.',
+          url: 'pamt16.github.io/firmix_blog/',
+        },
+        {
+          num: '05', cat: 'DERECHOS DE INQUILINOS',
+          title: 'Derechos del inquilino en Lima ante cobros abusivos y desalojos',
+          desc: 'Conoce el marco legal que te protege y como defender tu tranquilidad frente a propietarios abusivos.',
+          url: 'adriangth3.github.io/BlogFirmix',
+        },
+      ];
+
+      y = 46;
+      articles.forEach(art => {
+        const cardH = 38;
+        doc.setFillColor(13, 17, 23);
+        doc.roundedRect(margin, y, contentW, cardH, 2, 2, 'F');
+
+        // Número
+        doc.setTextColor(245, 158, 11);
+        doc.setFontSize(22);
+        doc.setFont('helvetica', 'bold');
+        doc.text(art.num, margin + 5, y + 14);
+
+        // Categoría
+        doc.setTextColor(245, 158, 11);
+        doc.setFontSize(6.5);
+        doc.setFont('helvetica', 'bold');
+        doc.text(art.cat, margin + 20, y + 7);
+
+        // Título
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(9.5);
+        doc.setFont('helvetica', 'bold');
+        const titleLines = doc.splitTextToSize(art.title, contentW - 28);
+        doc.text(titleLines, margin + 20, y + 14);
+
+        // Descripción
+        doc.setTextColor(148, 163, 184);
+        doc.setFontSize(7.5);
+        doc.setFont('helvetica', 'normal');
+        const descLines = doc.splitTextToSize(art.desc, contentW - 28);
+        doc.text(descLines, margin + 20, y + 22);
+
+        // URL
+        doc.setTextColor(245, 158, 11);
+        doc.setFontSize(7);
+        doc.text('>> ' + art.url, margin + 20, y + 33);
+
+        y += cardH + 4;
+      });
+
+      // CTA final
+      doc.setFillColor(245, 158, 11);
+      doc.roundedRect(margin, y + 4, contentW, 16, 3, 3, 'F');
+      doc.setTextColor(14, 19, 27);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Empieza gratis en Firmix IA - abre app.html', W / 2, y + 13.5, { align: 'center' });
+
+      // Footer pág 2
+      doc.setTextColor(75, 85, 99);
+      doc.setFontSize(7.5);
+      doc.setFont('helvetica', 'normal');
+      doc.text('(c) 2026 Firmix IA | Las firmas digitales cumplen con la Ley N. 27269 del Peru', W / 2, 290, { align: 'center' });
+
+      // Descargar
+      const fname = 'GuiaGratuitadeAlquilerSeguro.pdf';
+      doc.save(fname);
+    }
+  </script>
+
+
+  <!-- ═══════════════════════════════════════════════════════ CHATBOX INFORMATIVO -->
+  <div id="firmix-chat-widget" class="fixed bottom-6 right-6 z-50 font-sans">
+    <!-- Chat Toggle Button -->
+    <button id="chat-toggle-btn"
+      class="w-14 h-14 bg-gradient-to-tr from-amber-500 to-amber-600 rounded-full flex items-center justify-center shadow-lg shadow-amber-500/30 hover:scale-110 active:scale-95 transition-all duration-300 relative group animate-bounce-slow"
+      aria-label="Abrir chat informativo">
+      <!-- Pulse Effect -->
+      <span class="absolute inset-0 rounded-full bg-amber-500/20 animate-ping opacity-75"></span>
+      <!-- Message Icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-navy-950 group-hover:rotate-12 transition-transform"
+        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+      </svg>
+      <!-- Close Icon -->
+      <svg xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6 text-navy-950 hidden group-hover:rotate-90 transition-transform" id="chat-close-icon" fill="none"
+        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <!-- Chat Box Window -->
+    <div id="chat-box"
+      class="absolute bottom-20 right-0 w-[340px] sm:w-[380px] h-[480px] bg-navy-950/95 border border-navy-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden backdrop-blur-lg transform translate-y-10 opacity-0 pointer-events-none transition-all duration-300 origin-bottom-right">
+      <!-- Header -->
+      <div
+        class="p-4 bg-gradient-to-r from-navy-900 to-navy-850 border-b border-navy-800 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div
+            class="w-9 h-9 bg-gradient-to-tr from-amber-500 to-amber-600 rounded-lg flex items-center justify-center p-1.5 shadow-md shadow-amber-500/10">
+            <img src="img/LogoFirmix2.png" class="w-full h-full object-contain" alt="Firmix Logo">
+          </div>
+          <div>
+            <h4 class="text-sm font-bold text-white tracking-wide">Asistente Informativo</h4>
+            <div class="flex items-center space-x-1.5">
+              <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+              <span class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">IA Activa</span>
+            </div>
+          </div>
+        </div>
+        <button id="close-chat-btn" class="text-slate-400 hover:text-white transition-colors" aria-label="Cerrar chat">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Messages Container -->
+      <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-4 scroll-smooth">
+        <!-- Bot Welcome -->
+        <div class="flex items-start space-x-2.5">
+          <div
+            class="w-7 h-7 bg-navy-800 border border-navy-700 rounded-lg flex items-center justify-center flex-shrink-0 text-amber-500 font-bold text-[10px]">
+            FX</div>
+          <div
+            class="bg-navy-900 border border-navy-800 text-slate-300 rounded-2xl rounded-tl-none p-3 text-xs leading-relaxed max-w-[80%] shadow-sm">
+            ¡Hola! Soy tu asistente informativo de **Firmix AI**. ¿Tienes alguna duda sobre nuestra plataforma? Puedes
+            hacer clic en una pregunta sugerida o escribirme.
+          </div>
+        </div>
+
+        <!-- Suggested Questions -->
+        <div class="pt-2" id="suggested-block">
+          <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider mb-2">Preguntas sugeridas:</p>
+          <div class="flex flex-col space-y-2" id="suggested-container">
+            <button
+              class="suggested-q text-left bg-navy-900 hover:bg-navy-800 border border-navy-800 hover:border-amber-500/40 text-slate-300 hover:text-white rounded-xl p-2.5 text-xs transition-all duration-200 focus:outline-none">
+              ¿Qué es Firmix AI?
+            </button>
+            <button
+              class="suggested-q text-left bg-navy-900 hover:bg-navy-800 border border-navy-800 hover:border-amber-500/40 text-slate-300 hover:text-white rounded-xl p-2.5 text-xs transition-all duration-200 focus:outline-none">
+              ¿Firmix AI es seguro?
+            </button>
+            <button
+              class="suggested-q text-left bg-navy-900 hover:bg-navy-800 border border-navy-800 hover:border-amber-500/40 text-slate-300 hover:text-white rounded-xl p-2.5 text-xs transition-all duration-200 focus:outline-none">
+              ¿Cómo analizar mi contrato de alquiler?
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Form -->
+      <form id="chat-form" class="p-3 bg-navy-900 border-t border-navy-800 flex items-center space-x-2">
+        <input type="text" id="chat-input" placeholder="Escribe tu pregunta..."
+          class="flex-1 bg-navy-950 border border-navy-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all duration-200">
+        <button type="submit"
+          class="w-8 h-8 bg-amber-500 hover:bg-amber-600 rounded-xl flex items-center justify-center text-navy-950 shadow-md shadow-amber-500/10 hover:scale-105 active:scale-95 transition-all"
+          aria-label="Enviar mensaje">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+            stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Chatbox Styles -->
+  <style>
+    @keyframes bounceSlow {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    .animate-bounce-slow {
+      animation: bounceSlow 3.5s infinite ease-in-out;
+    }
+
+    #chat-messages::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    #chat-messages::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    #chat-messages::-webkit-scrollbar-thumb {
+      background: #1b263b;
+      border-radius: 2px;
+    }
+
+    #chat-messages::-webkit-scrollbar-thumb:hover {
+      background: #385489;
+    }
+
+    .typing-dots span {
+      animation: typingBlink 1.4s infinite both;
+    }
+
+    .typing-dots span:nth-child(2) {
+      animation-delay: .2s;
+    }
+
+    .typing-dots span:nth-child(3) {
+      animation-delay: .4s;
+    }
+
+    @keyframes typingBlink {
+      0% {
+        opacity: .2;
+      }
+
+      20% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: .2;
+      }
+    }
+  </style>
+
+  <!-- Chatbox Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const chatToggleBtn = document.getElementById('chat-toggle-btn');
+      const chatBox = document.getElementById('chat-box');
+      const closeChatBtn = document.getElementById('close-chat-btn');
+      const chatMessages = document.getElementById('chat-messages');
+      const chatForm = document.getElementById('chat-form');
+      const chatInput = document.getElementById('chat-input');
+      const suggestedContainer = document.getElementById('suggested-container');
+      const chatCloseIcon = document.getElementById('chat-close-icon');
+      const chatMsgIcon = chatToggleBtn.querySelector('svg:not(#chat-close-icon)');
+
+      let isOpen = false;
+
+      // Toggle Chatbox
+      function toggleChat() {
+        isOpen = !isOpen;
+        if (isOpen) {
+          chatBox.classList.remove('translate-y-10', 'opacity-0', 'pointer-events-none');
+          chatBox.classList.add('translate-y-0', 'opacity-1', 'pointer-events-auto');
+          chatMsgIcon.classList.add('hidden');
+          chatCloseIcon.classList.remove('hidden');
+          chatToggleBtn.classList.remove('animate-bounce-slow');
+        } else {
+          chatBox.classList.remove('translate-y-0', 'opacity-1', 'pointer-events-auto');
+          chatBox.classList.add('translate-y-10', 'opacity-0', 'pointer-events-none');
+          chatCloseIcon.classList.add('hidden');
+          chatMsgIcon.classList.remove('hidden');
+          chatToggleBtn.classList.add('animate-bounce-slow');
+        }
+      }
+
+      chatToggleBtn.addEventListener('click', toggleChat);
+      closeChatBtn.addEventListener('click', toggleChat);
+
+      // Append messages
+      function appendMessage(sender, text, isMarkdown = true) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'flex items-start space-x-2.5';
+
+        if (sender === 'user') {
+          msgDiv.className += ' justify-end';
+          msgDiv.innerHTML = `
+            <div class="bg-amber-500 text-navy-950 rounded-2xl rounded-tr-none p-3 text-xs leading-relaxed max-w-[80%] shadow-sm font-medium">
+              ${escapeHTML(text)}
+            </div>
+          `;
+        } else {
+          const formattedText = isMarkdown ? parseSimpleMarkdown(text) : escapeHTML(text);
+          msgDiv.innerHTML = `
+            <div class="w-7 h-7 bg-navy-800 border border-navy-700 rounded-lg flex items-center justify-center flex-shrink-0 text-amber-500 font-bold text-[10px]">FX</div>
+            <div class="bg-navy-900 border border-navy-800 text-slate-300 rounded-2xl rounded-tl-none p-3 text-xs leading-relaxed max-w-[80%] shadow-sm">
+              ${formattedText}
+            </div>
+          `;
+        }
+
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      // Typing indicator
+      let typingDiv = null;
+      function showTyping() {
+        if (typingDiv) return;
+        typingDiv = document.createElement('div');
+        typingDiv.className = 'flex items-start space-x-2.5';
+        typingDiv.innerHTML = `
+          <div class="w-7 h-7 bg-navy-800 border border-navy-700 rounded-lg flex items-center justify-center flex-shrink-0 text-amber-500 font-bold text-[10px]">FX</div>
+          <div class="bg-navy-900 border border-navy-800 text-slate-300 rounded-2xl rounded-tl-none p-3 text-xs leading-relaxed max-w-[80%] shadow-sm typing-dots">
+            <span>•</span><span>•</span><span>•</span>
+          </div>
+        `;
+        chatMessages.appendChild(typingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      function removeTyping() {
+        if (typingDiv) {
+          typingDiv.remove();
+          typingDiv = null;
+        }
+      }
+
+      // Escape HTML
+      function escapeHTML(str) {
+        return str.replace(/[&<>'"]/g,
+          tag => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+          }[tag] || tag)
+        );
+      }
+
+      // Parse simple markdown tags
+      function parseSimpleMarkdown(text) {
+        let html = escapeHTML(text);
+        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        html = html.replace(/`(.*?)`/g, '<code class="bg-navy-950 px-1 py-0.5 rounded text-[10px]">$1</code>');
+        html = html.replace(/\n/g, '<br>');
+        return html;
+      }
+
+      // QA Map
+      const qna = {
+        '¿Qué es Firmix AI?': '**Firmix AI** es una plataforma inteligente que te ayuda a auditar, analizar y firmar tus contratos de alquiler de forma segura y rapida en Lima.\n\nContamos con:\n- **Auditoria de contratos con IA** para detectar clausulas abusivas.\n- **Abogado virtual 24/7** para resolver tus dudas legales.\n- **Firma digital certificada** con validez bajo la Ley N. 27269.',
+        '¿Firmix AI es seguro?': '¡Totalmente seguro! En **Firmix AI** ciframos toda tu informacion confidencial. Ademas, nuestras firmas digitales cumplen estrictamente con la **Ley N. 27269 de Firmas y Certificados Digitales del Peru**, garantizando que el contrato tenga el mismo valor legal que una firma en papel.',
+        '¿Cómo analizar mi contrato de alquiler?': 'Es muy facil analizar tu contrato:\n\n1. Ve a nuestra aplicacion abriendo **`app.html`**.\n2. Registrate con tu correo o red preferida.\n3. Sube tu contrato en PDF o Word.\n4. La IA escaneara el texto y te mostrara una calificacion de riesgo, ademas de alertas sobre clausulas abusivas en cuestion de segundos.'
+      };
+
+      // Keyword processor
+      function processInput(message) {
+        const text = message.toLowerCase().trim();
+        if (text.includes('que es') || text.includes('quien') || text.includes('que hace')) {
+          return qna['¿Qué es Firmix AI?'];
+        }
+        if (text.includes('segur') || text.includes('confiabl') || text.includes('validez') || text.includes('legal')) {
+          return qna['¿Firmix AI es seguro?'];
+        }
+        if (text.includes('como') && (text.includes('analiz') || text.includes('subir') || text.includes('usar') || text.includes('contrat'))) {
+          return qna['¿Cómo analizar mi contrato de alquiler?'];
+        }
+        if (text.includes('hola') || text.includes('buenos dias') || text.includes('buenas') || text.includes('saludo')) {
+          return '¡Hola! Soy el asistente virtual de **Firmix AI**. ¿En que te puedo ayudar hoy? Puedes hacerme preguntas sobre seguridad, como analizar contratos o que servicios ofrecemos.';
+        }
+        if (text.includes('precio') || text.includes('gratis') || text.includes('costo') || text.includes('cobro')) {
+          return '¡El registro y tus primeros 3 analisis con **Scam Shield** son gratis! Tambien puedes probar el chat con el Abogado IA sin costo alguno en **`app.html`**. Para analisis ilimitados, contamos con planes muy accesibles.';
+        }
+        if (text.includes('app') || text.includes('aplicacion') || text.includes('probar') || text.includes('link')) {
+          return '¡Prueba nuestra app ahora mismo! Solo debes abrir el archivo **`app.html`** en tu navegador. Ahi podras subir contratos y chatear directamente con la IA.';
+        }
+        return 'Interesante pregunta. Como asistente IA de informacion basica, te recomiendo probar nuestra aplicacion completa en **`app.html`**, donde podras auditar contratos de alquiler reales, chatear con nuestro abogado IA 24/7 y firmar documentos de manera digital y segura.';
+      }
+
+      // Suggested questions click
+      suggestedContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest('.suggested-q');
+        if (!btn) return;
+        const q = btn.textContent.trim();
+        const a = qna[q] || qna['¿' + q + '?'] || qna[q.replace('¿', '').replace('?', '')];
+
+        appendMessage('user', q);
+        btn.blur();
+
+        showTyping();
+        setTimeout(() => {
+          removeTyping();
+          if (a) {
+            appendMessage('bot', a);
+          } else {
+            appendMessage('bot', 'Lo siento, no tengo una respuesta para eso en este momento.');
+          }
+        }, 800);
+      });
+
+      // Form submit
+      chatForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const msg = chatInput.value.trim();
+        if (!msg) return;
+
+        appendMessage('user', msg);
+        chatInput.value = '';
+
+        showTyping();
+        setTimeout(() => {
+          removeTyping();
+          const reply = processInput(msg);
+          appendMessage('bot', reply);
+        }, 800);
+      });
+    });
+
+    // ── Quiz Logic ──────────────────────────────────────────────────────────
+    let currentStep = 0; // Inicia en 0 (formulario de datos)
+    let score = 0;
+    const totalSteps = 3;
+    let hasAnswered = false;
+    let leadName = '';
+    let leadEmail = '';
+    let leadGoal = '';
+
+    const quizData = {
+      1: {
+        correct: 'B',
+        feedback: {
+          titleCorrect: '¡Exacto! Tienes instinto legal.',
+          titleIncorrect: 'Incorrecto. Ten cuidado con esta cláusula.',
+          desc: 'La frase "previa conformidad" le concede al propietario el poder legal unilateral para decidir si el inmueble se devuelve conforme. Muchos malos arrendadores usan esto para retener la garantía indefinidamente argumentando desperfectos inexistentes o mínimos. Una IA como Firmix te sugerirá cambiarlo por cláusulas objetivas.'
+        }
+      },
+      2: {
+        correct: 'A',
+        feedback: {
+          titleCorrect: '¡Excelente respuesta!',
+          titleIncorrect: 'Cuidado. Legalmente esto es un peligro.',
+          desc: 'Si el contrato dice "en efectivo" y pagas mediante transferencia, legalmente estás incumpliendo la forma estipulada. El arrendador podría demandar falta de pago y tendrías que ir a juicio para validarlo. Aunque tengas los vouchers, demostrar la modificación tácita del contrato te obligaría a contratar abogados e ir a juicio. Firmix IA te alerta de inmediato de esta incongruencia.'
+        }
+      },
+      3: {
+        correct: 'A',
+        feedback: {
+          titleCorrect: '¡Correcto! Conoces la ley rápida.',
+          titleIncorrect: 'Incorrecto. La Ley 30933 cambió las reglas.',
+          desc: 'El Allanamiento Futuro y la Ley N° 30933 permiten que el desalojo se ejecute vía notarial y con auxilio policial de forma express (en cuestión de semanas) si vence el plazo o se adeudan 2 meses. Es una cláusula muy potente que debes firmar conociendo exactamente tus obligaciones para no sufrir desalojos repentinos.'
+        }
+      }
+    };
+
+    function startQuizQuestions() {
+      const nameInput = document.getElementById('quiz-lead-name');
+      const emailInput = document.getElementById('quiz-lead-email');
+      const goalSelect = document.getElementById('quiz-lead-goal');
+
+      if (!nameInput.value.trim()) {
+        alert('Por favor, ingresa tu nombre completo.');
+        nameInput.focus();
+        return;
+      }
+      if (!emailInput.value.trim() || !emailInput.value.includes('@')) {
+        alert('Por favor, ingresa un correo electrónico válido.');
+        emailInput.focus();
+        return;
+      }
+      if (!goalSelect.value) {
+        alert('Por favor, selecciona tu objetivo.');
+        goalSelect.focus();
+        return;
+      }
+
+      leadName = nameInput.value.trim();
+      leadEmail = emailInput.value.trim();
+      leadGoal = goalSelect.options[goalSelect.selectedIndex].text;
+
+      // Ocultar formulario paso 0
+      document.querySelector('.quiz-step[data-step="0"]').classList.add('hidden');
+
+      // Mostrar paso 1
+      currentStep = 1;
+      document.querySelector('.quiz-step[data-step="1"]').classList.remove('hidden');
+
+      // Mostrar barra de progreso
+      document.getElementById('quiz-progress-container').classList.remove('hidden');
+      document.getElementById('quiz-progress-text').textContent = `Pregunta 1 de ${totalSteps}`;
+      document.getElementById('quiz-progress-bar').style.width = '33%';
+    }
+
+    function selectOption(step, option) {
+      if (hasAnswered) return;
+      hasAnswered = true;
+
+      const qInfo = quizData[step];
+      const isCorrect = option === qInfo.correct;
+      if (isCorrect) score++;
+
+      // Highlight selected and incorrect/correct options
+      const stepEl = document.querySelector(`.quiz-step[data-step="${step}"]`);
+      const buttons = stepEl.querySelectorAll('.option-btn');
+
+      buttons.forEach(btn => {
+        btn.classList.add('opacity-50');
+        // Find which option this button is
+        const text = btn.textContent.trim();
+        const isBtnA = text.startsWith('A)');
+        const btnOpt = isBtnA ? 'A' : 'B';
+
+        const circle = btn.querySelector('.w-5');
+
+        if (circle) {
+          if (btnOpt === qInfo.correct) {
+            btn.classList.remove('opacity-50');
+            btn.classList.add('border-emerald-500/40', 'bg-emerald-950/20');
+            circle.innerHTML = '✓';
+            circle.className = 'w-5 h-5 rounded-full bg-emerald-500 border-emerald-500 text-navy-950 flex items-center justify-center text-xs font-bold flex-shrink-0 ml-4';
+          }
+
+          if (btnOpt === option && !isCorrect) {
+            btn.classList.remove('opacity-50');
+            btn.classList.add('border-rose-500/40', 'bg-rose-950/20');
+            circle.innerHTML = '✕';
+            circle.className = 'w-5 h-5 rounded-full bg-rose-500 border-rose-500 text-white flex items-center justify-center text-xs font-bold flex-shrink-0 ml-4';
+          }
+        }
+      });
+
+      // Show feedback
+      const feedbackBox = document.getElementById('quiz-feedback-box');
+      const feedbackIcon = document.getElementById('feedback-icon');
+      const feedbackTitle = document.getElementById('feedback-title');
+      const feedbackDesc = document.getElementById('feedback-desc');
+
+      if (feedbackBox && feedbackIcon && feedbackTitle && feedbackDesc) {
+        feedbackBox.classList.remove('hidden');
+        if (isCorrect) {
+          feedbackBox.className = 'mt-8 p-5 rounded-2xl border border-emerald-500/30 bg-emerald-950/10 text-emerald-300 transition-all duration-300';
+          feedbackIcon.className = 'w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-[10px] font-bold text-navy-950 flex-shrink-0 mt-0.5';
+          feedbackIcon.textContent = '✓';
+          feedbackTitle.textContent = qInfo.feedback.titleCorrect;
+        } else {
+          feedbackBox.className = 'mt-8 p-5 rounded-2xl border border-rose-500/30 bg-rose-950/10 text-rose-300 transition-all duration-300';
+          feedbackIcon.className = 'w-6 h-6 rounded-full bg-rose-500 flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0 mt-0.5';
+          feedbackIcon.textContent = '✕';
+          feedbackTitle.textContent = qInfo.feedback.titleIncorrect;
+        }
+        feedbackDesc.textContent = qInfo.feedback.desc;
+      }
+    }
+
+    document.getElementById('quiz-next-btn').addEventListener('click', () => {
+      // Hide feedback box
+      document.getElementById('quiz-feedback-box').classList.add('hidden');
+
+      const currentStepEl = document.querySelector(`.quiz-step[data-step="${currentStep}"]`);
+      if (currentStepEl) {
+        currentStepEl.classList.add('hidden');
+      }
+
+      currentStep++;
+      hasAnswered = false;
+
+      if (currentStep <= totalSteps) {
+        // Show next question
+        const nextStepEl = document.querySelector(`.quiz-step[data-step="${currentStep}"]`);
+        if (nextStepEl) {
+          nextStepEl.classList.remove('hidden');
+        }
+
+        // Update progress bar
+        document.getElementById('quiz-progress-text').textContent = `Pregunta ${currentStep} de ${totalSteps}`;
+        const pct = (currentStep / totalSteps) * 100;
+        document.getElementById('quiz-progress-bar').style.width = `${pct}%`;
+      } else {
+        // Show results
+        document.getElementById('quiz-progress-container').classList.add('hidden');
+        showQuizResults();
+      }
+    });
+
+    function showQuizResults() {
+      document.getElementById('quiz-question-container').classList.add('hidden');
+      const resultsContainer = document.getElementById('quiz-result-container');
+      if (resultsContainer) {
+        resultsContainer.classList.remove('hidden');
+      }
+
+      // Risk percentage calculation
+      let baseRisk = 95;
+      if (score === 3) baseRisk = 15;
+      else if (score === 2) baseRisk = 45;
+      else if (score === 1) baseRisk = 75;
+
+      // Goal modifier
+      const goalSelect = document.getElementById('quiz-lead-goal');
+      const goalVal = goalSelect.value;
+      let modifier = 0;
+      if (goalVal === 'inquilino-comercial') {
+        modifier = 5;
+      } else if (goalVal === 'propietario') {
+        modifier = 5;
+      }
+      const totalRisk = Math.min(100, baseRisk + modifier);
+
+      // UI updates
+      document.getElementById('report-lead-name').textContent = leadName;
+      document.getElementById('report-lead-goal').textContent = leadGoal;
+
+      const riskValEl = document.getElementById('risk-percentage-val');
+      const riskCircle = document.getElementById('risk-gauge-circle');
+
+      if (riskValEl) riskValEl.textContent = `${totalRisk}%`;
+
+      if (riskCircle) {
+        // Clear past colors
+        riskCircle.className = 'w-24 h-24 rounded-full flex flex-col items-center justify-center mx-auto mb-6 border-4 shadow-lg transition-all duration-500';
+        const pctText = riskCircle.querySelector('#risk-percentage-val');
+
+        if (totalRisk >= 75) {
+          riskCircle.classList.add('border-rose-500', 'shadow-rose-500/20');
+          if (pctText) pctText.className = 'text-3xl font-black text-rose-500';
+        } else if (totalRisk >= 45) {
+          riskCircle.classList.add('border-amber-500', 'shadow-amber-500/20');
+          if (pctText) pctText.className = 'text-3xl font-black text-amber-500';
+        } else {
+          riskCircle.classList.add('border-emerald-500', 'shadow-emerald-500/20');
+          if (pctText) pctText.className = 'text-3xl font-black text-emerald-500';
+        }
+      }
+
+      const badge = document.getElementById('quiz-badge');
+      const scoreText = document.getElementById('quiz-score-text');
+
+      if (badge && scoreText) {
+        if (totalRisk <= 20) {
+          badge.textContent = '🛡️ Nivel de Riesgo: Bajo';
+          badge.className = 'inline-block mt-3 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+          scoreText.innerHTML = `Hola **${leadName}**, según tu objetivo (**${leadGoal}**), cuentas con un nivel de riesgo de **${totalRisk}%**. Tienes un excelente conocimiento legal. Sin embargo, recuerda que la letra pequeña suele cambiar en cada contrato. Usa **Firmix IA** para auditar en 2 minutos cualquier contrato y asegurarte de que no haya sorpresas.`;
+        } else if (totalRisk <= 50) {
+          badge.textContent = '⚠️ Nivel de Riesgo: Moderado';
+          badge.className = 'inline-block mt-3 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/20 text-amber-400 border border-amber-500/30';
+          scoreText.innerHTML = `Hola **${leadName}**, según tu objetivo (**${leadGoal}**), cuentas con un nivel de riesgo de **${totalRisk}%**. Tienes nociones importantes, pero hay trampas contractuales específicas que pasaste por alto y que podrían costarte tu depósito de garantía o exponerte a multas abusivas. Te recomendamos usar **Firmix IA** para auditar gratis tu borrador de contrato.`;
+        } else {
+          badge.textContent = '🚨 Nivel de Riesgo: Crítico';
+          badge.className = 'inline-block mt-3 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-500/20 text-rose-400 border border-rose-500/30';
+          scoreText.innerHTML = `Hola **${leadName}**, según tu objetivo (**${leadGoal}**), cuentas con un nivel de riesgo de **${totalRisk}%**. Tu conocimiento de las cláusulas trampa en el mercado peruano es insuficiente. Estás muy expuesto a perder tu garantía, sufrir cobros abusivos o aceptar términos de desalojo express desfavorables. ¡Es indispensable que analices tu contrato antes de firmar!`;
+        }
+      }
+    }
+
+    function resetQuiz() {
+      currentStep = 0;
+      score = 0;
+      hasAnswered = false;
+
+      // Reset values
+      document.getElementById('quiz-lead-name').value = '';
+      document.getElementById('quiz-lead-email').value = '';
+      document.getElementById('quiz-lead-goal').selectedIndex = 0;
+
+      // Hide results
+      const resultsContainer = document.getElementById('quiz-result-container');
+      const feedbackBox = document.getElementById('quiz-feedback-box');
+      if (resultsContainer) resultsContainer.classList.add('hidden');
+      if (feedbackBox) feedbackBox.classList.add('hidden');
+
+      // Hide progress container
+      document.getElementById('quiz-progress-container').classList.add('hidden');
+
+      // Show container
+      document.getElementById('quiz-question-container').classList.remove('hidden');
+
+      const steps = document.querySelectorAll('.quiz-step');
+      steps.forEach((step, idx) => {
+        if (step.getAttribute('data-step') === '0') {
+          step.classList.remove('hidden');
+        } else {
+          step.classList.add('hidden');
+        }
+
+        const buttons = step.querySelectorAll('.option-btn');
+        buttons.forEach(btn => {
+          btn.className = 'option-btn w-full text-left bg-navy-950 hover:bg-navy-900 border border-navy-800 hover:border-amber-500/40 text-slate-300 hover:text-white rounded-2xl p-4 text-sm transition-all focus:outline-none flex justify-between items-center group';
+          const circle = btn.querySelector('.w-5');
+          if (circle) {
+            circle.innerHTML = '';
+            circle.className = 'w-5 h-5 rounded-full border border-slate-700 flex-shrink-0 group-hover:border-amber-500 transition-colors ml-4';
+          }
+        });
+      });
+    }
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,90 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   LANDING B — Emerald/Cyan theme overrides & new utilities
+   ───────────────────────────────────────────────────────────────────────── */
+
+.text-gradient-emerald-cyan {
+  background: linear-gradient(to right, #34d399, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-grid-pattern-dark {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(27, 38, 59, 0.2) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(27, 38, 59, 0.2) 1px, transparent 1px);
+}
+
+.blob-b {
+  border-radius: 50%;
+  filter: blur(80px);
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Nav link underline — Emerald */
+.nav-link-b {
+  position: relative;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #cbd7e9;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-link-b::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #10b981;
+  transition: width 0.3s;
+}
+.nav-link-b:hover { color: #fff; }
+.nav-link-b:hover::after { width: 100%; }
+
+/* Desktop-browser slide */
+.slide-b { display: none; animation: slideInB 0.6s ease-out; }
+.slide-b.active { display: flex; }
+
+@keyframes slideInB {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* story timeline B */
+.story-timeline-line-b {
+  background: linear-gradient(to bottom, transparent, #10b981, #06b6d4, transparent);
+}
+
+/* feature card B */
+.feature-card-b { transition: border-color 0.3s, transform 0.3s; }
+.feature-card-b:hover { transform: translateY(-4px); }
+
+/* Glow shadows B */
+.shadow-glow-emerald { box-shadow: 0 0 20px -4px rgba(16, 185, 129, 0.5); }
+.shadow-glow-cyan    { box-shadow: 0 0 20px -4px rgba(6, 182, 212, 0.4); }
+.shadow-browser      { box-shadow: 0 30px 60px -15px rgba(2, 6, 23, 0.8); }
+
+/* upload card animations */
+@keyframes spin { to { transform: rotate(360deg); } }
+.animate-spin { animation: spin 1s linear infinite; }
+@keyframes ping {
+  75%, 100% { transform: scale(2); opacity: 0; }
+}
+.animate-ping { animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite; }
+
+/* ── Theme scope overrides — evita cualquier rastro de la paleta ámbar (Landing A) ── */
+.landing-b-theme ::selection {
+  background-color: #10b981;
+  color: #0e131b;
+}
+.landing-b-theme input[type="email"]:focus,
+.landing-b-theme input[type="text"]:focus,
+.landing-b-theme input[type="tel"]:focus,
+.landing-b-theme select:focus {
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+  outline: none;
+}

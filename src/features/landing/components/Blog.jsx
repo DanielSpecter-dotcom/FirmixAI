@@ -38,66 +38,47 @@ export function Blog() {
   ];
 
   return (
-    <section id="blog" style={{
-      padding: '4rem 0',
-      background: '#060911',
-      borderTop: '1px solid rgba(13,17,23,0.6)',
-    }}>
-      <div className="container">
-        <div style={{ textAlign: 'center', maxWidth: '48rem', margin: '0 auto 3rem' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+    <section id="blog" className="py-16 bg-[#060911] border-t border-navy-900/60">
+      <div className="container mx-auto px-4">
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <span className="text-xs font-bold text-amber-500 uppercase tracking-widest">
             Recursos Gratuitos
           </span>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'clamp(1.5rem, 4vw, 2rem)', color: '#fff', marginTop: '0.5rem' }}>
+          <h2 className="font-display font-bold text-2xl sm:text-3xl text-white mt-2">
             Blog &amp; Guías de Alquiler Seguro
           </h2>
-          <p style={{ color: '#94a3b8', marginTop: '0.75rem', fontWeight: 300, fontSize: '0.875rem' }}>
+          <p className="text-slate-400 mt-3 text-sm sm:text-base font-light">
             Aprende sobre tus derechos y deberes como inquilino o propietario en Lima Metropolitana.
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }} className="blog-grid">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map(post => (
             <div
               key={post.title}
-              className={post.featured ? 'blog-card-featured' : undefined}
-              style={{
-                padding: post.featured ? '2rem' : '1.5rem',
-                background: post.featured ? 'rgba(13,17,23,0.55)' : 'rgba(13,17,23,0.4)',
-                border: `1px solid ${post.featured ? 'rgba(245,158,11,0.25)' : '#1b263b'}`,
-                borderTop: post.featured ? '3px solid #f59e0b' : undefined,
-                borderRadius: '1rem',
-                display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-                transition: 'border-color 0.2s',
-              }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(245,158,11,0.3)'}
-              onMouseLeave={e => e.currentTarget.style.borderColor = post.featured ? 'rgba(245,158,11,0.25)' : '#1b263b'}
+              className={`p-6 rounded-2xl flex flex-col justify-between transition-all duration-200 bg-navy-900/40 border border-navy-800 hover:border-amber-500/30 ${
+                post.featured 
+                  ? 'sm:col-span-2 bg-navy-900/55 border-t-4 border-t-amber-500 border-amber-500/25 p-8' 
+                  : ''
+              }`}
             >
               <div>
-                <span style={{ fontSize: '0.625rem', fontWeight: 800, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                <span className="text-[10px] font-bold text-amber-500 uppercase tracking-wider">
                   {post.featured ? '★ Destacado · ' : ''}{post.tag}
                 </span>
-                <h4 style={{
-                  fontSize: post.featured ? 'clamp(1.125rem, 2vw, 1.375rem)' : '1rem',
-                  fontWeight: 700, color: '#fff',
-                  marginTop: '0.5rem', lineHeight: 1.4,
-                  transition: 'color 0.2s',
-                }}>{post.title}</h4>
-                <p style={{ fontSize: post.featured ? '0.8125rem' : '0.75rem', color: '#94a3b8', marginTop: '0.5rem', lineHeight: 1.6 }}>{post.desc}</p>
+                <h4 className={`font-bold text-white mt-3 leading-snug ${
+                  post.featured ? 'text-lg sm:text-xl' : 'text-base'
+                }`}>{post.title}</h4>
+                <p className={`text-slate-400 mt-3 leading-relaxed ${
+                  post.featured ? 'text-sm' : 'text-xs'
+                }`}>{post.desc}</p>
               </div>
-              <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid rgba(27,38,59,0.6)' }}>
+              <div className="mt-6 pt-4 border-t border-navy-800/80">
                 <a
                   href={post.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{
-                    fontSize: '0.75rem', fontWeight: 700,
-                    color: '#f59e0b', textDecoration: 'none',
-                    display: 'flex', alignItems: 'center', gap: '0.25rem',
-                    transition: 'color 0.2s',
-                  }}
-                  onMouseEnter={e => e.currentTarget.style.color = '#fbbf24'}
-                  onMouseLeave={e => e.currentTarget.style.color = '#f59e0b'}
+                  className="text-xs font-bold text-amber-500 hover:text-amber-400 flex items-center gap-1.5 transition-colors duration-200"
                 >
                   <span>Leer Artículo</span><span>→</span>
                 </a>
@@ -106,16 +87,6 @@ export function Blog() {
           ))}
         </div>
       </div>
-
-      <style>{`
-        @media (min-width: 640px) {
-          .blog-grid { grid-template-columns: repeat(2, 1fr) !important; }
-          .blog-card-featured { grid-column: span 2; }
-        }
-        @media (min-width: 1024px) {
-          .blog-grid { grid-template-columns: repeat(3, 1fr) !important; }
-        }
-      `}</style>
     </section>
   );
 }

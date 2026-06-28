@@ -27,67 +27,47 @@ export function Testimonials() {
   ];
 
   return (
-    <section id="testimonials" style={{
-      padding: '4rem 0',
-      background: 'rgba(13,17,23,0.2)',
-      borderTop: '1px solid rgba(13,17,23,0.6)',
-    }}>
-      <div className="container">
-        <div style={{ textAlign: 'center', maxWidth: '48rem', margin: '0 auto 4rem' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+    <section id="testimonials" className="py-16 bg-navy-950/20 border-t border-navy-900/60">
+      <div className="container mx-auto px-4">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <span className="text-xs font-bold text-amber-500 uppercase tracking-widest">
             Opiniones Reales
           </span>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', color: '#fff', marginTop: '0.5rem' }}>
+          <h2 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-white mt-2">
             Salvados de estafas por Firmix IA
           </h2>
-          <p style={{ color: '#94a3b8', marginTop: '1rem', fontWeight: 300, fontSize: '0.9rem' }}>
+          <p className="text-slate-400 mt-4 font-light text-sm sm:text-base">
             Conoce la experiencia de inquilinos jóvenes en Lima que tomaron el control de su seguridad legal.
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem' }} className="testimonials-grid">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {items.map(t => (
             <div
               key={t.name}
-              style={{
-                padding: '1.5rem',
-                background: 'rgba(13,17,23,0.4)',
-                border: '1px solid #1b263b',
-                borderRadius: '1rem',
-                transition: 'border-color 0.2s',
-              }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(245,158,11,0.2)'}
-              onMouseLeave={e => e.currentTarget.style.borderColor = '#1b263b'}
+              className="p-6 bg-navy-900/40 border border-navy-800 hover:border-amber-500/20 rounded-2xl transition-all duration-200"
             >
               {/* Stars */}
-              <div style={{ color: '#f59e0b', marginBottom: '1rem', fontSize: '1.125rem' }}>
+              <div className="text-amber-500 mb-4 text-lg">
                 {'★'.repeat(t.stars)}
               </div>
-              <p style={{ fontSize: '0.875rem', color: '#cbd7e9', fontStyle: 'italic', lineHeight: 1.7 }}>{t.quote}</p>
-              <div style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <div style={{
-                  width: '2.25rem', height: '2.25rem', borderRadius: '50%',
-                  background: `linear-gradient(135deg, ${t.gradFrom}, ${t.gradTo})`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '0.75rem', fontWeight: 800, color: '#fff',
-                }}>
+              <p className="text-sm text-slate-300 italic leading-relaxed">{t.quote}</p>
+              <div className="mt-6 flex items-center gap-3">
+                <div 
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-extrabold text-white flex-shrink-0"
+                  style={{ background: `linear-gradient(135deg, ${t.gradFrom}, ${t.gradTo})` }}
+                >
                   {t.initials}
                 </div>
                 <div>
-                  <h5 style={{ fontSize: '0.875rem', fontWeight: 700, color: '#fff' }}>{t.name}</h5>
-                  <p style={{ fontSize: '0.6875rem', color: '#64748b' }}>{t.role}</p>
+                  <h5 className="text-sm font-bold text-white leading-none">{t.name}</h5>
+                  <p className="text-[11px] text-slate-500 mt-1">{t.role}</p>
                 </div>
               </div>
             </div>
           ))}
         </div>
       </div>
-
-      <style>{`
-        @media (min-width: 768px) {
-          .testimonials-grid { grid-template-columns: repeat(3, 1fr) !important; }
-        }
-      `}</style>
     </section>
   );
 }

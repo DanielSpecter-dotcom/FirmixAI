@@ -9,46 +9,27 @@ export function Footer() {
   ];
 
   return (
-    <footer style={{
-      background: '#0d1117',
-      borderTop: '1px solid #1b263b',
-      padding: '3rem 0',
-    }}>
-      <div className="container">
-        <div style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center',
-          justifyContent: 'space-between', gap: '1.5rem',
-        }} className="footer-inner">
+    <footer className="bg-[#0d1117] border-t border-navy-800 py-12">
+      <div className="container mx-auto px-4">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
 
           {/* Brand */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <div style={{
-              width: '2rem', height: '2rem',
-              background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-              borderRadius: '0.5rem',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              padding: '0.25rem',
-              boxShadow: '0 0 10px -4px rgba(245,158,11,0.2)',
-            }}>
-              <img src="/img/LogoFirmix2.png" style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="Firmix Logo" />
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg flex items-center justify-center p-1 shadow-md shadow-amber-500/10">
+              <img src="/img/LogoFirmix2.png" className="w-full h-full object-contain" alt="Firmix Logo" />
             </div>
-            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1rem', color: '#fff', letterSpacing: '0.05em' }}>
+            <span className="font-display font-bold text-base text-white tracking-wide">
               FIRMIX IA
             </span>
           </div>
 
           {/* Nav links */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <div className="flex items-center gap-6 flex-wrap justify-center text-sm">
             {links.map(l => (
               <a
                 key={l.href}
                 href={l.href}
-                style={{
-                  color: '#64748b', textDecoration: 'none',
-                  fontSize: '0.875rem', transition: 'color 0.2s',
-                }}
-                onMouseEnter={e => e.currentTarget.style.color = '#f59e0b'}
-                onMouseLeave={e => e.currentTarget.style.color = '#64748b'}
+                className="text-slate-500 hover:text-amber-500 transition-colors duration-200"
               >
                 {l.label}
               </a>
@@ -57,29 +38,18 @@ export function Footer() {
               href="/app.html"
               target="_blank"
               rel="noopener noreferrer"
-              style={{
-                color: '#f59e0b', textDecoration: 'none',
-                fontSize: '0.875rem', fontWeight: 600, transition: 'color 0.2s',
-              }}
-              onMouseEnter={e => e.currentTarget.style.color = '#fbbf24'}
-              onMouseLeave={e => e.currentTarget.style.color = '#f59e0b'}
+              className="text-amber-500 hover:text-amber-400 font-semibold transition-colors duration-200"
             >
               App →
             </a>
           </div>
 
           {/* Copyright */}
-          <p style={{ fontSize: '0.6875rem', color: '#475569', textAlign: 'center', maxWidth: '36rem', lineHeight: 1.6 }}>
+          <p className="text-[11px] text-slate-600 text-center md:text-right max-w-md leading-relaxed">
             © 2026 Firmix IA. Todos los derechos reservados. Las firmas digitales emitidas cumplen con la Ley N° 27269 de Firmas y Certificados Digitales de la República del Perú.
           </p>
         </div>
       </div>
-
-      <style>{`
-        @media (min-width: 768px) {
-          .footer-inner { flex-direction: row !important; }
-        }
-      `}</style>
     </footer>
   );
 }

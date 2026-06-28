@@ -12,30 +12,25 @@ export function QuickStats() {
   ];
 
   return (
-    <section style={{
-      padding: '2.5rem 0',
-      background: 'rgba(13,17,23,0.5)',
-      borderTop: '1px solid rgba(13,17,23,0.6)',
-      borderBottom: '1px solid rgba(13,17,23,0.6)',
-    }}>
-      <div className="container">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem', textAlign: 'center' }} className="stats-grid-b">
+    <section className="py-10 bg-navy-900/50 border-t border-b border-navy-900/60">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
           {stats.map((s, i) => (
-            <div key={s.value} style={{ borderLeft: i > 0 && i % 2 !== 0 ? '1px solid #1b263b' : 'none' }}>
-              <div style={{ fontSize: 'clamp(1.5rem, 4vw, 1.875rem)', fontFamily: 'var(--font-display)', fontWeight: 800, color: s.color }}>{s.value}</div>
-              <p style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '0.25rem' }}>{s.label}</p>
+            <div 
+              key={s.value} 
+              className="py-2 lg:border-l lg:first:border-l-0 border-navy-800"
+            >
+              <div 
+                className="text-2xl sm:text-3xl font-display font-black" 
+                style={{ color: s.color }}
+              >
+                {s.value}
+              </div>
+              <p className="text-[10px] sm:text-xs text-slate-500 font-semibold uppercase tracking-widest mt-2">{s.label}</p>
             </div>
           ))}
         </div>
       </div>
-
-      <style>{`
-        @media (min-width: 768px) {
-          .stats-grid-b { grid-template-columns: repeat(4, 1fr) !important; }
-          .stats-grid-b > div { border-left: 1px solid #1b263b !important; }
-          .stats-grid-b > div:first-child { border-left: none !important; }
-        }
-      `}</style>
     </section>
   );
 }

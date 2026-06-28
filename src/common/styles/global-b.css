@@ -18,9 +18,13 @@
 
 .blob-b {
   border-radius: 50%;
-  filter: blur(80px);
+  filter: blur(60px);
   position: absolute;
   pointer-events: none;
+  /* Promote to own GPU layer to prevent scroll repaints */
+  will-change: transform;
+  transform: translateZ(0);
+  contain: layout style;
 }
 
 /* Nav link underline — Emerald */

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Landing A — Página principal (Amber/Navy) -->
+  <url>
+    <loc>https://firmixai.vercel.app/landing-a</loc>
+    <lastmod>2026-06-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link
+      rel="alternate"
+      hreflang="es-PE"
+      href="https://firmixai.vercel.app/landing-a"/>
+  </url>
+
+  <!-- Landing B — Variante Scam Shield (Emerald/Cyan) -->
+  <url>
+    <loc>https://firmixai.vercel.app/landing-b</loc>
+    <lastmod>2026-06-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link
+      rel="alternate"
+      hreflang="es-PE"
+      href="https://firmixai.vercel.app/landing-b"/>
+  </url>
+
+</urlset>

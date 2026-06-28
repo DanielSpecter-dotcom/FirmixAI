@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* ─────────────────────────────────────────────────────────────────────────
    FIRMIX IA — Global Styles
    ───────────────────────────────────────────────────────────────────────── */
@@ -89,15 +93,33 @@ body {
 /* ── Ambient Blobs ── */
 .blob {
   border-radius: 50%;
-  filter: blur(80px);
+  filter: blur(60px);
   position: absolute;
   pointer-events: none;
+  /* Promote to own GPU layer to prevent scroll repaints */
+  will-change: transform;
+  transform: translateZ(0);
+  /* Prevent blur from leaking into layout calculations */
+  contain: layout style;
 }
 
 /* ── Glow Shadows ── */
 .shadow-glow-amber { box-shadow: 0 0 20px -4px rgba(245, 158, 11, 0.5); }
 .shadow-glow-navy  { box-shadow: 0 0 20px -5px rgba(56, 84, 137, 0.5); }
 .shadow-phone      { box-shadow: 0 30px 60px -12px rgba(6, 9, 14, 0.7); }
+
+/* ── Scroll Performance ── */
+/*
+ * content-visibility: auto tells the browser to skip rendering
+ * off-screen sections entirely, dramatically reducing scroll jank.
+ * contain-intrinsic-size gives the browser a size estimate to
+ * correctly calculate scrollbar position before rendering.
+ */
+#features, #demo, #storytelling, #pricing, #testimonials, #blog, #contract-quiz, #contacto {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 600px;
+}
+
 
 /* ── Nav Link Underline Hover ── */
 .nav-link {

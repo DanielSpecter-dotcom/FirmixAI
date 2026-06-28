@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /landing-a
+Allow: /landing-b
+Disallow: /app
+Disallow: /app.html
+
+# Sitemap
+Sitemap: https://firmixai.vercel.app/sitemap.xml

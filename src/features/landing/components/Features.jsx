@@ -24,63 +24,40 @@ export function Features() {
   ];
 
   return (
-    <section id="features" style={{
-      padding: '4rem 0',
-      background: 'rgba(13,17,23,0.25)',
-      borderTop: '1px solid rgba(13,17,23,0.6)',
-      borderBottom: '1px solid rgba(13,17,23,0.6)',
-      position: 'relative',
-    }}>
-      <div className="container">
-        <div style={{ textAlign: 'center', maxWidth: '48rem', margin: '0 auto 4rem' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+    <section id="features" className="py-16 bg-navy-950/25 border-t border-b border-navy-900/60 relative">
+      <div className="container mx-auto px-4">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <span className="text-xs font-bold text-amber-500 uppercase tracking-widest">
             Dolores Resueltos
           </span>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', color: '#fff', marginTop: '0.5rem' }}>
+          <h2 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-white mt-2">
             La respuesta digital a la burocracia de alquileres
           </h2>
-          <p style={{ color: '#94a3b8', marginTop: '1rem', fontWeight: 300, fontSize: '0.9rem' }}>
+          <p className="text-slate-400 mt-4 font-light text-sm sm:text-base">
             Diseñado para jóvenes independientes en Lima Metropolitana que valoran su paz mental y su dinero.
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem' }} className="features-grid">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {cards.map(card => (
             <div
               key={card.title}
-              className="feature-card"
-              style={{
-                padding: '1.5rem',
-                background: 'rgba(13,17,23,0.4)',
-                border: '1px solid #1b263b',
-                borderRadius: '1rem',
-              }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(245,158,11,0.3)'}
-              onMouseLeave={e => e.currentTarget.style.borderColor = '#1b263b'}
+              className="feature-card p-6 bg-navy-900/40 border border-navy-800 hover:border-amber-500/30 rounded-2xl transition-all duration-200"
             >
-              <div style={{
-                width: '3rem', height: '3rem',
-                background: card.bg, color: card.color,
-                borderRadius: '0.75rem',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                marginBottom: '1.5rem',
-              }}>
-                <svg style={{ width: '1.5rem', height: '1.5rem' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
+                style={{ background: card.bg, color: card.color }}
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d={card.icon} />
                 </svg>
               </div>
-              <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#fff' }}>{card.title}</h3>
-              <p style={{ fontSize: '0.875rem', color: '#94a3b8', marginTop: '0.75rem', lineHeight: 1.7 }}>{card.desc}</p>
+              <h3 className="text-lg font-bold text-white">{card.title}</h3>
+              <p className="text-sm text-slate-400 mt-3 leading-relaxed">{card.desc}</p>
             </div>
           ))}
         </div>
       </div>
-
-      <style>{`
-        @media (min-width: 768px) {
-          .features-grid { grid-template-columns: repeat(3, 1fr) !important; }
-        }
-      `}</style>
     </section>
   );
 }

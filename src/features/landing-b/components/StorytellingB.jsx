@@ -1,3 +1,62 @@
+import { useState, useRef, useEffect } from 'react';
+
+const YOUTUBE_ID = 'h7s2HbhJkfA';
+
+function LazyVideo({ title }) {
+  const [loaded, setLoaded] = useState(false);
+  const containerRef = useRef(null);
+  const src = `https://www.youtube-nocookie.com/embed/${YOUTUBE_ID}?autoplay=1&mute=1&rel=0&modestbranding=1`;
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setLoaded(true); observer.disconnect(); } },
+      { threshold: 0.4 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={containerRef} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+      {loaded ? (
+        <iframe
+          src={src}
+          style={{ border: 'none', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+          allowFullScreen
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          title={title}
+        />
+      ) : (
+        <button
+          onClick={() => setLoaded(true)}
+          aria-label={`Reproducir: ${title}`}
+          style={{
+            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+            background: 'transparent', border: 'none', cursor: 'pointer',
+            display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center', gap: '0.75rem',
+          }}
+        >
+          <div style={{
+            width: 72, height: 72, borderRadius: '50%',
+            background: 'rgba(16,185,129,0.15)', border: '2px solid rgba(16,185,129,0.4)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <svg width="30" height="30" fill="#10b981" viewBox="0 0 24 24" style={{ marginLeft: 4 }}>
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </div>
+          <span style={{ color: '#94a3b8', fontSize: '0.8125rem', fontWeight: 500 }}>
+            Clic para reproducir el video
+          </span>
+        </button>
+      )}
+    </div>
+  );
+}
+
 /**
  * StorytellingB — sección narrativa con video y stats, paleta Emerald/Cyan (variante B).
  */
@@ -71,17 +130,20 @@ export function StorytellingB() {
           {/* Video */}
           <div>
             <div style={{
-              position: 'relative', background: '#0d1117', borderRadius: '16px', overflow: 'hidden',
-              boxShadow: '0 40px 80px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(16,185,129,0.15)',
-              aspectRatio: '16/9',
+              position: 'relative',
+              paddingTop: '56.25%',
+              background: '#0d1117',
+              borderRadius: '16px',
+              overflow: 'hidden',
+              boxShadow: '0 20px 40px -10px rgba(0,0,0,0.7), 0 0 0 1px rgba(16,185,129,0.15)',
             }}>
               <div className="film-grain" style={{ position: 'absolute', inset: 0, zIndex: 10, pointerEvents: 'none', borderRadius: '1rem', opacity: 0.04 }} />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(16,185,129,0.05) 0%, transparent 60%)', pointerEvents: 'none', zIndex: 1 }} />
-              <div style={{ position: 'absolute', top: '1rem', left: '1rem', zIndex: 20, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <div style={{ position: 'absolute', top: '0.75rem', left: '0.75rem', zIndex: 20, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <span style={{
                   display: 'flex', alignItems: 'center', gap: '0.375rem',
                   padding: '0.25rem 0.625rem',
-                  background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
+                  background: 'rgba(0,0,0,0.7)',
                   border: '1px solid rgba(255,255,255,0.1)', borderRadius: '9999px',
                   fontSize: '0.625rem', fontWeight: 700, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.1em',
                 }}>
@@ -89,18 +151,10 @@ export function StorytellingB() {
                   Video
                 </span>
               </div>
-              <iframe
-                src="https://drive.google.com/file/d/1AM_npGaESxKwz_D05ca6TrTzlO4LIs09/preview"
-                width="100%" height="100%"
-                style={{ border: 'none', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-                frameBorder="0"
-                allowFullScreen
-                title="Firmix IA — Video Storytelling"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              />
+              <LazyVideo title="Firmix IA — Video Storytelling" />
             </div>
             <p style={{ textAlign: 'center', fontSize: '0.75rem', color: '#64748b', marginTop: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-              <svg style={{ width: '0.875rem', height: '0.875rem', color: '#34d399' }} fill="currentColor" viewBox="0 0 20 20">
+              <svg style={{ width: '0.875rem', height: '0.875rem', color: '#34d399', flexShrink: 0 }} fill="currentColor" viewBox="0 0 20 20">
                 <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zm12.553 1.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
               </svg>
               Video de presentación del equipo Firmix IA — UPC 2026

@@ -17,7 +17,7 @@ export function useSEO({
   title,
   description,
   canonical,
-  ogImage = 'https://firmixai.vercel.app/img/og-image.png',
+  ogImage = 'https://firmix-ai.vercel.app/img/og-image.png',
   ogType = 'website',
   robots = 'index, follow',
   jsonLd,

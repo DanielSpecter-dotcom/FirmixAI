@@ -5,4 +5,4 @@ Disallow: /app
 Disallow: /app.html
 
 # Sitemap
-Sitemap: https://firmixai.vercel.app/sitemap.xml
+Sitemap: https://firmix-ai.vercel.app/sitemap.xml

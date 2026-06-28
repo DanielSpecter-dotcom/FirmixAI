@@ -4,11 +4,11 @@
 
 ## Recursos del Sitio
 
-* [Landing A — Principal](https://firmixai.vercel.app/landing-a): Información del servicio general con tema Amber/Navy.
-* [Landing B — Scam Shield](https://firmixai.vercel.app/landing-b): Foco en la herramienta Scam Shield para la auditoría de riesgos en contratos de alquiler con tema Emerald/Cyan.
-* [App — Acceso a la Plataforma](https://firmixai.vercel.app/app): Entorno privado con Scam Shield, Chatbot Legal 24/7 y Smart Vault cifrado para documentos.
-* [Sitemap](https://firmixai.vercel.app/sitemap.xml): Estructura XML del sitio para motores de búsqueda.
-* [Robots.txt](https://firmixai.vercel.app/robots.txt): Reglas de rastreo de indexación para bots.
+* [Landing A — Principal](https://firmix-ai.vercel.app/landing-a): Información del servicio general con tema Amber/Navy.
+* [Landing B — Scam Shield](https://firmix-ai.vercel.app/landing-b): Foco en la herramienta Scam Shield para la auditoría de riesgos en contratos de alquiler con tema Emerald/Cyan.
+* [App — Acceso a la Plataforma](https://firmix-ai.vercel.app/app): Entorno privado con Scam Shield, Chatbot Legal 24/7 y Smart Vault cifrado para documentos.
+* [Sitemap](https://firmix-ai.vercel.app/sitemap.xml): Estructura XML del sitio para motores de búsqueda.
+* [Robots.txt](https://firmix-ai.vercel.app/robots.txt): Reglas de rastreo de indexación para bots.
 
 ## Marco Legal de Soporte
 

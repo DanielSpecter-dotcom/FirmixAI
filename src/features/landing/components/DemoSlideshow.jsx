@@ -78,7 +78,7 @@ export function DemoSlideshow() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
-                      <h4 className="font-bold text-white text-sm sm:text-base truncate">{f.title}</h4>
+                      <h3 className="font-bold text-white text-sm sm:text-base truncate">{f.title}</h3>
                       {f.premium && (
                         <span className="text-[9px] bg-amber-500/15 text-amber-400 font-extrabold px-2 py-0.5 rounded border border-amber-500/30 tracking-wide flex-shrink-0">PREMIUM</span>
                       )}

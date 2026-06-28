@@ -100,7 +100,7 @@ export function PricingB() {
                 }}>{plan.badge}</div>
               )}
               <div>
-                <h4 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#fff' }}>{plan.name}</h4>
+                <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#fff' }}>{plan.name}</h3>
                 <p style={{ fontSize: '0.75rem', color: plan.highlight ? '#34d399' : '#64748b', marginTop: '0.25rem', fontWeight: plan.highlight ? 600 : 400 }}>{plan.sub}</p>
                 <div style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
                   <span style={{ fontSize: '2.25rem', fontFamily: 'var(--font-display)', fontWeight: 800, color: '#fff' }}>{plan.price}</span>

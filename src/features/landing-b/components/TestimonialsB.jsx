@@ -74,7 +74,7 @@ export function TestimonialsB() {
                   {t.initials}
                 </div>
                 <div>
-                  <h5 style={{ fontSize: '0.875rem', fontWeight: 700, color: '#fff' }}>{t.name}</h5>
+                  <h3 style={{ fontSize: '0.875rem', fontWeight: 700, color: '#fff' }}>{t.name}</h3>
                   <p style={{ fontSize: '0.6875rem', color: '#64748b' }}>{t.role}</p>
                 </div>
               </div>

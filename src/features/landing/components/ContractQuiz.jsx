@@ -64,8 +64,9 @@ export function ContractQuiz() {
               </div>
               <div className="flex flex-col gap-4 max-w-md mx-auto">
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-400 mb-1.5 uppercase tracking-wide">Nombre completo</label>
+                  <label htmlFor="lead-name" className="block text-[11px] font-bold text-slate-400 mb-1.5 uppercase tracking-wide">Nombre completo</label>
                   <input
+                    id="lead-name"
                     type="text"
                     value={leadName}
                     onChange={e => setLeadName(e.target.value)}
@@ -74,8 +75,9 @@ export function ContractQuiz() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-400 mb-1.5 uppercase tracking-wide">Correo electrónico</label>
+                  <label htmlFor="lead-email" className="block text-[11px] font-bold text-slate-400 mb-1.5 uppercase tracking-wide">Correo electrónico</label>
                   <input
+                    id="lead-email"
                     type="email"
                     value={leadEmail}
                     onChange={e => setLeadEmail(e.target.value)}
@@ -84,8 +86,9 @@ export function ContractQuiz() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-400 mb-1.5 uppercase tracking-wide">¿Cuál es tu objetivo?</label>
+                  <label htmlFor="lead-goal" className="block text-[11px] font-bold text-slate-400 mb-1.5 uppercase tracking-wide">¿Cuál es tu objetivo?</label>
                   <select
+                    id="lead-goal"
                     value={leadGoal}
                     onChange={e => setLeadGoal(e.target.value)}
                     className="w-full bg-[#060911] border border-navy-800 focus:border-amber-500 rounded-xl px-4 py-3 text-xs text-white focus:outline-none"

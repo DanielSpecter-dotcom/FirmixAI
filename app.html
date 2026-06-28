@@ -1,13 +1,29 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!-- ── Google Analytics ──────────────────────────────────────────── -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-487QBZ5F6X"></script>
+  <!-- ── Lazy Loading Google Analytics ──────────────────────────────── -->
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-487QBZ5F6X');
+    (function() {
+      var gaLoaded = false;
+      function loadGA() {
+        if (gaLoaded) return;
+        gaLoaded = true;
+        
+        var gaScript = document.createElement('script');
+        gaScript.async = true;
+        gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-487QBZ5F6X";
+        document.head.appendChild(gaScript);
+        
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-487QBZ5F6X');
+      }
+      
+      ['mouseover', 'keydown', 'touchmove', 'touchstart', 'scroll'].forEach(function(e) {
+        window.addEventListener(e, loadGA, { passive: true, once: true });
+      });
+    })();
   </script>
 
   <!-- ── Charset & Viewport ──────────────────────────────────────── -->
@@ -38,8 +54,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
+    rel="preload"
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet">
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </noscript>
 </head>
 
 <body class="bg-[#0e131b] text-slate-300 font-sans selection:bg-amber-500 selection:text-navy-950">

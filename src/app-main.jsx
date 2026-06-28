@@ -245,7 +245,7 @@ function AuthScreen({ onLogin }) {
   };
 
   return (
-    <div className="min-h-screen bg-navy-950 flex items-center justify-center px-4 relative overflow-hidden">
+    <main className="min-h-screen bg-navy-950 flex items-center justify-center px-4 relative overflow-hidden">
       {/* Background ambient gradients */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-amber-500/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-navy-600/10 rounded-full blur-[100px] pointer-events-none" />
@@ -354,9 +354,9 @@ function AuthScreen({ onLogin }) {
                     placeholder="Mínimo 6 caracteres"
                     value={form.password}
                     onChange={e => set('password', e.target.value)}
-                    className="w-full bg-navy-950 border border-navy-700 focus:border-amber-500 rounded-xl px-3 py-2.5 pr-10 text-sm text-white focus:outline-none transition-colors"
+                    className="w-full bg-navy-950 border border-navy-700 focus:border-amber-500 rounded-xl px-3 py-2.5 pr-12 text-sm text-white focus:outline-none transition-colors"
                   />
-                  <button type="button" onClick={() => setShowPass(p => !p)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors">
+                  <button type="button" onClick={() => setShowPass(p => !p)} aria-label="Mostrar contraseña" className="absolute right-0 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-slate-500 hover:text-slate-300 transition-colors">
                     {showPass ? icons.eyeOff() : icons.eye()}
                   </button>
                 </div>
@@ -372,9 +372,9 @@ function AuthScreen({ onLogin }) {
                     placeholder="Repite tu contraseña"
                     value={form.confirm}
                     onChange={e => set('confirm', e.target.value)}
-                    className="w-full bg-navy-950 border border-navy-700 focus:border-amber-500 rounded-xl px-3 py-2.5 pr-10 text-sm text-white focus:outline-none transition-colors"
+                    className="w-full bg-navy-950 border border-navy-700 focus:border-amber-500 rounded-xl px-3 py-2.5 pr-12 text-sm text-white focus:outline-none transition-colors"
                   />
-                  <button type="button" onClick={() => setShowConfirm(p => !p)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors">
+                  <button type="button" onClick={() => setShowConfirm(p => !p)} aria-label="Confirmar contraseña" className="absolute right-0 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-slate-500 hover:text-slate-300 transition-colors">
                     {showConfirm ? icons.eyeOff() : icons.eye()}
                   </button>
                 </div>
@@ -417,9 +417,9 @@ function AuthScreen({ onLogin }) {
                     placeholder="Tu contraseña"
                     value={form.password}
                     onChange={e => set('password', e.target.value)}
-                    className="w-full bg-navy-950 border border-navy-700 focus:border-amber-500 rounded-xl px-3 py-2.5 pr-10 text-sm text-white focus:outline-none transition-colors"
+                    className="w-full bg-navy-950 border border-navy-700 focus:border-amber-500 rounded-xl px-3 py-2.5 pr-12 text-sm text-white focus:outline-none transition-colors"
                   />
-                  <button type="button" onClick={() => setShowPass(p => !p)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors">
+                  <button type="button" onClick={() => setShowPass(p => !p)} aria-label="Mostrar contraseña" className="absolute right-0 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-slate-500 hover:text-slate-300 transition-colors">
                     {showPass ? icons.eyeOff() : icons.eye()}
                   </button>
                 </div>
@@ -441,7 +441,7 @@ function AuthScreen({ onLogin }) {
           </p>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 

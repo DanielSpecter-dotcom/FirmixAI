@@ -60,7 +60,7 @@ export function Testimonials() {
                   {t.initials}
                 </div>
                 <div>
-                  <h5 className="text-sm font-bold text-white leading-none">{t.name}</h5>
+                  <h3 className="text-sm font-bold text-white leading-none">{t.name}</h3>
                   <p className="text-[11px] text-slate-500 mt-1">{t.role}</p>
                 </div>
               </div>

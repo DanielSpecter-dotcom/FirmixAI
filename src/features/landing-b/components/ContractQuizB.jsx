@@ -82,8 +82,9 @@ export function ContractQuizB() {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '28rem', margin: '0 auto' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', marginBottom: '0.375rem' }}>Nombre completo</label>
+                  <label htmlFor="lead-name-b" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', marginBottom: '0.375rem' }}>Nombre completo</label>
                   <input
+                    id="lead-name-b"
                     type="text"
                     value={leadName}
                     onChange={e => setLeadName(e.target.value)}
@@ -92,8 +93,9 @@ export function ContractQuizB() {
                   />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', marginBottom: '0.375rem' }}>Correo electrónico</label>
+                  <label htmlFor="lead-email-b" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', marginBottom: '0.375rem' }}>Correo electrónico</label>
                   <input
+                    id="lead-email-b"
                     type="email"
                     value={leadEmail}
                     onChange={e => setLeadEmail(e.target.value)}
@@ -102,8 +104,9 @@ export function ContractQuizB() {
                   />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', marginBottom: '0.375rem' }}>¿Cuál es tu objetivo?</label>
+                  <label htmlFor="lead-goal-b" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', marginBottom: '0.375rem' }}>¿Cuál es tu objetivo?</label>
                   <select
+                    id="lead-goal-b"
                     value={leadGoal}
                     onChange={e => setLeadGoal(e.target.value)}
                     style={{ width: '100%', background: '#060911', border: '1px solid #1b263b', borderRadius: '0.75rem', padding: '0.75rem 1rem', fontSize: '0.75rem', color: leadGoal ? '#fff' : '#64748b' }}

@@ -1,21 +1,39 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
-    <!-- ── Google Analytics ───────────────────────────────────────── -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-487QBZ5F6X"></script>
+    <!-- ── Lazy Loading Google Tag Manager & Google Analytics ────────── -->
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-487QBZ5F6X');
-    </script>
+      (function() {
+        var gtmLoaded = false;
+        function loadGTM() {
+          if (gtmLoaded) return;
+          gtmLoaded = true;
+          
+          // Google Analytics
+          var gaScript = document.createElement('script');
+          gaScript.async = true;
+          gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-487QBZ5F6X";
+          document.head.appendChild(gaScript);
+          
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-487QBZ5F6X');
 
-    <!-- ── Google Tag Manager ────────────────────────────────────── -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-WMFBGGZN');</script>
+          // Google Tag Manager
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','GTM-WMFBGGZN');
+        }
+        
+        // Cargar al interactuar el usuario
+        ['mouseover', 'keydown', 'touchmove', 'touchstart', 'scroll'].forEach(function(e) {
+          window.addEventListener(e, loadGTM, { passive: true, once: true });
+        });
+      })();
+    </script>
 
     <!-- ── Charset & Viewport ────────────────────────────────────── -->
     <meta charset="UTF-8" />
@@ -59,9 +77,17 @@
 
     <!-- ── Google Fonts ──────────────────────────────────────────── -->
     <link
+      rel="preload"
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
-      rel="stylesheet"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
 
     <!-- ── JSON-LD Schema.org (base, se sobreescribe por ruta) ──── -->
     <script type="application/ld+json">

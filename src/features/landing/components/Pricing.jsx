@@ -82,7 +82,7 @@ export function Pricing() {
                 </div>
               )}
               <div>
-                <h4 className="text-lg font-bold text-white">{plan.name}</h4>
+                <h3 className="text-lg font-bold text-white">{plan.name}</h3>
                 <p className={`text-xs mt-1 font-semibold ${plan.highlight ? 'text-amber-500' : 'text-slate-500'}`}>
                   {plan.sub}
                 </p>
